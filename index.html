@@ -3,1775 +3,230 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GLUCO AI — Brand Book</title>
+<title>GLUCO AI — Central de Documentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-  --void:     #08090F;
-  --deep:     #0E1118;
-  --surface:  #161B27;
-  --card:     #1C2235;
-  --border:   #252D42;
-  --muted:    #3A4460;
-  --dim:      #5B6B8A;
-  --sub:      #8B9AB8;
-  --text:     #D8E0F0;
-  --white:    #F0F4FF;
-  --blue:     #2B7FFF;
-  --blue-dim: rgba(43,127,255,0.12);
-  --blue-glow:rgba(43,127,255,0.35);
-  --teal:     #00D9B4;
-  --teal-dim: rgba(0,217,180,0.10);
-  --teal-glow:rgba(0,217,180,0.3);
-  --green:    #00C896;
-  --amber:    #F5A623;
-  --red:      #FF4D4D;
-  --grad-brand: linear-gradient(135deg,#2B7FFF 0%,#00D9B4 100%);
-  --grad-dark:  linear-gradient(180deg,#0E1118 0%,#08090F 100%);
+  --void:#0A0E1A; --abyss:#111526; --surface:#1A1E2E;
+  --elevated:#242840; --stroke:#2E334F; --muted:#4A5070;
+  --t2:#8B93B8; --t1:#E8EEFF;
+  --blue:#1B6FFF; --teal:#00D4B4; --green:#00C48C;
+  --yellow:#FFB020; --red:#FF4B4B; --purple:#9B6DFF;
 }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;}
 
-html { scroll-behavior: smooth; }
+/* HEADER */
+.header{background:var(--abyss);border-bottom:1px solid var(--stroke);position:sticky;top:0;z-index:100;}
+.header-inner{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;letter-spacing:-0.04em;text-decoration:none;color:var(--t1);}
+.logo-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+.logo span{color:var(--blue);}
+.header-badge{font-size:11px;font-weight:700;background:rgba(0,212,180,.1);border:1px solid rgba(0,212,180,.3);color:var(--teal);padding:4px 12px;border-radius:6px;}
 
-body {
-  background: var(--void);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+/* HERO */
+.hero{max-width:1080px;margin:0 auto;padding:72px 28px 56px;}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;}
+.hero-title{font-size:clamp(36px,5vw,58px);font-weight:900;letter-spacing:-0.05em;line-height:1.0;margin-bottom:18px;}
+.hero-title span{color:var(--blue);}
+.hero-sub{font-size:16px;color:var(--t2);max-width:520px;line-height:1.7;margin-bottom:40px;}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.stat{border-left:2px solid var(--stroke);padding-left:16px;}
+.stat-value{font-size:22px;font-weight:900;letter-spacing:-0.04em;color:var(--t1);}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
 
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-  background: rgba(8,9,15,0.88);
-  backdrop-filter: blur(20px) saturate(160%);
-  border-bottom: 1px solid var(--border);
-  padding: 0 40px;
-  height: 60px;
-  display: flex; align-items: center; justify-content: space-between;
-}
+/* MAIN */
+.main{max-width:1080px;margin:0 auto;padding:0 28px 80px;}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-top:48px;}
 
-.nav-logo {
-  display: flex; align-items: center; gap: 10px;
-  font-weight: 800; font-size: 15px; letter-spacing: -0.02em; color: var(--white);
-  text-decoration: none;
-}
+/* CARDS */
+.featured-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;}
+.docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+.doc-card{background:var(--abyss);border:1px solid var(--stroke);border-radius:20px;padding:28px;text-decoration:none;color:var(--t1);display:flex;flex-direction:column;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.doc-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 12px 40px rgba(27,111,255,.15);}
+.doc-card.accent{border-color:rgba(27,111,255,.4);background:linear-gradient(135deg,rgba(27,111,255,.08),var(--abyss));}
+.doc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;opacity:0;transition:opacity .2s;}
+.doc-card:hover::before{opacity:1;}
+.doc-card.blue::before{background:var(--blue);}
+.doc-card.green::before{background:var(--green);}
+.doc-card.yellow::before{background:var(--yellow);}
+.doc-card.purple::before{background:var(--purple);}
+.doc-card.teal::before{background:var(--teal);}
+.card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;}
+.card-icon.blue{background:rgba(27,111,255,.15);}
+.card-icon.green{background:rgba(0,196,140,.15);}
+.card-icon.yellow{background:rgba(255,176,32,.15);}
+.card-icon.purple{background:rgba(155,109,255,.15);}
+.card-icon.teal{background:rgba(0,212,180,.15);}
+.card-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.card-tag.blue{color:var(--blue);}
+.card-tag.green{color:var(--green);}
+.card-tag.yellow{color:var(--yellow);}
+.card-tag.purple{color:var(--purple);}
+.card-tag.teal{color:var(--teal);}
+.card-title{font-size:20px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px;line-height:1.2;}
+.card-desc{font-size:13px;color:var(--t2);line-height:1.6;flex:1;margin-bottom:20px;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.card-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{font-size:10px;font-weight:600;background:var(--surface);border:1px solid var(--stroke);border-radius:5px;padding:3px 8px;color:var(--t2);}
+.card-arrow{font-size:18px;color:var(--muted);transition:color .2s,transform .2s;}
+.doc-card:hover .card-arrow{color:var(--blue);transform:translateX(4px);}
+.new-badge{position:absolute;top:20px;right:20px;font-size:10px;font-weight:800;background:rgba(27,111,255,.2);border:1px solid rgba(27,111,255,.4);color:var(--blue);padding:3px 10px;border-radius:99px;letter-spacing:.06em;}
+.status{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;border-radius:99px;padding:3px 10px;position:absolute;bottom:20px;right:20px;}
+.status::before{content:'';width:5px;height:5px;border-radius:50%;}
+.status.review{background:rgba(255,176,32,.1);color:var(--yellow);}
+.status.review::before{background:var(--yellow);}
 
-.nav-logo-mark {
-  width: 28px; height: 28px;
-  background: var(--grad-brand);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-}
+/* QUICK LINKS */
+.quick-links{background:var(--surface);border:1px solid var(--stroke);border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:40px;}
+.quick-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-right:4px;white-space:nowrap;}
+.quick-link{font-size:12px;font-weight:600;color:var(--t2);text-decoration:none;padding:6px 12px;border-radius:8px;border:1px solid var(--stroke);background:var(--abyss);transition:all .15s;white-space:nowrap;}
+.quick-link:hover{color:var(--blue);border-color:rgba(27,111,255,.4);}
 
-.nav-logo-mark svg { width: 16px; height: 16px; }
+/* FOOTER */
+.footer{border-top:1px solid var(--stroke);padding:32px 28px;max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-weight:800;font-size:15px;letter-spacing:-0.03em;}
+.footer-logo span{color:var(--blue);}
+.footer-meta{font-size:12px;color:var(--muted);}
 
-.nav-links {
-  display: flex; gap: 4px; list-style: none;
-}
-
-.nav-links a {
-  display: block; padding: 6px 14px; border-radius: 8px;
-  font-size: 13px; font-weight: 500; color: var(--sub);
-  text-decoration: none; transition: all 0.2s;
-}
-
-.nav-links a:hover { color: var(--white); background: var(--surface); }
-
+/* RESPONSIVE */
 @media(max-width:768px){
-  .nav-links { display: none; }
-  nav { padding: 0 20px; }
+  .featured-grid{grid-template-columns:1fr;}
+  .docs-grid{grid-template-columns:1fr;}
 }
-
-/* ── UTILS ── */
-.container { max-width: 1140px; margin: 0 auto; padding: 0 40px; }
-@media(max-width:768px){ .container { padding: 0 20px; } }
-
-.section { padding: 100px 0; }
-.section-alt { background: var(--deep); }
-
-.eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--teal);
-  background: var(--teal-dim);
-  border: 1px solid rgba(0,217,180,0.2);
-  border-radius: 99px; padding: 5px 14px;
-  margin-bottom: 24px;
-}
-
-.eyebrow-dot {
-  width: 5px; height: 5px;
-  background: var(--teal); border-radius: 50%;
-}
-
-.section-title {
-  font-size: clamp(28px,4vw,44px);
-  font-weight: 800; letter-spacing: -0.035em;
-  color: var(--white); line-height: 1.1;
-  margin-bottom: 16px;
-}
-
-.section-sub {
-  font-size: 17px; color: var(--sub);
-  max-width: 540px; line-height: 1.7;
-  margin-bottom: 60px;
-}
-
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-}
-
-/* cards */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 32px;
-  transition: border-color 0.25s;
-}
-.card:hover { border-color: var(--muted); }
-
-.card-sm {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-}
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center;
-  padding: 120px 40px 80px;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(43,127,255,0.13) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 40% at 75% 70%, rgba(0,217,180,0.07) 0%, transparent 60%),
-    var(--void);
-  position: relative; overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 56px 56px;
-  opacity: 0.35;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 80%);
-}
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
-  text-transform: uppercase; color: var(--teal);
-  border: 1px solid rgba(0,217,180,0.25);
-  background: rgba(0,217,180,0.06);
-  border-radius: 99px; padding: 7px 18px;
-  margin-bottom: 36px; position: relative;
-}
-
-.hero-title {
-  font-size: clamp(64px, 10vw, 120px);
-  font-weight: 900; letter-spacing: -0.055em;
-  color: var(--white); line-height: 0.95;
-  margin-bottom: 12px; position: relative;
-}
-
-.hero-title .brand-ai {
-  background: var(--grad-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero-promise {
-  font-size: clamp(16px, 2.2vw, 22px);
-  font-weight: 500; color: var(--sub);
-  max-width: 580px; line-height: 1.6;
-  margin-bottom: 48px; position: relative;
-}
-
-.hero-ctas {
-  display: flex; gap: 12px; flex-wrap: wrap;
-  justify-content: center; position: relative;
-}
-
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--blue); color: #fff;
-  padding: 13px 26px; border-radius: 12px;
-  font-size: 14px; font-weight: 700;
-  text-decoration: none; border: none; cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 0 24px var(--blue-glow);
-}
-.btn-primary:hover { background: #4090FF; box-shadow: 0 0 36px var(--blue-glow); transform: translateY(-1px); }
-
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; color: var(--sub);
-  padding: 13px 26px; border-radius: 12px;
-  font-size: 14px; font-weight: 600;
-  text-decoration: none; border: 1px solid var(--border); cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-ghost:hover { border-color: var(--muted); color: var(--white); }
-
-.hero-stats {
-  display: flex; gap: 48px; margin-top: 80px; position: relative;
-  flex-wrap: wrap; justify-content: center;
-}
-
-.hero-stat-val {
-  font-size: 36px; font-weight: 800; letter-spacing: -0.04em;
-  color: var(--white); display: block;
-  font-variant-numeric: tabular-nums;
-}
-.hero-stat-val.teal { color: var(--teal); }
-.hero-stat-label { font-size: 12px; color: var(--dim); margin-top: 4px; }
-
-/* ── BRAND FOUNDATION ── */
-.mission-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
-  margin-bottom: 48px;
-}
-@media(max-width:768px){ .mission-grid { grid-template-columns:1fr; } }
-
-.mission-card-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; margin-bottom: 16px;
-}
-
-.mission-card-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--blue); margin-bottom: 10px;
-}
-
-.mission-card-text { font-size: 15px; color: var(--sub); line-height: 1.65; }
-
-.values-grid {
-  display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px;
-}
-
-.value-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-  padding: 20px; display: flex; gap: 12px; align-items: flex-start;
-}
-
-.value-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--grad-brand); flex-shrink: 0; margin-top: 6px;
-}
-
-.value-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-.value-desc { font-size: 13px; color: var(--dim); line-height: 1.5; }
-
-/* ── AUDIENCE ── */
-.audience-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-@media(max-width:900px){ .audience-grid { grid-template-columns:1fr; } }
-
-.persona-label {
-  display: inline-block;
-  font-size: 10px; font-weight: 800; letter-spacing: 0.15em;
-  text-transform: uppercase; padding: 3px 10px;
-  border-radius: 99px; margin-bottom: 14px;
-}
-.persona-primary { background: rgba(43,127,255,0.15); color: var(--blue); }
-.persona-secondary { background: rgba(0,217,180,0.1); color: var(--teal); }
-.persona-tertiary { background: rgba(139,154,184,0.1); color: var(--sub); }
-
-.persona-name { font-size: 22px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; margin-bottom: 4px; }
-.persona-role { font-size: 13px; color: var(--dim); margin-bottom: 16px; }
-
-.persona-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-.tag {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
-  padding: 4px 10px; border-radius: 99px;
-  background: var(--surface); border: 1px solid var(--border);
-  color: var(--sub);
-}
-
-.persona-pain { font-size: 13px; color: var(--dim); line-height: 1.6; }
-
-/* ── PERSONALITY ── */
-.voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
-@media(max-width:600px){ .voice-grid { grid-template-columns:1fr; } }
-
-.voice-card-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
-}
-
-.vocab-list {
-  display: flex; flex-wrap: wrap; gap: 8px;
-}
-
-.vocab-pill {
-  font-size: 13px; padding: 6px 14px; border-radius: 99px;
-  background: var(--surface); border: 1px solid var(--border); color: var(--text);
-}
-
-.vocab-pill.avoid {
-  background: rgba(255,77,77,0.06);
-  border-color: rgba(255,77,77,0.2); color: var(--red);
-  text-decoration: line-through; text-decoration-color: rgba(255,77,77,0.4);
-}
-
-/* ── LOGO ── */
-.logo-concepts { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-bottom: 40px; }
-@media(max-width:768px){ .logo-concepts { grid-template-columns:1fr; } }
-
-.concept-featured {
-  border-color: var(--blue);
-  background: rgba(43,127,255,0.05);
-}
-
-.concept-badge {
-  display: inline-block; font-size: 10px; font-weight: 800;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 3px 10px; border-radius: 99px;
-  background: rgba(43,127,255,0.15); color: var(--blue);
-  margin-bottom: 20px;
-}
-
-.concept-visual {
-  height: 100px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 20px; gap: 10px;
-  background: var(--surface);
-}
-
-.logo-wave {
-  position: relative; width: 80px; height: 32px; overflow: visible;
-}
-
-.logo-wordmark {
-  font-size: 24px; font-weight: 900; letter-spacing: -0.04em; color: var(--white);
-}
-.logo-wordmark span { color: var(--blue); }
-
-.concept-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-.concept-desc { font-size: 13px; color: var(--dim); line-height: 1.55; }
-
-.logo-variations { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
-@media(max-width:600px){ .logo-variations { grid-template-columns: 1fr 1fr; } }
-
-.logo-var {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 24px 16px;
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
-  text-align: center;
-}
-
-.logo-var-bg-dark { background: var(--void); }
-.logo-var-bg-light { background: #EEF2FF; }
-.logo-var-bg-blue { background: var(--blue); }
-
-.logo-var-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
-
-/* ── COLORS ── */
-.palette-primary { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-@media(max-width:600px){ .palette-primary { grid-template-columns:1fr; } }
-
-.swatch-lg {
-  border-radius: 18px; padding: 36px 28px;
-  min-height: 180px; display: flex; flex-direction: column;
-  justify-content: flex-end; position: relative; overflow: hidden;
-}
-
-.swatch-lg::after {
-  content: '';
-  position: absolute; top: 16px; right: 16px;
-  width: 48px; height: 48px; border-radius: 50%;
-  background: rgba(255,255,255,0.07);
-}
-
-.swatch-name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
-.swatch-hex { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; opacity: 0.65; }
-.swatch-use { font-size: 12px; opacity: 0.5; margin-top: 4px; }
-
-.palette-secondary { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 20px; }
-@media(max-width:600px){ .palette-secondary { grid-template-columns:1fr; } }
-
-.swatch-md {
-  border-radius: 14px; padding: 28px 20px;
-  min-height: 130px; display: flex; flex-direction: column; justify-content: flex-end;
-}
-
-.palette-states { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-@media(max-width:600px){ .palette-states { grid-template-columns: 1fr 1fr; } }
-
-.swatch-sm {
-  border-radius: 12px; padding: 20px 14px;
-  min-height: 90px; display: flex; flex-direction: column; justify-content: flex-end;
-}
-
-.palette-neutrals { display: grid; grid-template-columns: repeat(8,1fr); gap: 8px; }
-@media(max-width:600px){ .palette-neutrals { grid-template-columns: repeat(4,1fr); } }
-
-.swatch-xs {
-  border-radius: 10px; aspect-ratio: 1;
-  border: 1px solid rgba(255,255,255,0.05);
-  position: relative; overflow: hidden;
-  display: flex; align-items: flex-end; padding: 6px;
-}
-.swatch-xs span {
-  font-family: 'SF Mono', monospace; font-size: 8px;
-  color: rgba(255,255,255,0.4); word-break: break-all;
-}
-
-/* ── TYPOGRAPHY ── */
-.type-scale { margin-bottom: 48px; }
-
-.type-row {
-  display: flex; align-items: baseline; gap: 28px;
-  padding: 20px 0; border-bottom: 1px solid var(--border);
-}
-
-.type-meta { width: 120px; flex-shrink: 0; }
-.type-token { display: block; font-family: 'SF Mono','Fira Code',monospace; font-size: 10px; color: var(--blue); margin-bottom: 3px; }
-.type-spec { font-size: 10px; color: var(--muted); line-height: 1.5; }
-
-.type-preview { flex: 1; }
-
-.font-families {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-}
-@media(max-width:600px){ .font-families { grid-template-columns:1fr; } }
-
-/* ── IDENTITY ── */
-.identity-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-bottom: 48px; }
-@media(max-width:768px){ .identity-grid { grid-template-columns:1fr; } }
-
-.identity-icon {
-  font-size: 28px; margin-bottom: 14px; display: block;
-}
-
-.identity-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-.identity-desc { font-size: 13px; color: var(--dim); line-height: 1.6; }
-
-.elevation-row {
-  display: flex; gap: 20px; align-items: flex-end;
-  flex-wrap: wrap; padding: 40px 32px;
-  background: var(--void); border: 1px solid var(--border);
-  border-radius: 20px; margin-bottom: 32px; justify-content: center;
-}
-
-.elevation-card {
-  background: var(--surface); border-radius: 14px; padding: 20px;
-  text-align: center; width: 110px;
-}
-
-/* ── MOCKUPS ── */
-.mockups-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-@media(max-width:768px){ .mockups-grid { grid-template-columns:1fr; } }
-
-/* App mockup */
-.phone-outer {
-  width: 240px; margin: 0 auto;
-  background: var(--surface); border-radius: 36px;
-  border: 1px solid var(--border); padding: 14px;
-  box-shadow: 0 32px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
-}
-
-.phone-screen {
-  background: var(--void); border-radius: 24px;
-  overflow: hidden; padding: 18px;
-}
-
-.phone-status {
-  display: flex; justify-content: space-between;
-  font-size: 10px; font-weight: 600; color: var(--text);
-  margin-bottom: 16px;
-}
-
-.phone-greeting { font-size: 15px; font-weight: 800; color: var(--white); margin-bottom: 3px; }
-.phone-date { font-size: 10px; color: var(--dim); margin-bottom: 14px; }
-
-.phone-glucose-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 16px; padding: 16px; margin-bottom: 12px;
-}
-
-.glucose-val {
-  font-family: 'SF Mono','Fira Code',monospace;
-  font-size: 36px; font-weight: 900; color: var(--white);
-  line-height: 1; letter-spacing: -0.03em;
-}
-
-.glucose-unit { font-size: 11px; color: var(--dim); margin-bottom: 8px; }
-
-.phone-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 10px; font-weight: 700; padding: 4px 8px;
-  border-radius: 99px; background: rgba(0,217,180,0.12);
-  border: 1px solid rgba(0,217,180,0.25); color: var(--teal);
-}
-
-.pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
-
-.phone-mini-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
-}
-
-.phone-mini {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px;
-}
-
-.phone-mini-label { font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
-.phone-mini-val { font-family: 'SF Mono','Fira Code',monospace; font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
-.phone-mini-sub { font-size: 9px; color: var(--teal); margin-top: 2px; }
-
-.phone-ai {
-  background: rgba(43,127,255,0.07); border: 1px solid rgba(43,127,255,0.2);
-  border-left: 2px solid var(--blue); border-radius: 12px; padding: 12px;
-}
-
-.phone-ai-label { font-size: 9px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
-.phone-ai-text { font-size: 11px; color: var(--text); line-height: 1.5; }
-
-.phone-nav {
-  display: flex; justify-content: space-around;
-  padding-top: 14px; border-top: 1px solid var(--border); margin-top: 12px;
-}
-.phone-nav-item { font-size: 10px; color: var(--dim); text-align: center; }
-.phone-nav-item.active { color: var(--blue); }
-.nav-icon { font-size: 15px; display: block; margin-bottom: 2px; }
-
-/* Instagram mockup */
-.ig-post {
-  aspect-ratio: 1;
-  background:
-    radial-gradient(ellipse 100% 80% at 50% 0%, rgba(43,127,255,0.15) 0%, transparent 65%),
-    var(--void);
-  border: 1px solid var(--border); border-radius: 16px;
-  padding: 28px; display: flex; flex-direction: column;
-  justify-content: space-between; overflow: hidden;
-}
-
-.ig-val { font-family: 'SF Mono','Fira Code',monospace; font-size: 72px; font-weight: 900; color: var(--white); line-height: 0.9; letter-spacing: -0.06em; }
-.ig-unit { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
-.ig-msg { font-size: 14px; color: var(--sub); line-height: 1.4; max-width: 180px; }
-.ig-cta { font-size: 11px; font-weight: 700; color: var(--teal); letter-spacing: 0.05em; }
-
-/* Dashboard mockup */
-.dashboard {
-  background: var(--deep); border: 1px solid var(--border);
-  border-radius: 20px; overflow: hidden;
-}
-
-.dash-topbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 16px 24px; border-bottom: 1px solid var(--border);
-}
-
-.dash-logo { font-size: 14px; font-weight: 900; letter-spacing: -0.02em; color: var(--white); }
-.dash-logo span { color: var(--blue); }
-
-.dash-body { display: grid; grid-template-columns: 200px 1fr; }
-@media(max-width:600px){ .dash-body { grid-template-columns: 1fr; } }
-
-.dash-sidebar {
-  border-right: 1px solid var(--border); padding: 20px 16px;
-}
-
-.dash-nav-item {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; padding: 8px 10px; border-radius: 8px; margin-bottom: 2px;
-  color: var(--dim); cursor: pointer;
-}
-.dash-nav-item.active { background: var(--blue-dim); color: var(--blue); font-weight: 600; }
-
-.dash-main { padding: 20px; }
-
-.dash-welcome { font-size: 13px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
-.dash-sub { font-size: 11px; color: var(--dim); margin-bottom: 16px; }
-
-.dash-widgets { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-
-.dash-widget {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 14px;
-}
-
-.dash-widget-label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-.dash-widget-val { font-family: 'SF Mono','Fira Code',monospace; font-size: 24px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; }
-.dash-widget-sub { font-size: 10px; color: var(--teal); margin-top: 3px; }
-
-/* Website hero mockup */
-.website-mock {
-  background: var(--deep); border: 1px solid var(--border);
-  border-radius: 20px; overflow: hidden;
-}
-
-.website-nav-mock {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 24px; border-bottom: 1px solid var(--border);
-  font-size: 12px;
-}
-
-.website-nav-links-mock { display: flex; gap: 20px; color: var(--dim); }
-
-.website-hero-mock {
-  padding: 48px 32px; text-align: center;
-  background: radial-gradient(ellipse 80% 60% at 50% 80%, rgba(43,127,255,0.1) 0%, transparent 70%);
-}
-
-.website-hero-h1 {
-  font-size: clamp(22px,4vw,40px);
-  font-weight: 900; letter-spacing: -0.04em;
-  color: var(--white); line-height: 1.05;
-  margin-bottom: 12px;
-  background: linear-gradient(180deg, var(--white) 0%, var(--sub) 140%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.website-hero-p { font-size: 13px; color: var(--sub); max-width: 360px; margin: 0 auto 24px; line-height: 1.6; }
-
-.website-press {
-  display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
-  padding-top: 24px; border-top: 1px solid var(--border); margin-top: 24px;
-}
-.press-name { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; }
-
-/* Biz card */
-.biz-card {
-  background: var(--void);
-  border: 1px solid var(--border); border-radius: 16px;
-  padding: 32px; aspect-ratio: 1.75 / 1;
-  display: flex; flex-direction: column; justify-content: space-between;
-  position: relative; overflow: hidden;
-}
-
-.biz-card::before {
-  content: '';
-  position: absolute; top: -20px; right: -20px;
-  width: 80px; height: 80px; border-radius: 50%;
-  background: var(--grad-brand); opacity: 0.12;
-}
-
-.biz-name { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--white); }
-.biz-role { font-size: 12px; color: var(--dim); margin-top: 4px; }
-.biz-contact { font-size: 11px; color: var(--sub); line-height: 1.8; }
-
-/* ── GUIDELINES ── */
-.guidelines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-@media(max-width:600px){ .guidelines-grid { grid-template-columns:1fr; } }
-
-.guideline-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 20px;
-}
-.guideline-icon {
-  width: 32px; height: 32px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 900;
-}
-.guideline-icon.do { background: rgba(0,200,150,0.12); color: var(--green); }
-.guideline-icon.dont { background: rgba(255,77,77,0.1); color: var(--red); }
-
-.guideline-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.guideline-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  font-size: 14px; color: var(--sub); line-height: 1.5;
-}
-.guideline-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
-.do .guideline-dot { background: var(--green); }
-.dont .guideline-dot { background: var(--red); }
-
-/* ── CLOSING ── */
-.closing {
-  text-align: center; padding: 120px 40px;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(43,127,255,0.12) 0%, transparent 70%),
-    var(--void);
-}
-
-.closing-quote {
-  font-size: clamp(28px,4vw,52px);
-  font-weight: 900; letter-spacing: -0.04em;
-  color: var(--white); max-width: 720px;
-  margin: 0 auto 24px; line-height: 1.1;
-}
-
-.closing-quote em {
-  font-style: normal;
-  background: var(--grad-brand);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.closing-sub { font-size: 17px; color: var(--sub); max-width: 460px; margin: 0 auto 48px; }
-
-.closing-meta {
-  font-size: 12px; color: var(--muted);
-  font-family: 'SF Mono','Fira Code',monospace;
-}
-
-/* ── FOOTER ── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 28px 40px;
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 12px;
-}
-
-.footer-brand { font-size: 14px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
-.footer-brand span { color: var(--blue); }
-.footer-copy { font-size: 12px; color: var(--dim); }
-
-/* ── CHART SVG ── */
-.chart-svg-wrap { width: 100%; height: 80px; margin-top: 12px; }
-
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#hero">
-    <div class="nav-logo-mark">
-      <svg viewBox="0 0 16 16" fill="none">
-        <path d="M1 9 C3 9 4.5 5 7 5 C9.5 5 11 11 13.5 11 C15 11 15.5 9 15.5 9" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-      </svg>
-    </div>
-    GLUCO<span style="color:var(--blue);">AI</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#foundation">Fundação</a></li>
-    <li><a href="#audience">Público</a></li>
-    <li><a href="#personality">Personalidade</a></li>
-    <li><a href="#logo">Logo</a></li>
-    <li><a href="#colors">Cores</a></li>
-    <li><a href="#typography">Tipografia</a></li>
-    <li><a href="#identity">Identidade</a></li>
-    <li><a href="#applications">Aplicações</a></li>
-    <li><a href="#guidelines">Diretrizes</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-badge"><span class="eyebrow-dot"></span>Brand Book v1.0 · 2026</div>
-  <h1 class="hero-title">GLUCO<span class="brand-ai"> AI</span></h1>
-  <p class="hero-promise">Inteligência metabólica para humanos de alta performance. Onde precisão clínica encontra design de produto premium.</p>
-  <div class="hero-ctas">
-    <a class="btn-primary" href="#foundation">Explorar Brand Book →</a>
-    <a class="btn-ghost" href="#applications">Ver Aplicações</a>
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="index.html">
+      <div class="logo-icon"><img src="gluco-ai-icon.svg" width="36" height="36" alt="GLUCO AI"></div>
+      <div>GLUCO <span>AI</span></div>
+    </a>
+    <span class="header-badge">Central de Documentos</span>
   </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Documentação Interna · Confidencial</div>
+  <h1 class="hero-title">Central de<br><span>Documentos</span></h1>
+  <p class="hero-sub">Todos os fluxos, playbooks e estratégias do GLUCO AI em um só lugar. Clique em qualquer documento para abrir.</p>
   <div class="hero-stats">
-    <div>
-      <span class="hero-stat-val">50K+</span>
-      <div class="hero-stat-label">Usuários ativos</div>
-    </div>
-    <div>
-      <span class="hero-stat-val teal">94%</span>
-      <div class="hero-stat-label">Tempo em zona ótima</div>
-    </div>
-    <div>
-      <span class="hero-stat-val">4.9★</span>
-      <div class="hero-stat-label">App Store</div>
-    </div>
+    <div class="stat"><div class="stat-value">5</div><div class="stat-label">Documentos</div></div>
+    <div class="stat"><div class="stat-value">100%</div><div class="stat-label">WhatsApp B2C</div></div>
+    <div class="stat"><div class="stat-value">SBD 2023</div><div class="stat-label">Diretrizes</div></div>
+    <div class="stat"><div class="stat-value">LGPD Art.11</div><div class="stat-label">Compliance</div></div>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<div class="main">
 
-<!-- 1. BRAND FOUNDATION -->
-<section class="section" id="foundation">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>01 — Fundação da Marca</div>
-    <h2 class="section-title">Essência Estratégica</h2>
-    <p class="section-sub">A base filosófica que orienta cada decisão de marca, produto e comunicação.</p>
+  <div class="section-label">Documentos Principais</div>
 
-    <div class="mission-grid">
-      <div class="card">
-        <div class="mission-card-icon" style="background:rgba(43,127,255,0.12);">🎯</div>
-        <div class="mission-card-title">Missão</div>
-        <p class="mission-card-text">Dar às pessoas o poder de entender e dominar sua própria bioquímica, para viver mais e melhor — com dados precisos e inteligência adaptativa.</p>
+  <div class="featured-grid">
+    <a class="doc-card accent blue" href="gluco-ai-onboarding-flow.html">
+      <div class="card-icon blue">💬</div>
+      <div class="card-tag blue">Fluxo Principal</div>
+      <h2 class="card-title">Fluxo de Onboarding</h2>
+      <p class="card-desc">O fluxo completo de entrada do usuário via WhatsApp. Todas as mensagens, ramificações, variáveis e lógica LGPD. Do primeiro "Olá" até a ativação do sistema — com mockup visual de cada mensagem.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">E1–E6</span>
+          <span class="chip">LGPD</span>
+          <span class="chip">MSG-NOME</span>
+          <span class="chip">AQS</span>
+          <span class="chip">Hormozi</span>
+        </div>
+        <span class="card-arrow">→</span>
       </div>
-      <div class="card">
-        <div class="mission-card-icon" style="background:rgba(0,217,180,0.1);">🔭</div>
-        <div class="mission-card-title">Visão</div>
-        <p class="mission-card-text">Um mundo onde cada decisão de saúde é informada por inteligência de dados pessoais em tempo real — tornando a medicina preventiva acessível a quem aspira à alta performance.</p>
-      </div>
-      <div class="card">
-        <div class="mission-card-icon" style="background:rgba(245,166,35,0.1);">⚡</div>
-        <div class="mission-card-title">Promessa</div>
-        <p class="mission-card-text"><em style="font-style:normal;color:var(--white);font-weight:600;">"A única plataforma que transforma dados de glicose em inteligência metabólica personalizada — com precisão clínica e elegância de produto."</em></p>
-      </div>
-    </div>
+      <span class="status review">Em Revisão</span>
+    </a>
 
-    <div class="values-grid">
-      <div class="value-card">
-        <div class="value-dot"></div>
-        <div>
-          <div class="value-name">Precision</div>
-          <div class="value-desc">Cada dado importa. Cada insight tem base científica.</div>
+    <a class="doc-card green" href="gluco-ai-conversion-flow.html">
+      <div class="new-badge">NOVO</div>
+      <div class="card-icon green">💳</div>
+      <div class="card-tag green">Conversão</div>
+      <h2 class="card-title">Fluxo de Conversão para Planos Pagos</h2>
+      <p class="card-desc">Do primeiro dado enviado até a ativação do plano pago. Pitch AQS, tratamento de objeções e fórmula Hormozi aplicada ao contexto de glicemia alta.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">R$79 / R$149</span>
+          <span class="chip">AQS</span>
+          <span class="chip">Objeções</span>
         </div>
+        <span class="card-arrow">→</span>
       </div>
-      <div class="value-card">
-        <div class="value-dot"></div>
-        <div>
-          <div class="value-name">Empowerment</div>
-          <div class="value-desc">Não somos um wearable. Somos um co-piloto metabólico.</div>
-        </div>
-      </div>
-      <div class="value-card">
-        <div class="value-dot"></div>
-        <div>
-          <div class="value-name">Transparency</div>
-          <div class="value-desc">Ciência aberta, dados seus, sem caixa-preta.</div>
-        </div>
-      </div>
-      <div class="value-card">
-        <div class="value-dot"></div>
-        <div>
-          <div class="value-name">Performance</div>
-          <div class="value-desc">Otimização contínua — não apenas monitoramento.</div>
-        </div>
-      </div>
-      <div class="value-card">
-        <div class="value-dot"></div>
-        <div>
-          <div class="value-name">Elegance</div>
-          <div class="value-desc">Tecnologia médica não precisa parecer clínica.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 2. AUDIENCE -->
-<section class="section section-alt" id="audience">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>02 — Público-Alvo</div>
-    <h2 class="section-title">Quem é o Usuário GLUCO AI</h2>
-    <p class="section-sub">Três perfis que compartilham um traço em comum: tratam a saúde como uma ciência pessoal.</p>
-
-    <div class="audience-grid">
-      <div class="card">
-        <span class="persona-label persona-primary">Principal</span>
-        <div class="persona-name">Marco, 38</div>
-        <div class="persona-role">CEO · Atleta de Elite · Biohacker</div>
-        <div class="persona-tags">
-          <span class="tag">Data-driven</span>
-          <span class="tag">Alta renda</span>
-          <span class="tag">São Paulo · Miami</span>
-          <span class="tag">Auto-experimentação</span>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Motivações</div>
-          <div class="persona-pain">Maximizar performance cognitiva e física. Entender a causa, não tratar o sintoma. ROI mensurável em saúde.</div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Frustrações</div>
-          <div class="persona-pain">Apps que mostram números sem contexto. Interface de dispositivos genéricos. Falta de personalização baseada no próprio corpo.</div>
-        </div>
-      </div>
-      <div class="card">
-        <span class="persona-label persona-secondary">Secundário</span>
-        <div class="persona-name">Fernanda, 45</div>
-        <div class="persona-role">Executiva Sênior · Empreendedora</div>
-        <div class="persona-tags">
-          <span class="tag">Longevidade</span>
-          <span class="tag">Energia consistente</span>
-          <span class="tag">Premium buyer</span>
-          <span class="tag">Influenciada por peers</span>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Motivações</div>
-          <div class="persona-pain">Viver mais com qualidade. Energia consistente durante workdays intensos. Produtos que "funcionam" sem esforço extra.</div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Entry Point</div>
-          <div class="persona-pain">Recomendação médica ou podcast de longevidade. Comunidade de alta performance. Evento de biohacking.</div>
-        </div>
-      </div>
-      <div class="card">
-        <span class="persona-label persona-tertiary">Terciário</span>
-        <div class="persona-name">Dr. Carlos, 52</div>
-        <div class="persona-role">Endocrinologista · Nutrologista</div>
-        <div class="persona-tags">
-          <span class="tag">Ferramenta clínica</span>
-          <span class="tag">Recomenda pacientes</span>
-          <span class="tag">Dashboard médico</span>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--sub);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Necessidades</div>
-          <div class="persona-pain">Dashboard clínico completo. Relatórios PDF para consulta. Dados longitudinais de pacientes. Evidência científica das recomendações da IA.</div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--sub);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Valor Percebido</div>
-          <div class="persona-pain">Ferramenta de monitoramento contínuo que amplia sua capacidade clínica e fideliza pacientes de alto perfil.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 3. PERSONALITY -->
-<section class="section" id="personality">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>03 — Personalidade</div>
-    <h2 class="section-title">Tom, Voz e Arquétipos</h2>
-    <p class="section-sub">GLUCO AI fala como um cientista brilhante que também é atleta de elite.</p>
-
-    <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;margin-bottom:32px;" class="voice-grid">
-      <div class="card">
-        <div class="voice-card-label">Arquétipos</div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
-          <div>
-            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">O Sábio</div>
-            <div style="font-size:13px;color:var(--dim);">Conhecimento profundo, dados como autoridade, confiança ganada.</div>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">O Herói</div>
-            <div style="font-size:13px;color:var(--dim);">Superação contínua, performance máxima, conquista mensurável.</div>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">O Criador</div>
-            <div style="font-size:13px;color:var(--dim);">Inovação, design pensado, tecnologia que inspira.</div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="voice-card-label">Espectro de Voz</div>
-        <div style="margin-bottom:24px;">
-          <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:8px;">
-            <span>Autoritativo</span><span>Empoderador</span>
-          </div>
-          <div style="height:6px;border-radius:99px;background:var(--grad-brand);"></div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--sub);margin-top:8px;">
-            <span>Preciso</span><span>Humano</span>
-          </div>
-          <div style="height:6px;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--sub));margin-top:8px;"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;">
-          <div>
-            <div style="color:var(--blue);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Onboarding</div>
-            <div style="color:var(--sub);font-style:italic;">"Seu metabolismo tem muito a dizer. Vamos escutá-lo juntos."</div>
-          </div>
-          <div>
-            <div style="color:var(--teal);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Insight AI</div>
-            <div style="color:var(--sub);font-style:italic;">"Seu pico às 14h está correlacionado com cortisol — não com carboidratos."</div>
-          </div>
-          <div>
-            <div style="color:var(--green);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Conquistas</div>
-            <div style="color:var(--sub);font-style:italic;">"Estabilidade metabólica por 30 dias. Seu corpo está respondendo."</div>
-          </div>
-          <div>
-            <div style="color:var(--sub);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Marketing</div>
-            <div style="color:var(--sub);font-style:italic;">"A longevidade não é sorte. É dados + decisão."</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-      <div class="card-sm">
-        <div class="voice-card-label">Vocabulary DNA — Use</div>
-        <div class="vocab-list">
-          <span class="vocab-pill">Precision</span>
-          <span class="vocab-pill">Intelligence</span>
-          <span class="vocab-pill">Metabolic</span>
-          <span class="vocab-pill">Longevity</span>
-          <span class="vocab-pill">Optimize</span>
-          <span class="vocab-pill">Insight</span>
-          <span class="vocab-pill">Adaptive</span>
-          <span class="vocab-pill">Evidence</span>
-          <span class="vocab-pill">Protocol</span>
-          <span class="vocab-pill">Biometric</span>
-        </div>
-      </div>
-      <div class="card-sm">
-        <div class="voice-card-label" style="color:var(--red);">Vocabulary DNA — Evite</div>
-        <div class="vocab-list">
-          <span class="vocab-pill avoid">Simple</span>
-          <span class="vocab-pill avoid">Amazing</span>
-          <span class="vocab-pill avoid">Revolutionary</span>
-          <span class="vocab-pill avoid">Guaranteed</span>
-          <span class="vocab-pill avoid">Just</span>
-          <span class="vocab-pill avoid">Perfect</span>
-          <span class="vocab-pill avoid">Easy</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 4. LOGO -->
-<section class="section section-alt" id="logo">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>04 — Sistema de Logo</div>
-    <h2 class="section-title">Identity Mark</h2>
-    <p class="section-sub">Três conceitos exploram os pilares da marca: precisão metabólica, inteligência artificial e performance humana.</p>
-
-    <div class="logo-concepts">
-      <!-- Concept A -->
-      <div class="card concept-featured">
-        <span class="concept-badge">Recomendado</span>
-        <div class="concept-visual">
-          <svg width="32" height="28" viewBox="0 0 32 28" fill="none">
-            <defs>
-              <linearGradient id="w1" x1="0" y1="14" x2="32" y2="14" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00D9B4"/><stop offset="1" stop-color="#2B7FFF"/>
-              </linearGradient>
-            </defs>
-            <path d="M1 16 C4 16 6 9 10 9 C14 9 16 21 20 21 C24 21 26 13 30 13"
-                  stroke="url(#w1)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <circle cx="28" cy="13" r="3.5" fill="#2B7FFF" opacity="0.3"/>
-            <circle cx="28" cy="13" r="1.8" fill="#2B7FFF"/>
-          </svg>
-          <span class="logo-wordmark">GLUCO <span>AI</span></span>
-        </div>
-        <div class="concept-name">Pure Signal</div>
-        <p class="concept-desc">Curva de glicose em range ótimo como símbolo. Linha contínua evoca fluxo de dados real. Simples, proprietário, memorável.</p>
-      </div>
-      <!-- Concept B -->
-      <div class="card">
-        <div class="concept-visual">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <path d="M16 3 L28 10 L28 22 L16 29 L4 22 L4 10 Z"
-                  stroke="#2B7FFF" stroke-width="1.5" fill="rgba(43,127,255,0.08)"/>
-            <circle cx="16" cy="16" r="3" fill="#2B7FFF"/>
-            <line x1="16" y1="13" x2="16" y2="7" stroke="#2B7FFF" stroke-width="1" opacity="0.6"/>
-            <line x1="19" y1="17.5" x2="25" y2="21" stroke="#2B7FFF" stroke-width="1" opacity="0.6"/>
-            <line x1="13" y1="17.5" x2="7" y2="21" stroke="#2B7FFF" stroke-width="1" opacity="0.6"/>
-          </svg>
-          <span class="logo-wordmark">GLUCO <span>AI</span></span>
-        </div>
-        <div class="concept-name">Neural Glucose</div>
-        <p class="concept-desc">Hexágono molecular (C₆H₁₂O₆) com nós de rede neural. Credibilidade científica máxima. Ideal para contextos B2B e médicos.</p>
-      </div>
-      <!-- Concept C -->
-      <div class="card">
-        <div class="concept-visual">
-          <svg width="36" height="28" viewBox="0 0 36 28" fill="none">
-            <defs>
-              <linearGradient id="arc1" x1="0" y1="0" x2="36" y2="28" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#2B7FFF"/><stop offset="1" stop-color="#00D9B4"/>
-              </linearGradient>
-            </defs>
-            <path d="M4 24 A14 14 0 0 1 32 24" stroke="#252D42" stroke-width="4" stroke-linecap="round" fill="none"/>
-            <path d="M4 24 A14 14 0 0 1 25 7" stroke="url(#arc1)" stroke-width="4" stroke-linecap="round" fill="none"/>
-            <circle cx="25" cy="7" r="4" fill="#2B7FFF"/>
-          </svg>
-          <span class="logo-wordmark">GLUCO <span style="font-weight:400;opacity:0.5;">·</span> <span>AI</span></span>
-        </div>
-        <div class="concept-name">Vital Arc</div>
-        <p class="concept-desc">Gauge de performance com ponto na zona ótima. Health-forward, aspiracional. Ideal para consumer e lifestyle.</p>
-      </div>
-    </div>
-
-    <!-- Variations -->
-    <div style="margin-bottom:16px;">
-      <div class="eyebrow" style="margin-bottom:24px;"><span class="eyebrow-dot"></span>Variações do Logo</div>
-    </div>
-    <div class="logo-variations">
-      <div class="logo-var">
-        <svg width="110" height="26" viewBox="0 0 110 26" fill="none">
-          <defs><linearGradient id="lv1" x1="0" y1="13" x2="30" y2="13" gradientUnits="userSpaceOnUse"><stop stop-color="#00D9B4"/><stop offset="1" stop-color="#2B7FFF"/></linearGradient></defs>
-          <path d="M1 15 C3 15 5 9 8 9 C11 9 13 19 16 19 C19 19 21 12 24 12"
-                stroke="url(#lv1)" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <circle cx="22" cy="12" r="2" fill="#2B7FFF" opacity="0.4"/>
-          <circle cx="22" cy="12" r="1" fill="#2B7FFF"/>
-          <text x="32" y="18" font-family="-apple-system,sans-serif" font-weight="800" font-size="13" fill="#F0F4FF" letter-spacing="-0.5">GLUCO</text>
-          <text x="84" y="18" font-family="-apple-system,sans-serif" font-weight="800" font-size="13" fill="#2B7FFF" letter-spacing="-0.5">AI</text>
-        </svg>
-        <span class="logo-var-label">Principal</span>
-      </div>
-      <div class="logo-var logo-var-bg-dark">
-        <svg width="110" height="26" viewBox="0 0 110 26" fill="none">
-          <defs><linearGradient id="lv2" x1="0" y1="13" x2="30" y2="13" gradientUnits="userSpaceOnUse"><stop stop-color="#00D9B4"/><stop offset="1" stop-color="#2B7FFF"/></linearGradient></defs>
-          <path d="M1 15 C3 15 5 9 8 9 C11 9 13 19 16 19 C19 19 21 12 24 12"
-                stroke="url(#lv2)" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <circle cx="22" cy="12" r="1" fill="#2B7FFF"/>
-          <text x="32" y="18" font-family="-apple-system,sans-serif" font-weight="800" font-size="13" fill="white" letter-spacing="-0.5">GLUCO</text>
-          <text x="84" y="18" font-family="-apple-system,sans-serif" font-weight="800" font-size="13" fill="#2B7FFF" letter-spacing="-0.5">AI</text>
-        </svg>
-        <span class="logo-var-label">Fundo Escuro</span>
-      </div>
-      <div class="logo-var logo-var-bg-light">
-        <svg width="110" height="26" viewBox="0 0 110 26" fill="none">
-          <defs><linearGradient id="lv3" x1="0" y1="13" x2="30" y2="13" gradientUnits="userSpaceOnUse"><stop stop-color="#00A88C"/><stop offset="1" stop-color="#1A5ED4"/></linearGradient></defs>
-          <path d="M1 15 C3 15 5 9 8 9 C11 9 13 19 16 19 C19 19 21 12 24 12"
-                stroke="url(#lv3)" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <circle cx="22" cy="12" r="1" fill="#1A5ED4"/>
-          <text x="32" y="18" font-family="-apple-system,sans-serif" font-weight="800" font-size="13" fill="#0A0E1A" letter-spacing="-0.5">GLUCO</text>
-          <text x="84" y="18" font-family="-apple-system,sans-serif" font-weight="800" font-size="13" fill="#1A5ED4" letter-spacing="-0.5">AI</text>
-        </svg>
-        <span class="logo-var-label" style="color:#4A5070;">Fundo Claro</span>
-      </div>
-      <div class="logo-var" style="align-items:center;justify-content:center;">
-        <div style="width:52px;height:52px;background:linear-gradient(135deg,#161B27,#1C2235);border:1px solid #252D42;border-radius:14px;display:flex;align-items:center;justify-content:center;">
-          <svg width="32" height="28" viewBox="0 0 32 28" fill="none">
-            <defs><linearGradient id="lv4" x1="0" y1="14" x2="32" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#00D9B4"/><stop offset="1" stop-color="#2B7FFF"/></linearGradient></defs>
-            <path d="M2 16 C5 16 7 9 11 9 C15 9 17 21 21 21 C25 21 27 13 30 13"
-                  stroke="url(#lv4)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <circle cx="28" cy="13" r="3" fill="#2B7FFF" opacity="0.3"/>
-            <circle cx="28" cy="13" r="1.6" fill="#2B7FFF"/>
-          </svg>
-        </div>
-        <span class="logo-var-label">App Icon</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 5. COLORS -->
-<section class="section" id="colors">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>05 — Sistema de Cores</div>
-    <h2 class="section-title">Color Palette</h2>
-    <p class="section-sub">Autoridade médica (azul profundo), vitalidade metabólica (teal) e acabamento premium (near-black).</p>
-
-    <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;">Primárias</div>
-    <div class="palette-primary" style="margin-bottom:20px;">
-      <div class="swatch-lg" style="background:#08090F;border:1px solid #252D42;">
-        <div class="swatch-name">Midnight Void</div>
-        <div class="swatch-hex">#08090F · Proporção 40%</div>
-        <div class="swatch-use">Background principal</div>
-      </div>
-      <div class="swatch-lg" style="background:#2B7FFF;box-shadow:0 0 40px rgba(43,127,255,0.4);">
-        <div class="swatch-name">Intelligence Blue</div>
-        <div class="swatch-hex">#2B7FFF · Proporção 15%</div>
-        <div class="swatch-use">CTA, links, ação primária</div>
-      </div>
-    </div>
-
-    <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;">Secundárias</div>
-    <div class="palette-secondary">
-      <div class="swatch-md" style="background:#00D9B4;box-shadow:0 0 24px rgba(0,217,180,0.3);">
-        <div class="swatch-name" style="color:#08090F;">Optimal Teal</div>
-        <div class="swatch-hex" style="color:rgba(8,9,15,0.65);">#00D9B4</div>
-        <div class="swatch-use" style="color:rgba(8,9,15,0.5);">Estado ótimo, sucesso</div>
-      </div>
-      <div class="swatch-md" style="background:#1C2235;border:1px solid #252D42;">
-        <div class="swatch-name">Deep Carbon</div>
-        <div class="swatch-hex">#1C2235</div>
-        <div class="swatch-use">Cards, surfaces</div>
-      </div>
-      <div class="swatch-md" style="background:#EEF2FF;">
-        <div class="swatch-name" style="color:#08090F;">Arctic Mist</div>
-        <div class="swatch-hex" style="color:rgba(8,9,15,0.6);">#EEF2FF</div>
-        <div class="swatch-use" style="color:rgba(8,9,15,0.5);">Background light mode</div>
-      </div>
-    </div>
-
-    <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;">Estado / Acento</div>
-    <div class="palette-states" style="margin-bottom:20px;">
-      <div class="swatch-sm" style="background:#00C896;">
-        <div class="swatch-name" style="color:#08090F;font-size:13px;">Optimal</div>
-        <div class="swatch-hex" style="color:rgba(8,9,15,0.7);font-size:11px;">#00C896</div>
-      </div>
-      <div class="swatch-sm" style="background:#F5A623;">
-        <div class="swatch-name" style="color:#08090F;font-size:13px;">Warning</div>
-        <div class="swatch-hex" style="color:rgba(8,9,15,0.7);font-size:11px;">#F5A623</div>
-      </div>
-      <div class="swatch-sm" style="background:#FF4D4D;">
-        <div class="swatch-name" style="font-size:13px;">Alert</div>
-        <div class="swatch-hex" style="font-size:11px;">#FF4D4D</div>
-      </div>
-      <div class="swatch-sm" style="background:#7C9EFF;">
-        <div class="swatch-name" style="color:#08090F;font-size:13px;">Info</div>
-        <div class="swatch-hex" style="color:rgba(8,9,15,0.7);font-size:11px;">#7C9EFF</div>
-      </div>
-    </div>
-
-    <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;">Neutros</div>
-    <div class="palette-neutrals">
-      <div class="swatch-xs" style="background:#08090F;"><span>#08090F</span></div>
-      <div class="swatch-xs" style="background:#0E1118;"><span>#0E1118</span></div>
-      <div class="swatch-xs" style="background:#161B27;"><span>#161B27</span></div>
-      <div class="swatch-xs" style="background:#1C2235;"><span>#1C2235</span></div>
-      <div class="swatch-xs" style="background:#252D42;"><span>#252D42</span></div>
-      <div class="swatch-xs" style="background:#3A4460;"><span>#3A4460</span></div>
-      <div class="swatch-xs" style="background:#8B9AB8;"><span>#8B9AB8</span></div>
-      <div class="swatch-xs" style="background:#F0F4FF;border:1px solid rgba(0,0,0,.1);"><span style="color:rgba(0,0,0,.35);">#F0F4FF</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 6. TYPOGRAPHY -->
-<section class="section section-alt" id="typography">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>06 — Tipografia</div>
-    <h2 class="section-title">Type System</h2>
-    <p class="section-sub">Sistema tipográfico baseado em system fonts de alta qualidade — sem dependências externas, máxima performance.</p>
-
-    <div class="type-scale">
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">display-xl</span>
-          <span class="type-spec">72px / 900<br>lh: 1.0 / ls: -0.055em</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-size:56px;font-weight:900;letter-spacing:-0.055em;line-height:1;color:var(--white);">Intelligence.</span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">h1</span>
-          <span class="type-spec">40px / 800<br>lh: 1.1 / ls: -0.04em</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1.1;color:var(--white);">Metabolic Score</span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">h2</span>
-          <span class="type-spec">32px / 700<br>lh: 1.2 / ls: -0.03em</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-size:32px;font-weight:700;letter-spacing:-0.03em;color:var(--white);">Your Optimal Zone</span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">h3</span>
-          <span class="type-spec">24px / 700<br>lh: 1.3 / ls: -0.02em</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em;color:var(--white);">AI Insight — Cortisol Pattern Detected</span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">body-l</span>
-          <span class="type-spec">18px / 400<br>lh: 1.7 / ls: 0</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-size:18px;font-weight:400;color:var(--sub);line-height:1.7;">Seu pico de glicose às 14h está correlacionado com cortisol elevado — não com carboidratos. Reduza stress antes do almoço.</span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">body-m</span>
-          <span class="type-spec">16px / 400<br>lh: 1.6 / ls: 0</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-size:16px;font-weight:400;color:var(--sub);line-height:1.6;">Texto padrão para descrições de UI, labels explicativos e conteúdo editorial em todas as superfícies.</span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">data-xl</span>
-          <span class="type-spec">Monospace<br>48px / 900 / lh: 1</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-family:'SF Mono','Fira Code',monospace;font-size:48px;font-weight:900;color:var(--white);letter-spacing:-0.03em;line-height:1;">112 <span style="font-size:18px;color:var(--dim);font-weight:400;">mg/dL</span></span>
-        </div>
-      </div>
-      <div class="type-row">
-        <div class="type-meta">
-          <span class="type-token">data-l</span>
-          <span class="type-spec">Monospace<br>32px / 800 / lh: 1</span>
-        </div>
-        <div class="type-preview">
-          <span style="font-family:'SF Mono','Fira Code',monospace;font-size:32px;font-weight:800;color:var(--white);letter-spacing:-0.025em;line-height:1;">87<span style="font-size:14px;color:var(--dim);font-weight:400;"> / 100</span></span>
-        </div>
-      </div>
-    </div>
-
-    <div class="font-families">
-      <div class="card">
-        <div class="type-token" style="display:block;margin-bottom:12px;">Sans — System UI Stack</div>
-        <div style="font-size:40px;font-weight:900;letter-spacing:-0.04em;margin-bottom:8px;">Aa Bb</div>
-        <div style="font-size:14px;color:var(--dim);line-height:1.8;">
-          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
-          abcdefghijklmnopqrstuvwxyz<br>
-          0123456789 .,;:!?@#&()
-        </div>
-      </div>
-      <div class="card">
-        <div class="type-token" style="display:block;margin-bottom:12px;">Mono — Data &amp; Numbers</div>
-        <div style="font-family:'SF Mono','Fira Code',monospace;font-size:40px;font-weight:900;letter-spacing:-0.03em;margin-bottom:8px;color:var(--teal);">0–9</div>
-        <div style="font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:var(--dim);line-height:1.8;">
-          112 mg/dL · 87/100 · +2.3↗<br>
-          08:43 AM · 30d streak · 94%<br>
-          #2B7FFF · rgba(0,217,180,0.1)
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 7. IDENTITY -->
-<section class="section" id="identity">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>07 — Identidade Visual</div>
-    <h2 class="section-title">Princípios Visuais</h2>
-    <p class="section-sub">Cada elemento visual reforça os valores da marca: precisão, elegância e inteligência.</p>
-
-    <div class="identity-grid">
-      <div class="card">
-        <span class="identity-icon">⬡</span>
-        <div class="identity-title">Formas</div>
-        <div class="identity-desc">Orgânico controlado. Curvas suaves para dados. Linhas nítidas para estrutura. Border radius: 8–20px. Sem ângulos agressivos.</div>
-      </div>
-      <div class="card">
-        <span class="identity-icon">↔</span>
-        <div class="identity-title">Espaçamento</div>
-        <div class="identity-desc">Sistema base 4px. Respiro generoso — conteúdo não compete por atenção. Proporções áureas entre elementos. Sem clutter.</div>
-      </div>
-      <div class="card">
-        <span class="identity-icon">✦</span>
-        <div class="identity-title">Ícones</div>
-        <div class="identity-desc">Line icons, 1.5px stroke, rounded linecaps. Grid 24×24px. Estilo: Lucide ou similar. Consistência total em peso e estilo.</div>
-      </div>
-      <div class="card">
-        <span class="identity-icon">◐</span>
-        <div class="identity-title">Glassmorphism</div>
-        <div class="identity-desc">Cards com blur(20px) + rgba(255,255,255,0.04). Bordas translúcidas. Somente em dark mode. Profundidade sem ostentação.</div>
-      </div>
-      <div class="card">
-        <span class="identity-icon">📸</span>
-        <div class="identity-title">Fotografia</div>
-        <div class="identity-desc">Pessoas reais, não modelos óbvios. Atletas, médicos, profissionais. Ambientes: laboratório clean, academia premium. Alta saturação controlada.</div>
-      </div>
-      <div class="card">
-        <span class="identity-icon">📊</span>
-        <div class="identity-title">Data Viz</div>
-        <div class="identity-desc">Gradiente teal→blue em gráficos de linha. Area fill suave. Zonas coloridas com 6–10% opacity. Tooltips com fundo glassmorphism.</div>
-      </div>
-    </div>
-
-    <!-- Spacing scale visual -->
-    <div style="margin-top:48px;">
-      <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px;">Spacing Scale — Base 4px</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-1</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:4px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">4px</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-2</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:8px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">8px</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-4</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:16px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">16px</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-6</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:24px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">24px</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-8</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:32px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">32px</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-12</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:48px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">48px</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-family:monospace;font-size:11px;color:var(--blue);width:72px;">space-16</span>
-          <div style="flex:1;background:var(--surface);border-radius:4px;height:28px;display:flex;align-items:center;padding:4px;">
-            <div style="height:20px;border-radius:3px;background:var(--grad-brand);width:64px;"></div>
-          </div>
-          <span style="font-family:monospace;font-size:11px;color:var(--dim);width:32px;">64px</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 8. APPLICATIONS -->
-<section class="section section-alt" id="applications">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>08 — Aplicações da Marca</div>
-    <h2 class="section-title">Mockups &amp; Aplicações</h2>
-    <p class="section-sub">A identidade GLUCO AI em contextos reais — app, social, web e material.</p>
-
-    <!-- App + Instagram -->
-    <div class="mockups-grid" style="margin-bottom:24px;">
-      <!-- App -->
-      <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:20px;">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);align-self:flex-start;">App Mobile — iOS</div>
-        <div class="phone-outer">
-          <div class="phone-screen">
-            <div class="phone-status"><span>9:41</span><span>●●●● ⚡87%</span></div>
-            <div class="phone-greeting">Bom dia, Marco</div>
-            <div class="phone-date">Terça · 17 de março</div>
-            <div class="phone-glucose-card">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
-                <div>
-                  <div class="glucose-val">112</div>
-                  <div class="glucose-unit">mg/dL · ↗ subindo levemente</div>
-                  <span class="phone-pill"><span class="pulse"></span>Optimal</span>
-                </div>
-              </div>
-              <svg width="100%" height="40" viewBox="0 0 200 40" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="phoneGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#00D9B4" stop-opacity="0.3"/>
-                    <stop offset="100%" stop-color="#00D9B4" stop-opacity="0"/>
-                  </linearGradient>
-                  <linearGradient id="phoneLine" x1="0" y1="0" x2="1" y2="0">
-                    <stop stop-color="#00D9B4"/><stop offset="1" stop-color="#2B7FFF"/>
-                  </linearGradient>
-                </defs>
-                <path d="M0 28 C20 27 40 22 60 20 C80 18 100 19 120 23 C140 27 160 28 180 25 C190 23 196 21 200 20 L200 40 L0 40 Z" fill="url(#phoneGrad)"/>
-                <path d="M0 28 C20 27 40 22 60 20 C80 18 100 19 120 23 C140 27 160 28 180 25 C190 23 196 21 200 20" stroke="url(#phoneLine)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <circle cx="200" cy="20" r="3" fill="#2B7FFF" stroke="white" stroke-width="1.5">
-                  <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/>
-                </circle>
-              </svg>
-            </div>
-            <div class="phone-mini-grid">
-              <div class="phone-mini">
-                <div class="phone-mini-label">Metabolic Score</div>
-                <div class="phone-mini-val" style="color:var(--teal);">87</div>
-                <div class="phone-mini-sub">+4 vs ontem</div>
-              </div>
-              <div class="phone-mini">
-                <div class="phone-mini-label">Tempo em Zona</div>
-                <div class="phone-mini-val">94%</div>
-                <div class="phone-mini-sub">🔥 18d streak</div>
-              </div>
-            </div>
-            <div class="phone-ai">
-              <div class="phone-ai-label">✦ AI Insight</div>
-              <div class="phone-ai-text">Janela anabólica ativa. Ideal para treino nas próximas 2h.</div>
-            </div>
-            <div class="phone-nav">
-              <div class="phone-nav-item active"><span class="nav-icon">⬡</span>Home</div>
-              <div class="phone-nav-item"><span class="nav-icon">📈</span>Trends</div>
-              <div class="phone-nav-item"><span class="nav-icon">✦</span>AI</div>
-              <div class="phone-nav-item"><span class="nav-icon">◎</span>Perfil</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Instagram -->
-      <div class="card" style="display:flex;flex-direction:column;gap:16px;">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);">Instagram — Feed Post</div>
-        <div class="ig-post">
-          <div style="font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.12em;text-transform:uppercase;">GLUCO AI</div>
-          <div>
-            <div class="ig-val">94</div>
-            <div class="ig-unit">% tempo em zona ótima · hoje</div>
-            <div class="ig-msg">Seu metabolismo está no pico. Sequência de 18 dias.</div>
-          </div>
-          <div class="ig-cta">glucoai.com → Comece agora</div>
-        </div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);">Instagram — Story</div>
-        <div style="background:var(--void);border:1px solid var(--border);border-radius:14px;padding:20px;background-image:radial-gradient(ellipse 80% 50% at 50% 80%,rgba(0,217,180,0.1) 0%,transparent 70%);">
-          <div style="display:flex;gap:4px;margin-bottom:12px;">
-            <div style="flex:1;height:2px;background:white;border-radius:2px;"></div>
-            <div style="flex:1;height:2px;background:white;border-radius:2px;"></div>
-            <div style="flex:1;height:2px;background:rgba(255,255,255,0.3);border-radius:2px;"></div>
-          </div>
-          <div style="text-align:center;padding:16px 0;">
-            <div style="font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Daily Summary</div>
-            <div style="font-family:monospace;font-size:64px;font-weight:900;color:var(--white);line-height:1;letter-spacing:-0.04em;">87</div>
-            <div style="font-size:14px;color:var(--sub);margin-top:6px;">Metabolic Score</div>
-            <div style="display:flex;gap:24px;justify-content:center;margin-top:16px;">
-              <div style="text-align:center;"><div style="font-family:monospace;font-size:18px;font-weight:800;color:var(--teal);">94%</div><div style="font-size:10px;color:var(--dim);">Tempo em zona</div></div>
-              <div style="text-align:center;"><div style="font-size:18px;font-weight:800;">🔥18</div><div style="font-size:10px;color:var(--dim);">Day streak</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dashboard + Website -->
-    <div class="mockups-grid" style="margin-bottom:24px;">
-      <!-- Dashboard -->
-      <div class="card">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;">Web Dashboard</div>
-        <div class="dashboard">
-          <div class="dash-topbar">
-            <div class="dash-logo">GLUCO<span>AI</span></div>
-            <div style="display:flex;gap:12px;font-size:11px;color:var(--dim);">
-              <span>Marco Oliveira</span>
-              <span>Pro Plan</span>
-            </div>
-          </div>
-          <div class="dash-body">
-            <div class="dash-sidebar">
-              <div class="dash-nav-item active">⬡ Overview</div>
-              <div class="dash-nav-item">📈 Glucose</div>
-              <div class="dash-nav-item">✦ AI Insights</div>
-              <div class="dash-nav-item">📋 Protocols</div>
-              <div class="dash-nav-item">🩺 Médico</div>
-            </div>
-            <div class="dash-main">
-              <div class="dash-welcome">Bem-vindo de volta, Marco</div>
-              <div class="dash-sub">Terça · 17 mar · Metabolic Score: 87/100</div>
-              <div class="dash-widgets">
-                <div class="dash-widget">
-                  <div class="dash-widget-label">Glicose Atual</div>
-                  <div class="dash-widget-val">112 <span style="font-size:12px;color:var(--dim);font-weight:400;">mg/dL</span></div>
-                  <div class="dash-widget-sub">↗ Ótimo</div>
-                </div>
-                <div class="dash-widget">
-                  <div class="dash-widget-label">Metabolic Score</div>
-                  <div class="dash-widget-val" style="color:var(--teal);">87</div>
-                  <div class="dash-widget-sub">+4 vs ontem</div>
-                </div>
-              </div>
-              <div style="background:var(--card);border:1px solid var(--border);border-left:2px solid var(--blue);border-radius:10px;padding:12px;">
-                <div style="font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;">✦ 3 AI Insights novos</div>
-                <div style="font-size:11px;color:var(--sub);">Padrão de cortisol · Janela anabólica · Impacto do sono +23%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Website Hero -->
-      <div class="card">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;">Website — Hero Section</div>
-        <div class="website-mock">
-          <div class="website-nav-mock">
-            <div style="font-size:13px;font-weight:900;letter-spacing:-0.02em;color:var(--white);">GLUCO<span style="color:var(--blue);">AI</span></div>
-            <div class="website-nav-links-mock">
-              <span>Features</span><span>Ciência</span><span>Preços</span>
-            </div>
-            <div style="display:flex;gap:8px;">
-              <span style="font-size:11px;padding:5px 12px;border-radius:8px;border:1px solid var(--border);color:var(--dim);">Login</span>
-              <span style="font-size:11px;padding:5px 12px;border-radius:8px;background:var(--blue);color:white;font-weight:600;">Começar →</span>
-            </div>
-          </div>
-          <div class="website-hero-mock">
-            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);background:rgba(0,217,180,0.08);border:1px solid rgba(0,217,180,0.2);border-radius:99px;padding:5px 12px;margin-bottom:16px;">
-              <span style="width:4px;height:4px;background:var(--teal);border-radius:50%;"></span>
-              Agora com IA metabólica adaptativa
-            </div>
-            <div class="website-hero-h1">Inteligência Metabólica.<br>Engenheirada para Peak Humans.</div>
-            <p class="website-hero-p">Monitoramento de glicose em tempo real encontra IA adaptativa — insights metabólicos personalizados que evoluem com sua biologia.</p>
-            <div style="display:flex;gap:10px;justify-content:center;margin-bottom:20px;">
-              <span class="btn-primary" style="font-size:12px;padding:10px 18px;">Começar Grátis →</span>
-              <span class="btn-ghost" style="font-size:12px;padding:10px 18px;">▶ Ver Demo</span>
-            </div>
-            <div class="website-press">
-              <span class="press-name">FORBES</span>
-              <span class="press-name">TECHCRUNCH</span>
-              <span class="press-name">HARVARD MEDICAL</span>
-              <span class="press-name">VEJA SAÚDE</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Business Card + Slide -->
-    <div class="mockups-grid">
-      <div class="card">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;">Cartão de Visita</div>
-        <div class="biz-card">
-          <div>
-            <div style="font-size:11px;font-weight:900;letter-spacing:-0.02em;color:var(--white);margin-bottom:4px;">GLUCO<span style="color:var(--blue);">AI</span></div>
-            <div style="width:28px;height:2px;background:var(--grad-brand);margin-top:6px;"></div>
-          </div>
-          <div>
-            <div class="biz-name">Marco Oliveira</div>
-            <div class="biz-role">Chief Health Officer</div>
-          </div>
-          <div class="biz-contact">
-            marco@glucoai.com<br>
-            +55 11 99999-0000<br>
-            glucoai.com
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;">Slide de Apresentação</div>
-        <div style="background:var(--void);border:1px solid var(--border);border-radius:14px;padding:36px 32px;aspect-ratio:16/9;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background-image:radial-gradient(ellipse 60% 50% at 30% 50%,rgba(43,127,255,0.12) 0%,transparent 70%);">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;">Série A · Pitch Deck · 2026</div>
-          <div style="font-size:clamp(20px,3vw,32px);font-weight:900;letter-spacing:-0.04em;color:var(--white);line-height:1.1;margin-bottom:10px;">O futuro da<br>saúde metabólica<br>é <span style="background:var(--grad-brand);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">inteligente.</span></div>
-          <div style="font-size:12px;color:var(--dim);">GLUCO AI · glucoai.com</div>
-          <div style="position:absolute;bottom:20px;right:24px;display:flex;gap:6px;">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);"></div>
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--muted);"></div>
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--muted);"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 9. GUIDELINES -->
-<section class="section" id="guidelines">
-  <div class="container">
-    <div class="eyebrow"><span class="eyebrow-dot"></span>09 — Diretrizes de Uso</div>
-    <h2 class="section-title">Do &amp; Don't</h2>
-    <p class="section-sub">Regras que garantem consistência e percepção premium em todo ponto de contato.</p>
-
-    <div class="guidelines-grid" style="margin-bottom:32px;">
-      <div class="card">
-        <div class="guideline-header do">
-          <div class="guideline-icon do">✓</div>
-          <div style="font-size:15px;font-weight:700;color:var(--green);">Faça</div>
-        </div>
-        <ul class="guideline-list do">
-          <li class="guideline-item"><span class="guideline-dot"></span>Use o logo nas versões aprovadas, sem alterações</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Mantenha clear space mínimo = altura da letra "G"</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Use versão reversed em fundos escuros</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Combine cores dentro do sistema aprovado</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Use tipografia mono exclusivamente para dados biométricos</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Mantenha tom de voz: preciso, empoderador, humano</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Certifique contraste WCAG AA em todas as superfícies</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Use espaçamento generoso — respiro é premium</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="guideline-header dont">
-          <div class="guideline-icon dont">✕</div>
-          <div style="font-size:15px;font-weight:700;color:var(--red);">Não Faça</div>
-        </div>
-        <ul class="guideline-list dont">
-          <li class="guideline-item"><span class="guideline-dot"></span>Distorcer proporções do logo</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Adicionar sombras, glows ou efeitos ao logo</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Usar cores fora da paleta aprovada</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Tom alarmista, culpabilizador ou paternalista</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Usar stock photos genéricas de "saúde"</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Fazer promessas de cura ou resultados garantidos</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Usar linguagem complexa sem tradução acessível</li>
-          <li class="guideline-item"><span class="guideline-dot"></span>Clutter visual — cada elemento precisa de razão</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Accessibility -->
-    <div class="card">
-      <div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:20px;">Acessibilidade — WCAG 2.1 AA</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;">
-          <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px;">#F0F4FF sobre #08090F</div>
-          <div style="font-family:monospace;font-size:11px;color:var(--green);">18.7:1 ✓ AAA</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;">
-          <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px;">#2B7FFF sobre #08090F</div>
-          <div style="font-family:monospace;font-size:11px;color:var(--green);">6.8:1 ✓ AA</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;">
-          <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px;">#00D9B4 sobre #08090F</div>
-          <div style="font-family:monospace;font-size:11px;color:var(--green);">8.2:1 ✓ AAA</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;">
-          <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px;">#8B9AB8 sobre #08090F</div>
-          <div style="font-family:monospace;font-size:11px;color:var(--amber);">5.1:1 ✓ AA</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CLOSING -->
-<section class="closing" id="closing">
-  <div class="eyebrow" style="margin-bottom:32px;"><span class="eyebrow-dot"></span>10 — Síntese Estratégica</div>
-  <h2 class="closing-quote">
-    "Precisão. Inteligência. <em>Elegância.</em>"
-  </h2>
-  <p class="closing-sub">
-    GLUCO AI não vende wearables. Vende domínio sobre a própria biologia. Cada pixel, cada palavra, cada dado deve reforçar essa promessa.
-  </p>
-
-  <div style="display:flex;flex-direction:column;gap:16px;max-width:560px;margin:0 auto 48px;">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:left;">
-      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Promise</div>
-      <div style="font-size:15px;color:var(--text);">Metabolic Intelligence for Peak Humans</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:left;">
-      <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Territory</div>
-      <div style="font-size:15px;color:var(--text);">The Science of Living Better</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:left;">
-      <div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Personality</div>
-      <div style="font-size:15px;color:var(--text);">Brilliant Scientist × Elite Athlete</div>
-    </div>
+    </a>
   </div>
 
-  <a class="btn-primary" href="#hero" style="display:inline-flex;">↑ Voltar ao início</a>
+  <div class="docs-grid">
+    <a class="doc-card yellow" href="gluco-ai-playbook.html">
+      <div class="new-badge">NOVO</div>
+      <div class="card-icon yellow">📋</div>
+      <div class="card-tag yellow">Referência Operacional</div>
+      <h2 class="card-title">Playbook Operacional</h2>
+      <p class="card-desc">Guia completo com todas as mensagens, variáveis, score de risco, protocolo AQS e metas SBD 2023. Versão para impressão e PDF.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">8 Seções</span>
+          <span class="chip">Score</span>
+          <span class="chip">PDF</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
 
-  <div class="closing-meta" style="margin-top:48px;">
-    Brand Book v1.0 · GLUCO AI · Março 2026 · Confidencial
+    <a class="doc-card purple" href="gluco-ai-brandbook.html">
+      <div class="card-icon purple">🎨</div>
+      <div class="card-tag purple">Identidade Visual</div>
+      <h2 class="card-title">Brandbook</h2>
+      <p class="card-desc">Paleta de cores, tipografia, logotipo, tom de voz e diretrizes de uso da marca GLUCO AI.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">Cores</span>
+          <span class="chip">Tipografia</span>
+          <span class="chip">Tom de Voz</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card teal" href="gluco-ai-sales.html">
+      <div class="card-icon teal">🚀</div>
+      <div class="card-tag teal">Landing Page</div>
+      <h2 class="card-title">Página de Vendas</h2>
+      <p class="card-desc">Landing page de conversão B2C com hero, problema, solução, preços e FAQ para captação de novos usuários.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">B2C</span>
+          <span class="chip">Preços</span>
+          <span class="chip">FAQ</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
   </div>
-</section>
 
-<footer>
-  <div>
-    <span class="footer-brand">GLUCO<span>AI</span></span>
+  <div class="quick-links">
+    <span class="quick-label">Acesso Rápido</span>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E1 — Abertura</a>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E2 — LGPD</a>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E4 — Coleta de Dados</a>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E6 — Entrega de Valor</a>
+    <a class="quick-link" href="gluco-ai-playbook.html#score">Score de Risco</a>
+    <a class="quick-link" href="gluco-ai-playbook.html#aqs">Protocolo AQS</a>
+    <a class="quick-link" href="gluco-ai-playbook.html#metas">Metas SBD 2023</a>
+    <a class="quick-link" href="gluco-ai-conversion-flow.html">Pitch Conversão</a>
   </div>
-  <div class="footer-copy">Brand Book v1.0 · 2026 · Todos os direitos reservados</div>
-  <div style="font-size:12px;color:var(--dim);">glucoai.com</div>
-</footer>
 
-<script>
-  // Smooth scroll sidebar dots update
-  const sections = document.querySelectorAll('section[id], footer');
-  const navLinks = document.querySelectorAll('.nav-links a');
+</div>
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        navLinks.forEach(a => {
-          a.style.color = '';
-          a.style.background = '';
-          if (a.getAttribute('href') === '#' + id) {
-            a.style.color = 'var(--white)';
-            a.style.background = 'var(--surface)';
-          }
-        });
-      }
-    });
-  }, { threshold: 0.35 });
+<div class="footer">
+  <div class="footer-logo">GLUCO <span>AI</span></div>
+  <div class="footer-meta">Central de Documentos · Março 2026 · Documento Interno Confidencial</div>
+</div>
 
-  sections.forEach(s => observer.observe(s));
-</script>
 </body>
 </html>
