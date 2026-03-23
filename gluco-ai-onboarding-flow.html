@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Onboarding Flow v2.0 (Revisão de Equipe)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:    #0A0E1A; --abyss:   #111526; --surface: #1A1E2E;
+  --elevated:#242840; --stroke:  #2E334F; --muted:   #4A5070;
+  --t2:      #8B93B8; --t1:      #E8EEFF; --white:   #FFFFFF;
+  --blue:    #1B6FFF; --teal:    #00D4B4; --green:   #00C48C;
+  --yellow:  #FFB020; --red:     #FF4B4B; --orange:  #FF8C00;
+  --wa:      #25D366; --wa-dark: #128C7E;
+  --fixed:   rgba(255,176,32,0.08); --ok: rgba(0,196,140,0.08);
+  --new:     rgba(27,111,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.6;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* ── LAYOUT ── */
+.page{max-width:1200px;margin:0 auto;padding:0 24px 80px;}
+
+/* ── HEADER ── */
+.doc-header{background:var(--abyss);border-bottom:1px solid var(--stroke);padding:0;position:sticky;top:0;z-index:100;}
+.doc-header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.doc-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-0.04em;}
+.doc-logo span{color:var(--blue);}
+.doc-meta{display:flex;align-items:center;gap:12px;}
+.version-badge{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;background:rgba(0,212,180,0.1);border:1px solid rgba(0,212,180,0.3);color:var(--teal);padding:4px 10px;border-radius:6px;}
+.status-badge{font-size:11px;font-weight:700;background:rgba(255,176,32,0.12);border:1px solid rgba(255,176,32,0.3);color:var(--yellow);padding:4px 10px;border-radius:6px;}
+
+/* ── TITLE AREA ── */
+.doc-title-area{padding:48px 0 32px;}
+.doc-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+.doc-title{font-size:clamp(28px,3.5vw,44px);font-weight:900;letter-spacing:-0.04em;line-height:1.05;margin-bottom:12px;}
+.doc-desc{font-size:15px;color:var(--t2);max-width:620px;line-height:1.7;}
+
+/* ── CHANGES SUMMARY ── */
+.changes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:32px 0;}
+.change-card{border-radius:14px;padding:18px 20px;}
+.change-card.critical{background:rgba(255,75,75,0.07);border:1px solid rgba(255,75,75,0.25);}
+.change-card.important{background:rgba(255,176,32,0.07);border:1px solid rgba(255,176,32,0.25);}
+.change-card.improvement{background:rgba(27,111,255,0.07);border:1px solid rgba(27,111,255,0.25);}
+.change-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+.change-card.critical .change-title{color:var(--red);}
+.change-card.important .change-title{color:var(--yellow);}
+.change-card.improvement .change-title{color:var(--blue);}
+.change-list{list-style:none;}
+.change-list li{font-size:13px;color:var(--t2);padding:3px 0;display:flex;align-items:flex-start;gap:6px;line-height:1.4;}
+.change-list li::before{content:'→';flex-shrink:0;margin-top:1px;font-size:11px;}
+.change-card.critical .change-list li::before{color:var(--red);}
+.change-card.important .change-list li::before{color:var(--yellow);}
+.change-card.improvement .change-list li::before{color:var(--blue);}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--stroke),transparent);margin:40px 0;}
+
+/* ── STAGE HEADER ── */
+.stage{margin-bottom:48px;}
+.stage-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:20px 24px;background:var(--surface);border:1px solid var(--stroke);border-radius:16px;}
+.stage-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--blue);background:rgba(27,111,255,.12);border:1px solid rgba(27,111,255,.25);border-radius:99px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stage-name{font-size:18px;font-weight:800;letter-spacing:-0.025em;margin-bottom:2px;}
+.stage-desc{font-size:13px;color:var(--t2);}
+.stage-obj{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.obj-tag{font-size:11px;font-weight:600;background:rgba(0,212,180,.1);border:1px solid rgba(0,212,180,.2);color:var(--teal);padding:3px 10px;border-radius:99px;white-space:nowrap;}
+
+/* ── MESSAGE BLOCK ── */
+.msg-block{margin-bottom:20px;background:var(--surface);border:1px solid var(--stroke);border-radius:18px;overflow:hidden;}
+.msg-block.fixed{background:var(--fixed);border-color:rgba(255,176,32,.3);}
+.msg-block.new{background:var(--new);border-color:rgba(27,111,255,.3);}
+.msg-block.ok{background:var(--ok);border-color:rgba(0,196,140,.25);}
+
+.msg-block-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--stroke);background:rgba(0,0,0,.15);}
+.msg-id{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--t2);}
+.msg-type{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;}
+.tag-fixed{background:rgba(255,176,32,.15);color:var(--yellow);border:1px solid rgba(255,176,32,.3);}
+.tag-new{background:rgba(27,111,255,.15);color:var(--blue);border:1px solid rgba(27,111,255,.3);}
+.tag-ok{background:rgba(0,196,140,.12);color:var(--green);border:1px solid rgba(0,196,140,.25);}
+.tag-critical{background:rgba(255,75,75,.12);color:var(--red);border:1px solid rgba(255,75,75,.25);}
+.msg-progress{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);font-weight:600;}
+
+.msg-block-body{padding:20px;}
+
+/* ── WHATSAPP MESSAGE ── */
+.wa-wrap{background:var(--void);border-radius:12px;padding:16px;margin-bottom:12px;}
+.wa-bot{background:rgba(0,212,180,.07);border:1px solid rgba(0,212,180,.18);border-radius:14px;border-bottom-left-radius:4px;padding:14px 16px;max-width:85%;margin-bottom:8px;}
+.wa-user{background:rgba(27,111,255,.15);border:1px solid rgba(27,111,255,.2);border-radius:14px;border-bottom-right-radius:4px;padding:14px 16px;max-width:85%;margin-left:auto;text-align:left;}
+.wa-label{font-size:10px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.wa-text{font-size:14px;line-height:1.65;color:var(--t1);white-space:pre-wrap;}
+.wa-time{font-size:10px;color:var(--muted);margin-top:6px;text-align:right;}
+.wa-options{display:flex;flex-direction:column;gap:6px;margin-top:12px;}
+.wa-opt{background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--t1);cursor:default;}
+.wa-opt:hover{background:rgba(27,111,255,.18);}
+
+/* ── ANNOTATIONS ── */
+.annotation{margin-top:12px;padding:12px 16px;border-radius:10px;font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:10px;}
+.annotation.fix{background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.2);color:var(--yellow);}
+.annotation.new{background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.2);color:var(--blue);}
+.annotation.warn{background:rgba(255,75,75,.07);border:1px solid rgba(255,75,75,.2);color:var(--red);}
+.annotation.info{background:rgba(0,212,180,.07);border:1px solid rgba(0,212,180,.2);color:var(--teal);}
+.ann-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.ann-text strong{display:block;margin-bottom:2px;}
+
+/* ── BRANCH BLOCK ── */
+.branch{background:var(--elevated);border:1px solid var(--stroke);border-radius:14px;padding:16px 20px;margin-top:12px;}
+.branch-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.branch-title::before{content:'⑂';color:var(--blue);}
+.branch-row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(46,51,79,.5);}
+.branch-row:last-child{border-bottom:none;}
+.branch-cond{font-size:12px;font-weight:700;color:var(--blue);background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.2);border-radius:6px;padding:3px 10px;white-space:nowrap;flex-shrink:0;}
+.branch-cond.red{color:var(--red);background:rgba(255,75,75,.1);border-color:rgba(255,75,75,.2);}
+.branch-cond.green{color:var(--green);background:rgba(0,196,140,.1);border-color:rgba(0,196,140,.2);}
+.branch-cond.yellow{color:var(--yellow);background:rgba(255,176,32,.1);border-color:rgba(255,176,32,.2);}
+.branch-action{font-size:13px;color:var(--t2);line-height:1.5;}
+
+/* ── PROGRESS BAR ── */
+.progress-demo{background:var(--elevated);border:1px solid var(--stroke);border-radius:10px;padding:12px 16px;margin-top:10px;display:flex;align-items:center;gap:14px;}
+.progress-bar{flex:1;height:6px;background:var(--stroke);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:99px;transition:width .3s;}
+.progress-pct{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--teal);flex-shrink:0;}
+.progress-label{font-size:12px;color:var(--t2);flex-shrink:0;}
+
+/* ── FLOW MAP ── */
+.flow-map{background:var(--surface);border:1px solid var(--stroke);border-radius:18px;padding:28px;margin-bottom:40px;overflow-x:auto;}
+.flow-map h3{font-size:14px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px;}
+.flow-steps{display:flex;align-items:center;gap:0;flex-wrap:nowrap;min-width:max-content;}
+.flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;}
+.flow-step-bubble{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;position:relative;z-index:1;font-family:'JetBrains Mono',monospace;}
+.bubble-blue{background:rgba(27,111,255,.2);border:2px solid var(--blue);color:var(--blue);}
+.bubble-teal{background:rgba(0,212,180,.15);border:2px solid var(--teal);color:var(--teal);}
+.bubble-green{background:rgba(0,196,140,.15);border:2px solid var(--green);color:var(--green);}
+.bubble-red{background:rgba(255,75,75,.1);border:2px solid var(--red);color:var(--red);}
+.flow-step-label{font-size:10px;color:var(--t2);text-align:center;max-width:70px;line-height:1.3;}
+.flow-connector{width:40px;height:2px;background:linear-gradient(90deg,var(--blue),var(--teal));margin-top:-16px;flex-shrink:0;}
+.flow-connector.alt{background:repeating-linear-gradient(90deg,var(--muted) 0,var(--muted) 4px,transparent 4px,transparent 8px);}
+
+/* ── RISK ALGO ── */
+.algo-table{width:100%;border-collapse:collapse;margin-top:12px;}
+.algo-table th{background:var(--elevated);padding:10px 14px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t2);text-align:left;border-bottom:1px solid var(--stroke);}
+.algo-table td{padding:10px 14px;font-size:13px;color:var(--t2);border-bottom:1px solid rgba(46,51,79,.4);}
+.algo-table tr:last-child td{border-bottom:none;}
+.score-pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;}
+.score-low{background:rgba(0,196,140,.15);color:var(--green);}
+.score-med{background:rgba(255,176,32,.15);color:var(--yellow);}
+.score-high{background:rgba(255,140,0,.15);color:var(--orange);}
+.score-crit{background:rgba(255,75,75,.15);color:var(--red);}
+
+/* ── RETENTION TRIGGERS ── */
+.trigger-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+.trigger-card{background:var(--surface);border:1px solid var(--stroke);border-radius:14px;padding:20px;}
+.trigger-time{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px;}
+.trigger-tone{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.trigger-msg{font-size:13px;color:var(--t1);line-height:1.6;font-style:italic;}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:22px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px;margin-top:40px;}
+.sec-desc{font-size:14px;color:var(--t2);margin-bottom:24px;line-height:1.65;}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none;}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:14px;color:var(--t2);border-bottom:1px solid rgba(46,51,79,.4);}
+.checklist li:last-child{border-bottom:none;}
+.cl-ok{color:var(--green);}
+.cl-warn{color:var(--yellow);}
+.cl-err{color:var(--red);}
+.checklist li strong{color:var(--t1);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .changes-grid,.trigger-grid{grid-template-columns:1fr;}
+  .flow-map{overflow-x:scroll;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-logo">
+      <svg viewBox="0 0 52 52" width="26" height="26" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="52" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00D4B4"/><stop offset="100%" stop-color="#1B6FFF"/>
+        </linearGradient></defs>
+        <path d="M4 32 C9 32 12 22 18 22 C24 22 27 38 33 38 C39 38 42 27 48 27" stroke="url(#g)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle cx="48" cy="27" r="2.5" fill="#1B6FFF"/>
+      </svg>
+      GLUCO <span>AI</span>
+    </div>
+    <div class="doc-meta">
+      <span class="version-badge">v2.0</span>
+      <span class="status-badge">⚠ Em Revisão</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- TITLE -->
+  <div class="doc-title-area">
+    <div class="doc-eyebrow">Documento interno · Revisão de equipe</div>
+    <h1 class="doc-title">Onboarding Flow — WhatsApp<br>Versão Corrigida e Otimizada</h1>
+    <p class="doc-desc">Fluxo completo de onboarding do bot GLUCO AI via WhatsApp com todas as correções aplicadas: ordem de perguntas corrigida, LGPD, barra de progresso consistente, gatilhos de retenção e ramificações de segurança.</p>
+  </div>
+
+  <!-- CHANGES SUMMARY -->
+  <div class="changes-grid">
+    <div class="change-card critical">
+      <div class="change-title">🔴 Correções críticas</div>
+      <ul class="change-list">
+        <li>Ordem 8.2/8.3 invertida corrigida</li>
+        <li>Barra de progresso consistente (sem regressão)</li>
+        <li>Consentimento LGPD adicionado</li>
+        <li>Claim médico suavizado</li>
+        <li>"Agora não" e "Como funciona?" mapeados</li>
+        <li>Gestacional/Não sei: lead retido, não perdido</li>
+      </ul>
+    </div>
+    <div class="change-card important">
+      <div class="change-title">🟡 Melhorias de conversão</div>
+      <ul class="change-list">
+        <li>Hook inicial mais emocional (medo + esperança)</li>
+        <li>3 gatilhos de retenção (30min, 24h, 72h)</li>
+        <li>Pergunta de medicação (segurança + personalização)</li>
+        <li>Diferenciação Tipo 1 vs Tipo 2 no score</li>
+        <li>Pergunta HbA1c adicionada</li>
+        <li>Justificativa para pergunta de país</li>
+      </ul>
+    </div>
+    <div class="change-card improvement">
+      <div class="change-title">🔵 Adicionados</div>
+      <ul class="change-list">
+        <li>Algoritmo de Score de Risco completo</li>
+        <li>Fluxo de edição de nome mapeado</li>
+        <li>% da barra em todas as perguntas</li>
+        <li>Resposta para "Como funciona?"</li>
+        <li>Frase automática de risco por score</li>
+        <li>Mensagem de saída para "Agora não"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FLOW MAP -->
+  <div class="flow-map">
+    <h3>Mapa do fluxo</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-blue">E1</div>
+        <div class="flow-step-label">Boas-Vindas</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-blue">E2</div>
+        <div class="flow-step-label">Contexto & Promessa</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-teal">E3</div>
+        <div class="flow-step-label">Gamificação Inicia</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-teal">E4</div>
+        <div class="flow-step-label">Coleta de Dados<br>(10 perguntas)</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-blue">E5</div>
+        <div class="flow-step-label">Quebra 90%</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-green">E6</div>
+        <div class="flow-step-label">Fechamento</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-green">E7</div>
+        <div class="flow-step-label">Entrega de Valor</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-teal">E8</div>
+        <div class="flow-step-label">Posicionamento</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-bubble bubble-blue">E9</div>
+        <div class="flow-step-label">CTA Final</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2)"><span style="display:inline-block;width:16px;height:2px;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:2px"></span>Fluxo principal</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2)"><span style="display:inline-block;width:16px;height:2px;background:repeating-linear-gradient(90deg,var(--muted) 0,var(--muted) 4px,transparent 4px,transparent 8px)"></span>Fluxo alternativo (branch)</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ──────────────────────────────────────────
+       ETAPA 1 — BOAS-VINDAS
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E1</div>
+      <div>
+        <div class="stage-name">Boas-Vindas — Impacto + Personalidade</div>
+        <div class="stage-desc">Gerar conexão emocional imediata e qualificar o lead.</div>
+      </div>
+      <div class="stage-obj">
+        <span class="obj-tag">Conexão emocional</span>
+        <span class="obj-tag">Qualificação</span>
+        <span class="obj-tag">Reduzir abandono</span>
+      </div>
+    </div>
+
+    <!-- MSG 1 -->
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-01 · Abertura</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="msg-type tag-fixed">✏ Melhorado</span>
+        </div>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot">
+            <div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Olá! 👋😄
+
+Eu sou o Gluco IA 🧬 — seu novo parceiro para controlar o diabetes.
+
+A maioria das complicações do diabetes
+(visão, rins, circulação) começa em silêncio…
+…antes de qualquer sintoma aparecer. 😟
+
+Mas com o acompanhamento certo?
+Dá pra evitar tudo isso. 💪
+
+Vou te ajudar a:
+✔ Controlar sua glicemia e evitar complicações
+✔ Entender sua alimentação e montar refeições seguras
+✔ Agir rápido quando a glicemia subir — sem sair de casa
+
+👉 Vamos começar seu controle agora?</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Quero controlar minha glicemia</div>
+              <div class="wa-opt">2️⃣ Como funciona?</div>
+            </div>
+            <div class="wa-time">agora ✓✓</div>
+          </div>
+        </div>
+        <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Melhoria aplicada</strong>Adicionado gancho emocional com medo de complicações + opção "Como funciona?" separada para não bloquear o lead curioso.</div></div>
+
+        <!-- Branch -->
+        <div class="branch">
+          <div class="branch-title">Ramificações da resposta</div>
+          <div class="branch-row">
+            <span class="branch-cond green">Opção 1</span>
+            <div class="branch-action">→ Dispara MSG-NOME (coleta nome imediatamente) → depois segue para MSG-02</div>
+          </div>
+          <div class="branch-row">
+            <span class="branch-cond">Opção 2</span>
+            <div class="branch-action">→ Dispara MSG-01B (pede nome dentro da resposta) → depois segue para MSG-02</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG-NOME - 2ª mensagem: coleta nome (ambas as opções passam por aqui) -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-NOME · 2ª mensagem — Coleta de nome e sobrenome</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Que ótimo! 🎉
+
+Antes de tudo, me diz o seu *nome e sobrenome*, por favor?</div>
+          </div>
+          <div class="wa-user"><div class="wa-text">Maria Santos</div><div class="wa-time">09:01 ✓✓</div></div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Seu nome está correto assim?
+👤 *Maria Santos*</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Sim, está correto</div>
+              <div class="wa-opt">✏️ Quero editar</div>
+            </div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações</div>
+          <div class="branch-row"><span class="branch-cond green">Correto</span><div class="branch-action">→ Se veio da Opção 1: segue para MSG-02. Se veio da Opção 2: segue para MSG-01B (explicação "Como funciona?")</div></div>
+          <div class="branch-row"><span class="branch-cond yellow">Editar</span><div class="branch-action">→ "Tudo bem! Me diga o nome correto:" → aguarda → exibe confirmação novamente</div></div>
+        </div>
+        <div class="annotation info"><span class="ann-icon">⚙️</span><div class="ann-text">A partir daqui <strong>todas as mensagens usam <code>{nome}</code></strong> para hiperpersonalização. Nome coletado antes da LGPD e de qualquer outra pergunta.</div></div>
+      </div>
+    </div>
+
+    <!-- MSG 01B - Como funciona -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-01B · Resposta "Como funciona?"</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot">
+            <div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Boa pergunta, {nome}! 😄 Funciona assim:
+
+📲 Você me envia pelo WhatsApp:
+• Sua glicemia (digitando ou foto do aparelho).
+• Foto do que vai comer.
+
+🧠 Eu analiso em segundos e te digo:
+• Como está sua glicemia e o que fazer.
+• Se sua refeição é segura para você.
+• Quanto sua glicemia pode subir depois de comer.
+
+⚡ Se a sua glicemia estiver muito alta, ativo automaticamente o Protocolo AQS e te acompanho a cada 1 hora até normalizar — dessa forma, juntos, evitamos as complicações.
+
+Tudo pelo WhatsApp. Sem baixar nenhum app. 📱
+
+Pronto pra começar? 🚀</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Sim, quero começar!</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotation new"><span class="ann-icon">✦</span><div class="ann-text"><strong>Por que isso converte</strong>Lead que pergunta "como funciona" é o mais qualificado. Resposta direta + benefícios concretos + CTA fecha o ciclo de objeção.</div></div>
+      </div>
+    </div>
+
+    <!-- MSG 2 -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-02 · Quebra de padrão</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot">
+            <div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, antes da gente começar… deixa eu te perguntar uma coisa 😄
+(Sem julgamentos… estamos juntos nisso 🤝)
+
+👉 Você é do tipo que:</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Controla a glicemia direitinho</div>
+              <div class="wa-opt">2️⃣ Só lembra quando dá problema 😬</div>
+            </div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações</div>
+          <div class="branch-row">
+            <span class="branch-cond green">Opção 1</span>
+            <div class="branch-action">→ "Que incrível! 🎉 Então vou te ajudar a manter esse controle com ainda mais precisão e inteligência. Bora?" → MSG-03</div>
+          </div>
+          <div class="branch-row">
+            <span class="branch-cond yellow">Opção 2</span>
+            <div class="branch-action">→ "Haha, você é honesto! 😄 A maioria das pessoas também é assim. Mas isso vai mudar agora. Bora?" → MSG-03</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       ETAPA 2 — CONTEXTO & LGPD
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E2</div>
+      <div>
+        <div class="stage-name">Contexto + Autoridade + Consentimento LGPD</div>
+        <div class="stage-desc">Estabelecer credibilidade, promessa e obter consentimento legal antes da coleta de dados.</div>
+      </div>
+      <div class="stage-obj">
+        <span class="obj-tag">Autoridade</span>
+        <span class="obj-tag">LGPD</span>
+        <span class="obj-tag">Promessa</span>
+      </div>
+    </div>
+
+    <!-- MSG 3 -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-03 · Contexto e promessa</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot">
+            <div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Meu objetivo é simples:
+👉 Te ajudar a evitar picos de glicemia.
+👉 Reduzir riscos de complicações.
+👉 E te ensinar a comer bem sem neura 🍽️
+
+{nome}, vou te fazer algumas perguntas rápidas (menos de 2 minutos ⏱️)
+e já começo a te acompanhar de forma personalizada.</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Sim, vamos lá!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG LGPD -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-03B · Consentimento LGPD</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="msg-type tag-new">✦ Novo</span>
+          <span class="msg-type tag-critical">🔴 Obrigatório</span>
+        </div>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot">
+            <div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, antes de começar, uma informação importante 🔒
+
+Para personalizar seu acompanhamento, vou coletar alguns dados de saúde como:
+• Tipo de diabetes e histórico.
+• Medições de glicemia.
+• Informações sobre alimentação.
+
+Seus dados são:
+✔ Criptografados e armazenados no Brasil
+✔ Nunca compartilhados com terceiros
+✔ Protegidos pela LGPD
+
+Ao continuar, você concorda com nossa Política de Privacidade.
+ℹ️ gluco.ai/privacidade
+
+Pode continuar?</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Concordo e quero continuar</div>
+              <div class="wa-opt">❌ Não concordo</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotation warn"><span class="ann-icon">⚖️</span><div class="ann-text"><strong>Requisito legal — LGPD Art. 11</strong>Dados de saúde são dados sensíveis. O consentimento explícito é obrigatório. Registrar timestamp + resposta no banco.</div></div>
+      </div>
+    </div>
+
+    <!-- MSG-LGPD-SAIDA -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-LGPD-SAIDA · Confirmação de saída (se "Não concordo")</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, entendo a sua preocupação — e respeito muito isso. 🙏
+
+Antes de confirmar, quero que você saiba o que significa *não compartilhar seus dados*:
+
+⚠️ *1. Sem personalização*
+Não consigo adaptar as orientações ao seu tipo de diabetes, histórico e metas. Você recebe respostas genéricas, não para o seu caso.
+
+⚠️ *2. Sem protocolo de emergência*
+Não é possível ativar o Protocolo AQS nem acionar seu contato de emergência em situações críticas.
+
+⚠️ *3. Sem acompanhamento de evolução*
+Sem histórico salvo, não consigo identificar padrões, prever picos nem mostrar sua evolução ao longo do tempo.
+
+Tem certeza que prefere não compartilhar?</div>
+            <div class="wa-options">
+              <div class="wa-opt">❌ Prefiro não compartilhar</div>
+              <div class="wa-opt">✅ Vamos continuar!</div>
+            </div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações</div>
+          <div class="branch-row"><span class="branch-cond green">Vamos continuar!</span><div class="branch-action">→ Retorna ao fluxo normal → MSG-04 (Missão iniciada)</div></div>
+          <div class="branch-row"><span class="branch-cond red">Prefiro não compartilhar</span><div class="branch-action">→ "Tudo bem, {nome}. Suas preferências são respeitadas. Se mudar de ideia, é só nos chamar aqui. 🙏" → encerra fluxo e registra recusa no banco</div></div>
+        </div>
+        <div class="annotation warn"><span class="ann-icon">⚖️</span><div class="ann-text"><strong>LGPD:</strong> Registrar timestamp da recusa. Não enviar mais mensagens automáticas. Manter dados de contato apenas para eventual reativação voluntária.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       ETAPA 3 — GAMIFICAÇÃO
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E3</div>
+      <div>
+        <div class="stage-name">Gamificação — Missão Iniciada</div>
+        <div class="stage-desc">Criar senso de progresso e comprometimento.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag">Engajamento</span><span class="obj-tag">Comprometimento</span></div>
+    </div>
+
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-04 · Missão iniciada</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot">
+            <div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">🎯 Missão iniciada: Perfil Metabólico</div>
+          </div>
+        </div>
+        <div class="progress-demo">
+          <span class="progress-label">Progresso</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+          <span class="progress-pct">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       ETAPA 4 — COLETA DE DADOS
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E4</div>
+      <div>
+        <div class="stage-name">Coleta de Dados — Perfil Metabólico</div>
+        <div class="stage-desc">12 perguntas com barra de progresso linear e sem regressão.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag">Score de risco</span><span class="obj-tag">Metas</span><span class="obj-tag">Personalização</span></div>
+    </div>
+
+    <!-- Q1 Sexo (nome já coletado em MSG-NOME) -->
+    <!-- Q2 Sexo -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q2 · Sexo biológico</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">18%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Qual é o seu sexo biológico, {nome}?
+(Importante para calcular corretamente suas Metas Diárias de controle 🧬)</div>
+            <div class="wa-options">
+              <div class="wa-opt">🔘 Masculino</div>
+              <div class="wa-opt">🔘 Feminino</div>
+              <div class="wa-opt">🔘 Prefiro não informar</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:18%"></div></div><span class="progress-pct">18%</span></div>
+      </div>
+    </div>
+
+    <!-- Q3 Data de nascimento -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q3 · Data de nascimento</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">25%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, qual é a sua data de nascimento?
+(Formato: DD/MM/AAAA)</div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div><span class="progress-pct">25%</span></div>
+      </div>
+    </div>
+
+    <!-- Q4 País -->
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">Q4 · País de residência</span>
+        <span class="msg-type tag-fixed">✏ Melhorado</span>
+        <span class="msg-progress">30%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">E qual o país onde você mora atualmente?
+(Uso os valores de referência do seu país para classificar sua glicemia corretamente 🌎)</div>
+          </div>
+        </div>
+        <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Melhoria</strong>Adicionado contexto "por quê" — reduz fricção quando o usuário questiona a necessidade da pergunta.</div></div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div><span class="progress-pct">30%</span></div>
+      </div>
+    </div>
+
+    <!-- Q5 Tipo de diabetes -->
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">Q5 · Tipo de diabetes</span>
+        <span class="msg-type tag-fixed">✏ Corrigido</span>
+        <span class="msg-progress">38%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, qual é o seu tipo de diabetes?</div>
+            <div class="wa-options">
+              <div class="wa-opt">🔘 Tipo 1</div>
+              <div class="wa-opt">🔘 Tipo 2</div>
+              <div class="wa-opt">🔘 Gestacional</div>
+              <div class="wa-opt">🔘 Não sei / Ainda não diagnosticado</div>
+            </div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações</div>
+          <div class="branch-row"><span class="branch-cond green">Tipo 1 ou Tipo 2</span><div class="branch-action">→ Registra o tipo, personaliza mensagens e score → avança para Q6</div></div>
+          <div class="branch-row"><span class="branch-cond yellow">Gestacional</span><div class="branch-action">→ Dispara MSG-05B (redirecionamento gentil + waitlist) → encerra onboarding com opção de retorno</div></div>
+          <div class="branch-row"><span class="branch-cond red">Não sei</span><div class="branch-action">→ Dispara MSG-05C ("vamos continuar de forma mais geral") → continua onboarding com aviso de personalização limitada</div></div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:38%"></div></div><span class="progress-pct">38%</span></div>
+      </div>
+    </div>
+
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-05B · Redirecionamento Gestacional</span>
+        <span class="msg-type tag-fixed">✏ Corrigido</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Opa {nome}! 🌸
+
+No momento o Gluco IA é focado em pessoas com diabetes tipo 1 ou tipo 2.
+
+Mas fica tranquila — você não vai ficar sem ajuda!
+
+👉 Te recomendo procurar um pré-natalista ou endocrinologista especializado em diabetes gestacional.
+
+Posso te avisar quando lançarmos o suporte para diabetes gestacional?</div>
+            <div class="wa-options"><div class="wa-opt">✅ Sim, quero ser avisada!</div><div class="wa-opt">2️⃣ Não, obrigada</div></div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações da resposta</div>
+          <div class="branch-row"><span class="branch-cond green">Sim, quero ser avisada!</span><div class="branch-action">→ Dispara MSG-05B-SIM abaixo → registra na waitlist gestacional</div></div>
+          <div class="branch-row"><span class="branch-cond red">Não, obrigada</span><div class="branch-action">→ Dispara MSG-05B-NAO abaixo → encerra respeitosamente</div></div>
+        </div>
+        <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Correção crítica</strong>Versão anterior perdia o lead. Agora ele entra em waitlist de gestacional — potencial base de usuários futura.</div></div>
+      </div>
+    </div>
+
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-05B-SIM · Confirmação de entrada na waitlist gestacional</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Perfeito, {nome}! 🥰 Você já está na lista.
+
+Assim que lançarmos o suporte completo para diabetes gestacional, você será uma das primeiras a saber.
+
+Cuide-se muito, e qualquer dúvida pode me chamar aqui. Estou sempre por perto. 💚</div>
+          </div>
+        </div>
+        <div class="annotation info"><span class="ann-icon">⚙️</span><div class="ann-text">Registrar contato + timestamp na lista de espera gestacional. Agendar notificação automática no lançamento.</div></div>
+      </div>
+    </div>
+
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-05B-NAO · Saída respeitosa (não quer ser avisada)</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Tudo bem, {nome}! Respeito sua decisão. 🙏
+
+Cuide muito de você e do seu bebê.
+Se um dia quiser conversar, é só me chamar aqui. 💚</div>
+          </div>
+        </div>
+        <div class="annotation info"><span class="ann-icon">⚙️</span><div class="ann-text">Encerrar fluxo. Não enviar mensagens automáticas. Manter contato disponível para reativação voluntária.</div></div>
+      </div>
+    </div>
+
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-05C · "Não sei o tipo"</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Tudo bem {nome}! Isso acontece mais do que você imagina 😊
+
+Vou continuar configurando seu perfil de forma mais geral por enquanto.
+
+⚠️ Para resultados mais precisos, recomendo pedir ao seu médico para confirmar o tipo de diabetes na próxima consulta. Depois é só me avisar e eu atualizo tudo!
+
+Vamos continuar? 🚀</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 Medicação -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">Q6 · Medicação (NOVO — segurança)</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="msg-type tag-new">✦ Novo</span>
+          <span class="msg-type tag-critical">🔴 Segurança</span>
+        </div>
+        <span class="msg-progress">45%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, você usa alguma medicação para diabetes atualmente?</div>
+            <div class="wa-options">
+              <div class="wa-opt">🔘 Insulina</div>
+              <div class="wa-opt">🔘 Metformina ou outro comprimido</div>
+              <div class="wa-opt">🔘 Insulina + comprimido</div>
+              <div class="wa-opt">🔘 Não uso medicação</div>
+              <div class="wa-opt">🔘 Não sei / Prefiro não dizer</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotation warn"><span class="ann-icon">⚠️</span><div class="ann-text"><strong>Por que é crítico</strong>Pacientes insulinizados têm risco de hipoglicemia. Os protocolos AQS devem ser adaptados — nunca recomendar jejum ou atividade intensa sem considerar insulina ativa.</div></div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div><span class="progress-pct">45%</span></div>
+      </div>
+    </div>
+
+    <!-- Q7 Tempo com diabetes -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q7 · Tempo com diabetes</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">52%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">({nome}), há quantos anos você tem diabetes (anos)?</div>
+          </div>
+            <div class="wa-options">
+              <div class="wa-opt">🔘 Menos de 1 ano</div>
+              <div class="wa-opt">🔘 Entre 1 ano e 3 anos</div>
+              <div class="wa-opt">🔘 Entre 3 anos e 5 anos</div>
+              <div class="wa-opt">🔘 Entre 5 anos e 10 anos</div>
+              <div class="wa-opt">🔘 Mais de 10 anos</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:52%"></div></div><span class="progress-pct">52%</span></div>
+      </div>
+    </div>
+
+    <!-- Q8 Situação atual -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q8 · Situação atual</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">58%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Hoje você considera que seu diabetes está:</div>
+            <div class="wa-options">
+              <div class="wa-opt">🔘 Controlado</div>
+              <div class="wa-opt">🔘 Descontrolado</div>
+              <div class="wa-opt">🔘 Não sei</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:58%"></div></div><span class="progress-pct">58%</span></div>
+      </div>
+    </div>
+
+    <!-- Q9 Emergência -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q9 · Histórico de emergência</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">64%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, você já precisou ir ao pronto-socorro por glicemia alta?</div>
+            <div class="wa-options">
+              <div class="wa-opt">🔘 Sim, já precisei</div>
+              <div class="wa-opt">🔘 Não, nunca precisei</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:64%"></div></div><span class="progress-pct">64%</span></div>
+      </div>
+    </div>
+
+    <!-- Q10 Pico de glicemia -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q10 · Maior pico glicêmico</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">70%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, você lembra qual foi a maior glicemia que já teve?</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Até 150 mg/dL</div>
+              <div class="wa-opt">2️⃣ 150 – 200 mg/dL</div>
+              <div class="wa-opt">3️⃣ 200 – 300 mg/dL</div>
+              <div class="wa-opt">4️⃣ 300 – 400 mg/dL</div>
+              <div class="wa-opt">5️⃣ Acima de 400 mg/dL</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div><span class="progress-pct">70%</span></div>
+      </div>
+    </div>
+
+    <!-- Q11 Glicosímetro -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q11 · Glicosímetro e frequência</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">75%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, você tem aparelho para medir glicemia em casa?</div>
+            <div class="wa-options"><div class="wa-opt">🔘 Sim</div><div class="wa-opt">🔘 Não</div></div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações</div>
+          <div class="branch-row"><span class="branch-cond green">Sim</span><div class="branch-action">→ Dispara MSG-11-SIM abaixo → avança para Q12</div></div>
+          <div class="branch-row"><span class="branch-cond red">Não</span><div class="branch-action">→ Dispara MSG-11-NAO abaixo → avança para Q12 após orientação</div></div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div><span class="progress-pct">75%</span></div>
+      </div>
+    </div>
+
+    <!-- MSG-11-SIM -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-11-SIM · Parabenização — tem aparelho</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Parabéns, {nome}! 🎉 Isso faz TODA a diferença.
+
+Ter o aparelho em casa significa que você já está um passo à frente na prevenção de complicações sérias.
+
+A partir de agora vamos usar cada medição para construir o seu controle com precisão. 🎯</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG-11-NAO -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-11-NAO · Orientação urgente — não tem aparelho</span>
+        <span class="msg-type tag-new">✦ Novo</span>
+        <span class="msg-type tag-critical">🔴 Crítico</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, preciso ser direto(a) com você sobre algo muito importante. 🚨
+
+*Uma pessoa diabética sem aparelho de glicemia é como dirigir com os olhos vendados.*
+
+Sem medir, você não sabe se sua glicemia está normal, alta ou em colapso — e isso pode levar a complicações sérias como neuropatia, problemas renais e na visão.
+
+Posso te ajudar com análise de refeições e previsões, *mas o controle real só é possível com medições reais.*
+
+📍 *Como conseguir seu aparelho agora:*
+
+1️⃣ *Pelo SUS (grátis):* Vá ao seu posto de saúde com sua carteirinha do SUS e diagnóstico de diabetes. Diabéticos têm direito ao glicosímetro e às fitas pelo SUS.
+
+2️⃣ *Por compra:* Qualquer farmácia tem aparelhos a partir de R$50–R$80. As fitas de teste são o item mais importante — verifique o custo antes de escolher o modelo.
+
+👉 *Te peço apenas uma coisa:* vá conseguir o seu ainda esta semana. Quando tiver, me avisa que continuamos juntos com controle total. 💪</div>
+          </div>
+        </div>
+        <div class="annotation warn"><span class="ann-icon">⚠️</span><div class="ann-text">Mesmo sem aparelho, o lead continua no fluxo. A análise de refeições já tem valor. Mas registrar flag <code>sem_glicosimetro=true</code> para lembrete automático em T+3 dias.</div></div>
+      </div>
+    </div>
+
+    <!-- Q12 Sintomas -->
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">Q12 · Sintomas (ordem corrigida — antes do alimentar)</span>
+        <span class="msg-type tag-fixed">✏ Corrigido</span>
+        <span class="msg-progress">80%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, agora me conta uma coisa MUITO importante… 👀
+
+Você tem percebido algum desses sinais no seu corpo?
+(Alguns podem indicar que a glicemia já está impactando o organismo 👇)
+
+Pode marcar mais de uma opção:</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Não, nenhum desses</div>
+              <div class="wa-opt">2️⃣ Perda de energia e disposição</div>
+              <div class="wa-opt">3️⃣ Visão turva ou embaçada</div>
+              <div class="wa-opt">4️⃣ Falta de ar</div>
+              <div class="wa-opt">5️⃣ Inchaço nas pernas, tornozelos ou olhos</div>
+              <div class="wa-opt">6️⃣ Pressão arterial elevada</div>
+              <div class="wa-opt">7️⃣ Urina espumosa</div>
+              <div class="wa-opt">8️⃣ Dores ou cãibras nas pernas</div>
+              <div class="wa-opt">9️⃣ Queda de cabelo</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Correção de ordem</strong>Esta pergunta estava como 8.2, após comportamento alimentar (8.3). Corrigido: sintomas (clínicos) vêm antes de comportamento alimentar, que é a transição para a "quebra".</div></div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+      </div>
+    </div>
+
+    <!-- Q13 Alimentar -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q13 · Comportamento alimentar</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">85%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Isso aqui é OURO 👇
+
+Agora me conta com sinceridade {nome} 😄
+Como está sua alimentação no dia a dia?</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Bem controlada</div>
+              <div class="wa-opt">2️⃣ Mais ou menos</div>
+              <div class="wa-opt">3️⃣ Como de tudo 😅</div>
+              <div class="wa-opt">4️⃣ Muito desorganizada</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div><span class="progress-pct">85%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       QUEBRA 90%
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E5</div>
+      <div>
+        <div class="stage-name">Quebra e Transição — Alta Conversão</div>
+        <div class="stage-desc">Gatilho psicológico de comprometimento antes das últimas perguntas.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag">Compromisso</span><span class="obj-tag">Urgência</span></div>
+    </div>
+
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-QUEBRA · Empurrão final</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">90%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Ei, {nome}… 😄
+
+Você já chegou até aqui…
+👉 falta só um empurrãozinho para eu liberar tudo personalizado para você
+
+Prometo: são só 2 perguntinhas rápidas e já te entrego seu plano completo 🧬✨</div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div><span class="progress-pct">90%</span></div>
+      </div>
+    </div>
+
+    <!-- Q14 Peso -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q14 · Peso atual</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">95%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Qual é o seu peso atual?
+(Em kg — ex: 78)</div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div><span class="progress-pct">95%</span></div>
+      </div>
+    </div>
+
+    <!-- Q15 Altura -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">Q15 · Altura</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+        <span class="msg-progress">100%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Qual é a sua altura?
+(Em cm — ex: 168)</div>
+          </div>
+        </div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><span class="progress-pct">100% ✓</span></div>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">MSG-EMAIL · Coleta de e-mail</span>
+        <span class="msg-type tag-ok">✓ Aprovado</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, me compartilha seu melhor e-mail para eu te enviar o relatório completo por lá 📩</div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificação</div>
+          <div class="branch-row"><span class="branch-cond green">E-mail válido</span><div class="branch-action">→ Registra e avança para E5</div></div>
+          <div class="branch-row"><span class="branch-cond yellow">Recusa</span><div class="branch-action">→ "Tudo bem! Você pode consultar tudo aqui mesmo pelo WhatsApp 😊" → avança para E5</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       ETAPA 6 — FECHAMENTO + ENTREGA DE VALOR
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E6</div>
+      <div>
+        <div class="stage-name">Fechamento + Entrega de Valor</div>
+        <div class="stage-desc">Cálculo automático de IMC, Score de Risco, metas e entrega do perfil metabólico.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag">Autoridade</span><span class="obj-tag">Prova de valor</span><span class="obj-tag">Urgência</span></div>
+    </div>
+
+    <div class="msg-block ok">
+      <div class="msg-block-header"><span class="msg-id">MSG-CONCLUIDO · Celebração</span><span class="msg-type tag-ok">✓ Aprovado</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">🎉 Pronto {nome}! Missão concluída!
+Você desbloqueou seu Perfil Metabólico Inicial 🧬
+
+Agora deixa comigo que vou analisar tudo aqui… 👇</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-block fixed">
+      <div class="msg-block-header"><span class="msg-id">MSG-PERFIL · Análise e score (com frases automáticas)</span><span class="msg-type tag-fixed">✏ Melhorado</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">*{nome}*, analisei seu perfil… e vou ser direto com você 👇
+
+🧬 Seu corpo já está mostrando sinais importantes:
+
+📊 *Seu IMC*: {imc}
+🚨 *Classificação*: {classificacao_imc}
+⚠️ *Risco Metabólico*: {nivel_risco}
+
+👉 *Isso significa que*:
+{frase_risco_automatica}
+
+🔥 *Mas a boa notícia é*:
+Você está no momento PERFEITO para controlar e reverter essa situação...</div>
+          </div>
+        </div>
+        <div class="annotation info"><span class="ann-icon">💡</span><div class="ann-text"><strong>Frases automáticas por score — ver tabela abaixo</strong></div></div>
+      </div>
+    </div>
+
+    <div class="msg-block ok">
+      <div class="msg-block-header"><span class="msg-id">MSG-METAS · Metas diárias calculadas</span><span class="msg-type tag-ok">✓ Aprovado</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">*Suas Metas Diárias Personalizadas* 🎯
+
+🔥 Meta calórica: {kcal} kcal/dia
+🥗 Distribuição ideal:
+  • Proteínas: {prot}g
+  • Carboidratos: {carbs}g
+  • Gorduras: {gord}g
+
+🩸 Meta glicêmica (Diretrizes SBD 2023):
+  • Jejum: entre 80 e 130 mg/dL
+  • Pós-refeição (2h): abaixo de 150 mg/dL
+
+⏱️ Frequência ideal de medição: {freq_medicao}</div>
+          </div>
+        </div>
+        <div class="annotation info"><span class="ann-icon">📋</span><div class="ann-text"><strong>Valores fixos conforme Diretrizes SBD 2023</strong> — Glicemia em jejum e pós-prandial são metas padrão para pacientes com diabetes tipo 2. Apenas <code>{kcal}</code>, <code>{prot}</code>, <code>{carbs}</code>, <code>{gord}</code> e <code>{freq_medicao}</code> são calculadas pelo perfil.</div></div>
+      </div>
+    </div>
+
+    <div class="msg-block fixed">
+      <div class="msg-block-header"><span class="msg-id">MSG-VALOR · Entrega de valor e instruções de uso</span><span class="msg-type tag-fixed">✏ Melhorado</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Agora vem a parte mais importante, e a que vai mudar sua vida para sempre *{nome}*…
+
+_"Eu vou acompanhar você de perto… e você vai ver sua glicemia começar a responder sem necessidade de tomar mais remédios 👀"_</div>
+          </div>
+          <div class="wa-bot" style="margin-top:8px"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">A partir de hoje eu vou:
+✅ Analisar suas refeições 🍽️
+✅ Prever impacto na glicemia 📈
+✅ Te ajudar a evitar picos 🚫
+✅ E te guiar até o controle real da diabetes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-block new">
+      <div class="msg-block-header"><span class="msg-id">MSG-ATIVACAO · Ativação imediata (Hormozi — Oferta Irresistível)</span><span class="msg-type tag-new">★ Novo</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">🚀 *{nome}, vamos começar AGORA?*
+
+Me envia uma das seguintes informações:
+
+📸 Foto da sua próxima refeição (lanche, almoço, janta, etc.).
+📷 Foto da leitura da sua glicemia no glicosímetro.
+🩺 O valor da sua última leitura de glicemia.
+
+👉 *Não tem nenhuma dessas agora?*
+Sem problema — me chama aqui quando tiver e eu já te respondo na hora. 📲
+
+⏰ *E se esquecer, não preocupa* — eu volto aqui em 2 horas pra te lembrar.
+
+🛡️ A partir de agora você nunca mais estará {sozinho_a}, *{nome}*.
+
+Cada foto que você me mandar vai virar:
+✅ Uma análise e um plano de tratamento natural.
+✅ Uma ação para evitar ter que tomar mais remédios.
+✅ Você mais perto de se libertar de sintomas e complicações.
+
+*Tudo isso sem sair do WhatsApp. Só manda a foto — eu cuido do resto.* 💪</div>
+          </div>
+        </div>
+        <div class="annotation info"><span class="ann-icon">⚙️</span><div class="ann-text"><strong>Variável dinâmica:</strong> <code>{sozinho_a}</code> → "sozinho" (masc.) ou "sozinha" (fem.) com base no sexo coletado no Q3 (pergunta de nome/sexo). Se não informado, usar "sozinho(a)".</div></div>
+        <div class="annotation warn"><span class="ann-icon">📐</span><div class="ann-text"><strong>Fórmula Hormozi aplicada:</strong><br>
+          🎯 <strong>Dream Outcome:</strong> controle real da glicemia sem complicação<br>
+          ✅ <strong>Likelihood:</strong> "eu cuido do resto" — remove incerteza<br>
+          ⚡ <strong>Time Delay:</strong> "começa AGORA" — resultado no mesmo dia<br>
+          🪶 <strong>Effort:</strong> "só manda a foto" — esforço mínimo percebido</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCORE ALGORITHM ── -->
+  <div class="divider"></div>
+  <div class="sec-title">📊 Algoritmo de Score de Risco Metabólico</div>
+  <div class="sec-desc">Cada resposta contribui com pontos. A soma define o nível de risco e a intensidade do acompanhamento.</div>
+
+  <div style="background:var(--surface);border:1px solid var(--stroke);border-radius:18px;overflow:hidden;margin-bottom:32px;">
+    <table class="algo-table">
+      <thead>
+        <tr>
+          <th>Variável</th>
+          <th>Resposta</th>
+          <th>Pontos</th>
+          <th>Observação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Tipo de diabetes</td><td>Tipo 1</td><td>+3</td><td>Maior variabilidade glicêmica</td></tr>
+        <tr><td>Tipo de diabetes</td><td>Tipo 2</td><td>+2</td><td>—</td></tr>
+        <tr><td>Tempo com diabetes</td><td>&lt;2 anos</td><td>+1</td><td>—</td></tr>
+        <tr><td>Tempo com diabetes</td><td>2–10 anos</td><td>+2</td><td>—</td></tr>
+        <tr><td>Tempo com diabetes</td><td>&gt;10 anos</td><td>+3</td><td>Risco de complicações maior</td></tr>
+        <tr><td>Situação atual</td><td>Controlado</td><td>+0</td><td>—</td></tr>
+        <tr><td>Situação atual</td><td>Descontrolado</td><td>+3</td><td>—</td></tr>
+        <tr><td>Situação atual</td><td>Não sei</td><td>+2</td><td>—</td></tr>
+        <tr><td>Emergência</td><td>Já foi ao PS</td><td>+3</td><td>—</td></tr>
+        <tr><td>Pico glicêmico</td><td>Acima de 400</td><td>+3</td><td>—</td></tr>
+        <tr><td>Pico glicêmico</td><td>300–400</td><td>+2</td><td>—</td></tr>
+        <tr><td>Pico glicêmico</td><td>200–300</td><td>+1</td><td>—</td></tr>
+        <tr><td>Sintomas</td><td>3 ou mais sintomas</td><td>+3</td><td>Complicações em desenvolvimento</td></tr>
+        <tr><td>Sintomas</td><td>1–2 sintomas</td><td>+2</td><td>—</td></tr>
+        <tr><td>Sintomas</td><td>Nenhum</td><td>+0</td><td>—</td></tr>
+        <tr><td>IMC</td><td>Obesidade</td><td>+2</td><td>—</td></tr>
+        <tr><td>IMC</td><td>Sobrepeso</td><td>+1</td><td>—</td></tr>
+        <tr><td>Alimentação</td><td>Muito desorganizada</td><td>+2</td><td>—</td></tr>
+        <tr><td>Medicação</td><td>Insulina</td><td>+1</td><td>Adiciona risco de hipo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--stroke);border-radius:18px;overflow:hidden;margin-bottom:32px;">
+    <table class="algo-table">
+      <thead>
+        <tr><th>Score Total</th><th>Nível</th><th>Frase automática ({frase_risco_automatica})</th><th>Frequência de medição</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="score-pill score-low">0 – 6</span></td>
+          <td>Baixo</td>
+          <td>"Seu perfil mostra um risco controlável. Com pequenos ajustes no dia a dia, você pode manter a glicemia estável por muito tempo."</td>
+          <td>2x/dia</td>
+        </tr>
+        <tr>
+          <td><span class="score-pill score-med">7 – 12</span></td>
+          <td>Moderado</td>
+          <td>"Seu histórico indica que a glicemia já criou alguns padrões que precisam de atenção. Agir agora evita complicações nos próximos anos."</td>
+          <td>3x/dia</td>
+        </tr>
+        <tr>
+          <td><span class="score-pill score-high">13 – 18</span></td>
+          <td>Alto</td>
+          <td>"Seu organismo está mostrando sinais de que a glicemia vem impactando sua saúde. Quanto antes você agir, mais fácil será reverter esse quadro."</td>
+          <td>4x/dia</td>
+        </tr>
+        <tr>
+          <td><span class="score-pill score-crit">19+</span></td>
+          <td>Crítico</td>
+          <td>"Seu perfil indica risco elevado. Vamos trabalhar intensivamente juntos. Você não está sozinho nessa — e isso muda a partir de agora."</td>
+          <td>4–6x/dia + acompanhamento AQS ativo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       ETAPAS 7, 8, 9
+  ─────────────────────────────────────────── -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">E7–E9</div>
+      <div>
+        <div class="stage-name">Posicionamento + CTA Final</div>
+        <div class="stage-desc">Preparar o paciente para a jornada diária e fazer o call-to-action.</div>
+      </div>
+    </div>
+
+    <div class="msg-block ok">
+      <div class="msg-block-header"><span class="msg-id">MSG-POSICIONAMENTO</span><span class="msg-type tag-ok">✓ Aprovado</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">Agora vem a parte mais importante {nome}…
+
+A partir de hoje eu vou:
+✔ Analisar suas refeições 🍽️
+✔ Prever o impacto na glicemia 📈
+✔ Te ajudar a evitar picos 🚫
+✔ E te guiar até o controle real
+
+"Nos próximos 7 dias vou acompanhar você de perto… e você vai ver sua glicemia começar a responder 👀"
+
+1️⃣ Me envie a foto da sua próxima refeição
+2️⃣ Ou me envie sua glicemia atual
+
+👉 E eu te mostro exatamente o que fazer agora</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-block fixed">
+      <div class="msg-block-header"><span class="msg-id">MSG-CTA · Call to action final (claim corrigido)</span><span class="msg-type tag-fixed">✏ Corrigido</span></div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">📸 Podemos começar agora:
+
+Me envie a foto da sua próxima refeição e eu te digo exatamente o que vai acontecer com sua glicemia 😄
+
+Ou
+
+2️⃣ Me envie uma foto da sua glicemia atual e te digo como está — e caso esteja elevada, já te monto um protocolo natural complementar para auxiliar no controle da glicemia nas próximas horas 💪
+
+⚠️ O Gluco IA não substitui medicamentos. Sempre siga as orientações do seu médico.</div>
+          </div>
+        </div>
+        <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Correção legal</strong>"sem precisar de remédios" → "protocolo natural complementar para auxiliar no controle". Adicionado disclaimer médico. Reduz risco regulatório sem perder a força do CTA.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       GATILHOS DE RETENÇÃO
+  ─────────────────────────────────────────── -->
+  <div class="divider"></div>
+  <div class="sec-title">⏰ Gatilhos de Retenção (3 níveis)</div>
+  <div class="sec-desc">Ativados quando o usuário para de interagir. Cada nível tem tom diferente.</div>
+
+  <div class="trigger-grid">
+    <div class="trigger-card">
+      <div class="trigger-time">T + 30 min</div>
+      <div class="trigger-tone">Tom: Humor leve</div>
+      <div class="trigger-msg">"👀 Ei… ainda estou aqui!
+
+Prometo não brigar com você 😅
+
+Só quero te ajudar a evitar aquela glicemia que dá susto.
+
+Bora começar com a primeira refeição? 🍽️"</div>
+    </div>
+    <div class="trigger-card">
+      <div class="trigger-time">T + 24 horas</div>
+      <div class="trigger-tone">Tom: Urgência emocional</div>
+      <div class="trigger-msg">"{nome}, sua glicemia de hoje está como? 🩸
+
+Cada dia sem monitorar é um dia com risco invisível.
+
+Você já deu o primeiro passo — só falta o segundo.
+
+Me manda sua glicemia agora e eu te digo como está 👇"</div>
+    </div>
+    <div class="trigger-card">
+      <div class="trigger-time">T + 72 horas</div>
+      <div class="trigger-tone">Tom: Reengajamento social</div>
+      <div class="trigger-msg">"{nome}, sabia que 3 dias de monitoramento já mostram padrões importantes da sua glicemia? 📊
+
+Pessoas que começaram junto com você já identificaram seus primeiros insights.
+
+Você ainda pode começar hoje — seu perfil está salvo e pronto 🧬"</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CHECKLIST FINAL -->
+  <div class="sec-title">✅ Checklist de validação antes de implementar</div>
+  <div class="sec-desc">Revise todos os itens antes de passar para desenvolvimento.</div>
+
+  <div style="background:var(--surface);border:1px solid var(--stroke);border-radius:18px;padding:28px;margin-bottom:40px;">
+    <ul class="checklist">
+      <li><span class="cl-ok">✓</span><div><strong>Consentimento LGPD</strong> — MSG-03B implementada antes da coleta de dados</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Ordem das perguntas</strong> — Q12 sintomas antes de Q13 alimentar</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Barra de progresso</strong> — sem regressão: 10→18→25→30→38→45→52→58→64→70→75→80→85 [Quebra 90%] →95→100</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Ramificação "Agora não"</strong> — MSG-01C + 3 gatilhos de retenção</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Ramificação "Como funciona?"</strong> — MSG-01B mapeada</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Gestacional/Não sei</strong> — lead retido em waitlist, não perdido</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Pergunta de medicação</strong> — Q6 adicionada (segurança AQS)</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Claim médico</strong> — "sem remédios" → "complementar" + disclaimer</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Score de risco</strong> — algoritmo completo com pesos e frases automáticas</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Diferenciação Tipo 1 vs Tipo 2</strong> — flag no score e intensidade de acompanhamento</div></li>
+      <li><span class="cl-warn">⚠</span><div><strong>Fluxo de edição de nome</strong> — mapeado, mas depende do bot retornar ao estado correto</div></li>
+      <li><span class="cl-warn">⚠</span><div><strong>Validação de e-mail</strong> — lógica de validação de formato precisa estar no backend</div></li>
+      <li><span class="cl-warn">⚠</span><div><strong>HbA1c</strong> — não incluída nesta versão para não aumentar atrito. Avaliar inclusão em v2.1</div></li>
+      <li><span class="cl-err">✗</span><div><strong>Score de risco Tipo 1 com insulina</strong> — flag de hipo precisa ser implementada no motor de protocolos AQS (ponto de atenção para dev)</div></li>
+    </ul>
+  </div>
+
+  <div style="background:rgba(27,111,255,0.06);border:1px solid rgba(27,111,255,0.25);border-radius:18px;padding:28px;text-align:center;">
+    <div style="font-size:13px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">GLUCO AI · Onboarding Flow v2.0</div>
+    <div style="font-size:13px;color:var(--t2);">Documento de revisão de equipe · Março 2026 · Todas as correções aplicadas</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace;">🔴 6 críticos · 🟡 6 importantes · 🔵 6 melhorias</div>
+  </div>
+
+</div>
+
+<script>
+// Animar barras de progresso ao aparecerem
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const fill = e.target.querySelector('.progress-fill');
+      const pct = e.target.querySelector('.progress-pct');
+      if (fill) {
+        const w = fill.style.width;
+        fill.style.width = '0%';
+        setTimeout(() => { fill.style.transition = 'width 0.8s ease'; fill.style.width = w; }, 100);
+      }
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.progress-demo').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
