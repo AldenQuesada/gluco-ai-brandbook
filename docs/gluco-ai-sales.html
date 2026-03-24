@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Inteligência Metabólica em Tempo Real</title>
+<meta name="description" content="O primeiro assistente de IA que transforma seus dados de glicose em insights acionáveis. Controle sua saúde metabólica com inteligência artificial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --void:           #0A0E1A;
+    --abyss:          #111526;
+    --surface:        #1A1E2E;
+    --elevated:       #242840;
+    --stroke:         #2E334F;
+    --muted:          #4A5070;
+    --text-secondary: #8B93B8;
+    --text-primary:   #E8EEFF;
+    --white:          #FFFFFF;
+    --blue:           #1B6FFF;
+    --teal:           #00D4B4;
+    --success:        #00C48C;
+    --blue-glow:      rgba(27,111,255,0.25);
+    --teal-glow:      rgba(0,212,180,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── UTILS ─── */
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--white) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-brand {
+    background: linear-gradient(90deg, var(--teal) 0%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--stroke);
+    transition: all 0.3s;
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 24px;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+  }
+
+  .btn-ghost {
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--stroke);
+  }
+  .btn-ghost:hover { border-color: var(--blue); color: var(--white); }
+
+  .btn-primary {
+    color: var(--white);
+    background: var(--blue);
+    box-shadow: 0 4px 20px var(--blue-glow);
+  }
+  .btn-primary:hover {
+    background: #2E7FFF;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px var(--blue-glow);
+  }
+
+  .btn-large {
+    padding: 16px 32px;
+    font-size: 16px;
+    border-radius: 14px;
+  }
+
+  .btn-teal {
+    color: var(--void);
+    background: var(--teal);
+    box-shadow: 0 4px 20px var(--teal-glow);
+  }
+  .btn-teal:hover {
+    background: #10DFBF;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px var(--teal-glow);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(27,111,255,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 40% at 80% 70%, rgba(0,212,180,0.10) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(46,51,79,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46,51,79,0.3) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,180,0.08);
+    border: 1px solid rgba(0,212,180,0.25);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--teal);
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 900px;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin-bottom: 40px;
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 64px;
+    position: relative;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-disclaimer {
+    font-size: 13px;
+    color: var(--muted);
+    position: relative;
+  }
+
+  /* ─── GLUCOSE CHART (decorativo) ─── */
+  .hero-visual {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 24px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chart-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(27,111,255,0.12) 0%, transparent 60%);
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .chart-title { font-weight: 700; font-size: 15px; }
+
+  .chart-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  .chart-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .chart-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,196,140,0.12);
+    border: 1px solid rgba(0,196,140,0.3);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--success);
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .ai-insight-card {
+    background: rgba(27,111,255,0.08);
+    border: 1px solid rgba(27,111,255,0.2);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .ai-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  .ai-insight-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .ai-insight-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ─── STATS ─── */
+  .stats-bar {
+    background: var(--abyss);
+    border-top: 1px solid var(--stroke);
+    border-bottom: 1px solid var(--stroke);
+    padding: 40px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 10%; bottom: 10%;
+    width: 1px;
+    background: var(--stroke);
+  }
+
+  .stat-value {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* ─── FEATURES ─── */
+  .section {
+    padding: 100px 0;
+  }
+
+  .section-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    width: 24px; height: 2px;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 50px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 64px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(27,111,255,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  .icon-blue { background: rgba(27,111,255,0.15); }
+  .icon-teal { background: rgba(0,212,180,0.12); }
+  .icon-success { background: rgba(0,196,140,0.12); }
+
+  .feature-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  .howworks {
+    background: var(--abyss);
+    padding: 100px 0;
+    border-top: 1px solid var(--stroke);
+    border-bottom: 1px solid var(--stroke);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 64px;
+  }
+
+  .step-card {
+    position: relative;
+    padding: 40px 32px;
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    text-align: center;
+  }
+
+  .step-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue);
+    background: rgba(27,111,255,0.1);
+    border: 1px solid rgba(27,111,255,0.25);
+    border-radius: 99px;
+    width: 36px; height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .step-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .step-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* Connector line between steps */
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 33.3%;
+    right: 33.3%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .testimonial-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+  }
+
+  .testimonial-card.featured {
+    background: rgba(27,111,255,0.06);
+    border-color: rgba(27,111,255,0.3);
+  }
+
+  .stars {
+    color: #FFB020;
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .testimonial-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .author-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .avatar-blue { background: rgba(27,111,255,0.2); color: var(--blue); }
+  .avatar-teal { background: rgba(0,212,180,0.15); color: var(--teal); }
+  .avatar-green { background: rgba(0,196,140,0.15); color: var(--success); }
+
+  .author-name { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+  .author-role { font-size: 13px; color: var(--muted); }
+
+  /* ─── PRICING ─── */
+  .pricing {
+    background: var(--abyss);
+    padding: 100px 0;
+    border-top: 1px solid var(--stroke);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 64px;
+    align-items: start;
+  }
+
+  .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 24px;
+    padding: 40px 32px;
+    position: relative;
+  }
+
+  .pricing-card.popular {
+    background: rgba(27,111,255,0.06);
+    border-color: var(--blue);
+    transform: scale(1.03);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .plan-price {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .plan-price sup {
+    font-size: 24px;
+    font-weight: 700;
+    vertical-align: super;
+  }
+
+  .plan-period {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+  }
+
+  .plan-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--stroke);
+    margin-bottom: 28px;
+  }
+
+  .plan-features { list-style: none; margin-bottom: 32px; }
+
+  .plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(46,51,79,0.5);
+  }
+
+  .plan-features li:last-child { border-bottom: none; }
+
+  .check {
+    color: var(--success);
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .cross { color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── FAQ ─── */
+  .faq-list { max-width: 720px; margin: 64px auto 0; }
+
+  .faq-item {
+    border-bottom: 1px solid var(--stroke);
+    overflow: hidden;
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    gap: 16px;
+    user-select: none;
+  }
+
+  .faq-question:hover { color: var(--white); }
+
+  .faq-arrow {
+    color: var(--muted);
+    font-size: 18px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--blue); }
+
+  .faq-answer {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding-bottom 0.35s;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 300px;
+    padding-bottom: 24px;
+  }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta {
+    padding: 120px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 50%, rgba(27,111,255,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 80% 80%, rgba(0,212,180,0.10) 0%, transparent 50%);
+  }
+
+  .final-cta .section-title { position: relative; max-width: 700px; margin: 16px auto 24px; }
+  .final-cta .section-desc { position: relative; margin: 0 auto 40px; }
+
+  .cta-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 40px;
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .trust-icon { color: var(--teal); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--abyss);
+    border-top: 1px solid var(--stroke);
+    padding: 60px 0 40px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 16px;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: var(--text-primary); }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 32px;
+    border-top: 1px solid var(--stroke);
+    font-size: 13px;
+    color: var(--muted);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .divider-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--stroke), transparent);
+    margin: 0;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .features-grid,
+    .steps-grid,
+    .testimonials-grid,
+    .pricing-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pricing-card.popular { transform: none; }
+
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .stat-item:not(:last-child)::after { display: none; }
+
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; width: 100%; }
+    .btn-large { width: 100%; justify-content: center; }
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .fade-up-1 { animation-delay: 0.1s; }
+  .fade-up-2 { animation-delay: 0.2s; }
+  .fade-up-3 { animation-delay: 0.35s; }
+  .fade-up-4 { animation-delay: 0.5s; }
+
+  /* ─── SVG CHART ─── */
+  .svg-chart-container {
+    position: relative;
+    height: 120px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .glucose-line {
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+    animation: drawLine 2s ease forwards 0.5s;
+  }
+
+  @keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .reading-dot {
+    opacity: 0;
+    animation: dotAppear 0.4s ease forwards 2.3s;
+  }
+
+  @keyframes dotAppear {
+    from { opacity: 0; transform: scale(0); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="32" height="32">
+        <defs>
+          <linearGradient id="navGrad" x1="0" y1="0" x2="52" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00D4B4"/>
+            <stop offset="100%" stop-color="#1B6FFF"/>
+          </linearGradient>
+        </defs>
+        <path d="M4 32 C9 32 12 22 18 22 C24 22 27 38 33 38 C39 38 42 27 48 27" stroke="url(#navGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle cx="48" cy="27" r="5" fill="#1B6FFF" opacity="0.2"/>
+        <circle cx="48" cy="27" r="2.5" fill="#1B6FFF"/>
+      </svg>
+      <span style="font-weight:800;font-size:18px;letter-spacing:-0.04em;">GLUCO <span style="color:var(--blue)">AI</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#features">Recursos</a></li>
+      <li><a href="#how-it-works">Como Funciona</a></li>
+      <li><a href="#pricing">Preços</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Entrar</a>
+      <a href="#pricing" class="btn btn-primary">Começar Grátis</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-grid"></div>
+
+  <div class="hero-badge fade-up fade-up-1">
+    <span class="badge-dot"></span>
+    Inteligência Metabólica em Tempo Real
+  </div>
+
+  <h1 class="hero-title fade-up fade-up-2">
+    Seu <span class="gradient-text-brand">assistente de IA</span><br>
+    para controle glicêmico
+  </h1>
+
+  <p class="hero-sub fade-up fade-up-3">
+    GLUCO AI transforma seus dados de glicose em insights acionáveis. Monitore, aprenda e otimize sua saúde metabólica com inteligência artificial de ponta.
+  </p>
+
+  <div class="hero-actions fade-up fade-up-4">
+    <a href="#pricing" class="btn btn-teal btn-large">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Começar Gratuitamente
+    </a>
+    <a href="#how-it-works" class="btn btn-ghost btn-large">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+      Ver como funciona
+    </a>
+  </div>
+
+  <p class="hero-disclaimer fade-up fade-up-4">Teste grátis por 14 dias. Sem cartão de crédito.</p>
+
+  <!-- Dashboard visual decorativo -->
+  <div class="hero-visual" style="margin-top:60px">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Glicose Atual</div>
+          <div style="font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:4px">Hoje, 14:32</div>
+        </div>
+        <div style="text-align:right">
+          <div class="chart-value">94</div>
+          <div class="chart-unit">mg/dL</div>
+        </div>
+        <div class="chart-status">
+          <span class="status-dot"></span>
+          Faixa ideal
+        </div>
+      </div>
+
+      <!-- SVG Chart animado -->
+      <div class="svg-chart-container">
+        <svg viewBox="0 0 800 120" width="100%" height="120" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#00D4B4"/>
+              <stop offset="100%" stop-color="#1B6FFF"/>
+            </linearGradient>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="120" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#1B6FFF" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#1B6FFF" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Area fill -->
+          <path d="M0 90 C60 90 100 70 160 65 C220 60 260 80 320 75 C380 70 420 50 480 45 C540 40 580 55 640 50 C700 45 740 40 800 35 L800 120 L0 120 Z"
+            fill="url(#areaGrad)" opacity="0.6"/>
+
+          <!-- Zona ideal (70-140 mg/dL) -->
+          <rect x="0" y="20" width="800" height="70" fill="rgba(0,196,140,0.04)" rx="0"/>
+          <line x1="0" y1="20" x2="800" y2="20" stroke="rgba(0,196,140,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="0" y1="90" x2="800" y2="90" stroke="rgba(0,196,140,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+
+          <!-- Glucose line -->
+          <path class="glucose-line"
+            d="M0 90 C60 90 100 70 160 65 C220 60 260 80 320 75 C380 70 420 50 480 45 C540 40 580 55 640 50 C700 45 740 40 800 35"
+            stroke="url(#lineGrad)"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            fill="none"
+            filter="url(#glow)"
+          />
+
+          <!-- Dot atual -->
+          <circle cx="800" cy="35" r="10" fill="#1B6FFF" opacity="0.15" class="reading-dot" filter="url(#glow)"/>
+          <circle cx="800" cy="35" r="4" fill="#1B6FFF" class="reading-dot"/>
+        </svg>
+      </div>
+
+      <!-- AI Insight card -->
+      <div class="ai-insight-card">
+        <div class="ai-icon">🧠</div>
+        <div>
+          <div class="ai-insight-title">Análise de IA</div>
+          <div class="ai-insight-text">Sua glicose está estável há 4 horas. O café da manhã com baixo índice glicêmico contribuiu para esse padrão excelente. Continue assim!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value gradient-text-brand">50K+</div>
+        <div class="stat-label">Usuários ativos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value gradient-text-brand">98%</div>
+        <div class="stat-label">Satisfação</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value gradient-text-brand">2.1M</div>
+        <div class="stat-label">Leituras analisadas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value gradient-text-brand">3.2x</div>
+        <div class="stat-label">Melhora no controle</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FEATURES ─── -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-eyebrow">Recursos</div>
+    <h2 class="section-title">IA que entende sua<br>biologia única</h2>
+    <p class="section-desc">
+      Cada corpo é diferente. O GLUCO AI aprende seus padrões individuais e entrega recomendações personalizadas.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-teal">📡</div>
+        <div class="feature-title">Monitoramento em Tempo Real</div>
+        <div class="feature-desc">Conecte seu sensor CGM e receba atualizações de glicose a cada 5 minutos, com alertas inteligentes antes que você saia da faixa ideal.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">🧠</div>
+        <div class="feature-title">Análise Preditiva com IA</div>
+        <div class="feature-desc">Nosso modelo de IA prevê variações de glicose até 60 minutos antes, permitindo que você aja proativamente.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-success">🍽️</div>
+        <div class="feature-title">Insights Nutricionais</div>
+        <div class="feature-desc">Registre suas refeições e descubra exatamente como cada alimento afeta sua glicose. Aprenda o que funciona para o SEU corpo.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">💪</div>
+        <div class="feature-title">Impacto do Exercício</div>
+        <div class="feature-desc">Entenda como diferentes tipos e intensidades de atividade física afetam sua glicose para otimizar performance e recuperação.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-teal">😴</div>
+        <div class="feature-title">Análise do Sono</div>
+        <div class="feature-desc">Correlacione qualidade do sono com variações glicêmicas noturnas. Identifique padrões que afetam seu descanso e metabolismo.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-success">📊</div>
+        <div class="feature-title">Relatórios para o Médico</div>
+        <div class="feature-desc">Gere relatórios detalhados e exportáveis para compartilhar com seu endocrinologista. Consultas mais produtivas e eficientes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section class="howworks" id="how-it-works">
+  <div class="container" style="text-align:center">
+    <div class="section-eyebrow" style="justify-content:center">Como Funciona</div>
+    <h2 class="section-title">Configure em minutos,<br>benefícios para a vida</h2>
+    <p class="section-desc" style="margin:0 auto 0">
+      Conecte, monitore e aprenda. Sem configurações complexas.
+    </p>
+
+    <div class="steps-grid" style="position:relative">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <span class="step-icon">🔗</span>
+        <div class="step-title">Conecte seu sensor</div>
+        <div class="step-desc">Compatible com os principais sensores CGM do mercado. Conexão via Bluetooth em menos de 2 minutos.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <span class="step-icon">🤖</span>
+        <div class="step-title">IA aprende seus padrões</div>
+        <div class="step-desc">Nos primeiros 7 dias, o GLUCO AI analisa seus dados para criar um modelo personalizado do seu metabolismo único.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <span class="step-icon">✨</span>
+        <div class="step-title">Receba insights acionáveis</div>
+        <div class="step-desc">Recomendações precisas sobre alimentação, exercício e estilo de vida baseadas em seus dados reais, não em médias populacionais.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">Depoimentos</div>
+    <h2 class="section-title">Quem já transformou<br>sua saúde metabólica</h2>
+    <p class="section-desc">Histórias reais de pessoas que usam GLUCO AI no dia a dia.</p>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card featured">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Depois de 3 anos com diabetes tipo 2, finalmente entendo como meu corpo reage a cada alimento. Minha HbA1c caiu de 8.2% para 6.8% em 4 meses."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar avatar-blue">RS</div>
+          <div>
+            <div class="author-name">Ricardo Santos</div>
+            <div class="author-role">Engenheiro, 48 anos — São Paulo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Como atleta, precisava entender o impacto dos treinos na minha glicose. O GLUCO AI foi um divisor de águas na minha performance."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar avatar-teal">MC</div>
+          <div>
+            <div class="author-name">Mariana Costa</div>
+            <div class="author-role">Triatleta profissional — Rio de Janeiro</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Fui diagnosticada com pré-diabetes há 6 meses. Com o GLUCO AI revertei o quadro com mudanças de estilo de vida. Meu médico ficou impressionado."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar avatar-green">AL</div>
+          <div>
+            <div class="author-name">Ana Lima</div>
+            <div class="author-role">Professora, 39 anos — Belo Horizonte</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ─── PRICING ─── -->
+<section class="pricing" id="pricing">
+  <div class="container" style="text-align:center">
+    <div class="section-eyebrow" style="justify-content:center">Planos</div>
+    <h2 class="section-title">Invista na sua saúde<br>metabólica hoje</h2>
+    <p class="section-desc" style="margin:0 auto">
+      Comece grátis e escale conforme sua jornada de saúde evolui.
+    </p>
+
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="plan-name">Gratuito</div>
+        <div class="plan-price"><sup style="font-size:20px">R$</sup>0</div>
+        <div class="plan-period">para sempre</div>
+        <div class="plan-desc">Para começar a monitorar e entender seus padrões glicêmicos.</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> 1 sensor CGM conectado</li>
+          <li><span class="check">✓</span> Histórico de 30 dias</li>
+          <li><span class="check">✓</span> Alertas básicos</li>
+          <li><span class="check">✓</span> Dashboard de saúde</li>
+          <li><span class="cross">—</span> <span style="color:var(--muted)">Análise preditiva de IA</span></li>
+          <li><span class="cross">—</span> <span style="color:var(--muted)">Insights nutricionais</span></li>
+          <li><span class="cross">—</span> <span style="color:var(--muted)">Relatórios para médico</span></li>
+        </ul>
+        <a href="#" class="btn btn-ghost" style="width:100%;justify-content:center;padding:14px;">Começar Grátis</a>
+      </div>
+
+      <!-- Pro (popular) -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">Mais Popular</div>
+        <div class="plan-name" style="color:var(--blue)">Pro</div>
+        <div class="plan-price gradient-text-brand"><sup>R$</sup>79</div>
+        <div class="plan-period">por mês · cancele quando quiser</div>
+        <div class="plan-desc">Para quem leva a sério o controle da saúde metabólica.</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Sensores ilimitados</li>
+          <li><span class="check">✓</span> Histórico completo</li>
+          <li><span class="check">✓</span> Alertas inteligentes</li>
+          <li><span class="check">✓</span> Análise preditiva de IA</li>
+          <li><span class="check">✓</span> Insights nutricionais</li>
+          <li><span class="check">✓</span> Análise de exercícios</li>
+          <li><span class="check">✓</span> Relatórios PDF para médico</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;">Iniciar 14 dias grátis</a>
+        <p style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center">Sem cobrança nos primeiros 14 dias</p>
+      </div>
+
+      <!-- Família -->
+      <div class="pricing-card">
+        <div class="plan-name">Família</div>
+        <div class="plan-price"><sup style="font-size:20px">R$</sup>149</div>
+        <div class="plan-period">por mês · até 5 membros</div>
+        <div class="plan-desc">Monitore a saúde metabólica de toda a família em um único plano.</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Tudo do plano Pro</li>
+          <li><span class="check">✓</span> Até 5 perfis independentes</li>
+          <li><span class="check">✓</span> Dashboard familiar</li>
+          <li><span class="check">✓</span> Alertas para cuidadores</li>
+          <li><span class="check">✓</span> Integração com pediatria</li>
+          <li><span class="check">✓</span> Suporte prioritário</li>
+          <li><span class="check">✓</span> Treinamento personalizado</li>
+        </ul>
+        <a href="#" class="btn btn-ghost" style="width:100%;justify-content:center;padding:14px;">Iniciar 14 dias grátis</a>
+      </div>
+    </div>
+
+    <p style="margin-top:32px;font-size:14px;color:var(--muted)">
+      Precisa de solução para clínicas ou hospitais?
+      <a href="#" style="color:var(--blue);text-decoration:none;font-weight:600">Fale sobre o plano Corporativo →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section class="section" id="faq">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-eyebrow" style="justify-content:center">FAQ</div>
+      <h2 class="section-title">Perguntas frequentes</h2>
+      <p class="section-desc" style="margin:0 auto 0">Tem dúvidas? A gente responde.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Com quais sensores CGM o GLUCO AI é compatível?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-answer">
+          O GLUCO AI é compatível com os principais sensores CGM do mercado: Freestyle Libre 2 e 3, Dexcom G6 e G7, Medtronic Guardian, e outros via API. Estamos constantemente expandindo nossa lista de compatibilidade.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Os meus dados de saúde são seguros?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-answer">
+          Absolutamente. Seus dados são criptografados end-to-end (AES-256), armazenados em servidores no Brasil, e nunca são compartilhados com terceiros sem sua autorização explícita. Você é o único dono dos seus dados. Estamos em conformidade com a LGPD e HIPAA.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Preciso ser diabético para usar o GLUCO AI?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-answer">
+          Não! O GLUCO AI é útil para qualquer pessoa que queira otimizar sua saúde metabólica: atletas buscando performance, pessoas com pré-diabetes, biohackers, e quem simplesmente quer entender melhor como seu corpo funciona.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Como funciona o período de teste gratuito?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-answer">
+          Você tem 14 dias de acesso completo ao plano Pro sem nenhum custo, sem precisar inserir cartão de crédito. Ao final do período, você escolhe o plano que melhor se adapta às suas necessidades ou continua no plano Gratuito.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Posso cancelar a qualquer momento?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-answer">
+          Sim, sem perguntas e sem burocracia. Cancele diretamente pelo app ou configurações da conta em menos de 1 minuto. Você continua com acesso até o final do período pago.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          O GLUCO AI substitui o acompanhamento médico?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-answer">
+          Não. O GLUCO AI é uma ferramenta de suporte e educação em saúde, não um dispositivo médico. Sempre consulte seu médico ou endocrinologista para diagnósticos e tratamentos. Os relatórios do GLUCO AI foram projetados para complementar — não substituir — o acompanhamento profissional.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ─── FINAL CTA ─── -->
+<section class="final-cta">
+  <div class="section-eyebrow" style="justify-content:center">Comece Agora</div>
+  <h2 class="section-title">Pronto para entender<br>seu metabolismo?</h2>
+  <p class="section-desc">
+    Junte-se a mais de 50.000 pessoas que já transformaram sua saúde metabólica com o GLUCO AI.
+  </p>
+
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative">
+    <a href="#pricing" class="btn btn-teal btn-large">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Começar Gratuitamente
+    </a>
+    <a href="#" class="btn btn-ghost btn-large" style="position:relative">
+      Falar com vendas
+    </a>
+  </div>
+
+  <div class="cta-trust">
+    <div class="trust-item">
+      <span class="trust-icon">🔒</span>
+      Dados criptografados
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">🇧🇷</span>
+      Servidores no Brasil
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">✓</span>
+      LGPD Compliant
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">↩</span>
+      14 dias grátis
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">✦</span>
+      Suporte em português
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="28" height="28">
+            <defs>
+              <linearGradient id="footerGrad" x1="0" y1="0" x2="52" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00D4B4"/>
+                <stop offset="100%" stop-color="#1B6FFF"/>
+              </linearGradient>
+            </defs>
+            <path d="M4 32 C9 32 12 22 18 22 C24 22 27 38 33 38 C39 38 42 27 48 27" stroke="url(#footerGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="48" cy="27" r="4" fill="#1B6FFF" opacity="0.3"/>
+            <circle cx="48" cy="27" r="2" fill="#1B6FFF"/>
+          </svg>
+          <span style="font-weight:800;font-size:17px;letter-spacing:-0.04em">GLUCO <span style="color:var(--blue)">AI</span></span>
+        </div>
+        <p>Inteligência metabólica para uma vida mais saudável. Transformando dados de glicose em insights que mudam vidas.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Produto</h4>
+        <ul>
+          <li><a href="#">Recursos</a></li>
+          <li><a href="#">Como Funciona</a></li>
+          <li><a href="#pricing">Preços</a></li>
+          <li><a href="#">Integrações</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#">Sobre nós</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Imprensa</a></li>
+          <li><a href="#">Carreiras</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="#">Cookies</a></li>
+          <li><a href="#">LGPD</a></li>
+          <li><a href="#">Aviso Médico</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 GLUCO AI. Todos os direitos reservados.</span>
+      <span class="mono" style="font-size:12px">v1.0 · Feito com ❤️ no Brasil</span>
+      <span>GLUCO AI não é um dispositivo médico. Consulte sempre seu médico.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // Sticky nav shadow on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 10) {
+      nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Intersection observer for fade-up elements
+  const fadeEls = document.querySelectorAll('.feature-card, .step-card, .testimonial-card, .pricing-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = entry.target.classList.contains('popular') ? 'scale(1.03)' : 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  fadeEls.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = el.classList.contains('popular') ? 'scale(1.03) translateY(16px)' : 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  // Animated glucose reading counter
+  const chartValue = document.querySelector('.chart-value');
+  if (chartValue) {
+    let val = 110;
+    const target = 94;
+    const interval = setInterval(() => {
+      if (val > target) {
+        val--;
+        chartValue.textContent = val;
+      } else {
+        clearInterval(interval);
+      }
+    }, 30);
+  }
+</script>
+<script src="editor.js"></script>
+</body>
+</html>
