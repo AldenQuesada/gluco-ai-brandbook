@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Brand Book v1.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --void:          #0A0E1A;
+    --abyss:         #111526;
+    --surface:       #1A1E2E;
+    --elevated:      #242840;
+    --stroke:        #2E334F;
+    --muted:         #4A5070;
+    --text-secondary:#8B93B8;
+    --text-primary:  #E8EEFF;
+    --white:         #FFFFFF;
+    --blue:          #1B6FFF;
+    --teal:          #00D4B4;
+    --success:       #00C48C;
+    --warning:       #FFB020;
+    --alert:         #FF4B4B;
+    --info:          #6C8EFF;
+    --blue-glow:     rgba(27,111,255,0.3);
+    --teal-glow:     rgba(0,212,180,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(27,111,255,0.15) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,212,180,0.08) 0%, transparent 60%),
+                var(--void);
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(46,51,79,0.4) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46,51,79,0.4) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  .logo-mark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 32px;
+    position: relative;
+  }
+
+  .logo-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cover-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .cover-title {
+    font-size: clamp(56px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--white) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+
+  .cover-subtitle {
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .cover-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    margin: 0 auto 48px;
+    position: relative;
+  }
+
+  .cover-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    position: relative;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--stroke);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  .section-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin-bottom: 64px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--stroke), transparent);
+    margin: 0;
+  }
+
+  /* ─── LOGO SECTION ─── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .logo-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 48px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .logo-card:hover { border-color: var(--blue); }
+
+  .logo-card.featured {
+    border-color: var(--blue);
+    background: rgba(27,111,255,0.06);
+  }
+
+  .logo-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logo-text-mark {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--white);
+  }
+
+  .logo-text-mark span { color: var(--blue); }
+
+  .logo-card-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .logo-card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .badge-recommended {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: rgba(0,212,180,0.1);
+    border: 1px solid rgba(0,212,180,0.3);
+    border-radius: 99px;
+    padding: 4px 10px;
+  }
+
+  .logo-variations {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .logo-var-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-var-card.dark-bg { background: var(--void); }
+  .logo-var-card.light-bg { background: #F0F4FF; }
+  .logo-var-card.blue-bg { background: var(--blue); }
+
+  .var-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── COLORS ─── */
+  .color-primary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .color-swatch-large {
+    border-radius: 20px;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .color-swatch-large::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .swatch-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .swatch-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  .swatch-use {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+
+  .color-secondary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .color-swatch-med {
+    border-radius: 16px;
+    padding: 28px 24px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .color-state-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .color-swatch-small {
+    border-radius: 12px;
+    padding: 20px 16px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .color-neutral-row {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+  }
+
+  .color-neutral-chip {
+    border-radius: 10px;
+    aspect-ratio: 1;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .neutral-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    word-break: break-all;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .type-showcase {
+    margin-bottom: 64px;
+  }
+
+  .type-row {
+    display: flex;
+    align-items: baseline;
+    gap: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--stroke);
+  }
+
+  .type-meta {
+    width: 120px;
+    flex-shrink: 0;
+  }
+
+  .type-token {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--blue);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .type-specs {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .type-sample { flex: 1; }
+
+  /* ─── SPACING ─── */
+  .spacing-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .spacing-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .spacing-bar-wrap {
+    flex: 1;
+    background: var(--surface);
+    border-radius: 4px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+  }
+
+  .spacing-bar {
+    height: 24px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    min-width: 4px;
+  }
+
+  .spacing-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+    width: 80px;
+  }
+
+  .spacing-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    width: 48px;
+    text-align: right;
+  }
+
+  /* ─── COMPONENTS ─── */
+  .component-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .component-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 32px;
+  }
+
+  .component-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  /* ─── GLUCOSE CHART ─── */
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 48px;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .chart-value-big {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .chart-unit {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  .chart-trend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--teal);
+    margin-top: 8px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .status-optimal {
+    background: rgba(0,212,180,0.12);
+    border: 1px solid rgba(0,212,180,0.3);
+    color: var(--teal);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .chart-svg-wrap {
+    width: 100%;
+    height: 200px;
+    position: relative;
+  }
+
+  /* ─── METABOLIC SCORE ─── */
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .gauge-wrap {
+    position: relative;
+    width: 200px;
+    height: 130px;
+  }
+
+  .score-number {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .score-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .score-status {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  /* ─── AI INSIGHT CARD ─── */
+  .ai-card {
+    background: rgba(27,111,255,0.06);
+    border: 1px solid rgba(27,111,255,0.2);
+    border-left: 3px solid var(--blue);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .ai-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    background: rgba(27,111,255,0.15);
+    border: 1px solid rgba(27,111,255,0.3);
+    border-radius: 99px;
+    padding: 4px 10px;
+  }
+
+  .ai-card-tag {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--elevated);
+    border-radius: 99px;
+    padding: 4px 10px;
+  }
+
+  .ai-card-text {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .confidence-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .confidence-label {
+    font-size: 11px;
+    color: var(--muted);
+    width: 90px;
+    flex-shrink: 0;
+  }
+
+  .confidence-bar-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--elevated);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .confidence-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--blue), var(--info));
+  }
+
+  .confidence-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+    width: 32px;
+    text-align: right;
+  }
+
+  .ai-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: var(--white);
+  }
+
+  .btn-primary:hover { background: #3580FF; box-shadow: 0 0 24px rgba(27,111,255,0.4); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--stroke);
+  }
+
+  .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+  .btn-teal {
+    background: var(--teal);
+    color: var(--void);
+  }
+
+  /* ─── MOBILE APP MOCKUP ─── */
+  .phone-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  .phone-frame {
+    width: 320px;
+    background: var(--abyss);
+    border-radius: 40px;
+    border: 1px solid var(--stroke);
+    padding: 16px;
+    box-shadow:
+      0 32px 80px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(255,255,255,0.05),
+      inset 0 0 0 1px rgba(255,255,255,0.03);
+    position: relative;
+  }
+
+  .phone-screen {
+    background: var(--void);
+    border-radius: 28px;
+    overflow: hidden;
+    padding: 20px 20px 24px;
+  }
+
+  .phone-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .phone-nav {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .phone-date {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .phone-glucose-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .phone-glucose-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .phone-glucose-unit {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .phone-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .phone-mini-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .phone-mini-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .phone-mini-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+
+  .phone-mini-sub {
+    font-size: 10px;
+    color: var(--teal);
+    margin-top: 2px;
+  }
+
+  .phone-insight-card {
+    background: rgba(27,111,255,0.08);
+    border: 1px solid rgba(27,111,255,0.2);
+    border-left: 2px solid var(--blue);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  .phone-insight-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .phone-insight-text {
+    font-size: 12px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .phone-bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--stroke);
+  }
+
+  .phone-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .phone-nav-item.active { color: var(--blue); }
+  .phone-nav-icon { font-size: 18px; }
+
+  /* ─── INSTAGRAM MOCKUP ─── */
+  .social-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .ig-post {
+    aspect-ratio: 1;
+    background: var(--void);
+    border-radius: 16px;
+    border: 1px solid var(--stroke);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px;
+    background-image: radial-gradient(ellipse 100% 100% at 50% 0%, rgba(27,111,255,0.12) 0%, transparent 70%);
+  }
+
+  .ig-brand {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ig-value-huge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin: 8px 0;
+  }
+
+  .ig-unit {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .ig-message {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    max-width: 200px;
+  }
+
+  .ig-cta {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--teal);
+    letter-spacing: 0.05em;
+  }
+
+  .ig-story {
+    aspect-ratio: 9/16;
+    background: var(--void);
+    border-radius: 16px;
+    border: 1px solid var(--stroke);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% 80%, rgba(0,212,180,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 20%, rgba(27,111,255,0.12) 0%, transparent 60%);
+  }
+
+  .ig-story-top {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ig-story-progress {
+    display: flex;
+    gap: 4px;
+  }
+
+  .ig-story-bar {
+    flex: 1;
+    height: 2px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 99px;
+  }
+
+  .ig-story-bar.active { background: var(--white); }
+
+  .ig-story-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ig-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--void);
+  }
+
+  .ig-story-name { font-size: 13px; font-weight: 600; color: var(--white); }
+  .ig-story-time { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  /* ─── WEBSITE HERO ─── */
+  .website-hero {
+    background: var(--abyss);
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .website-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--stroke);
+  }
+
+  .website-nav-links {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .website-hero-content {
+    padding: 80px 32px;
+    text-align: center;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(27,111,255,0.1) 0%, transparent 70%);
+  }
+
+  .website-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: rgba(0,212,180,0.08);
+    border: 1px solid rgba(0,212,180,0.2);
+    border-radius: 99px;
+    padding: 6px 14px;
+    margin-bottom: 24px;
+  }
+
+  .website-hero-h1 {
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    background: linear-gradient(180deg, var(--white) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .website-hero-sub {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .website-hero-ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 60px;
+  }
+
+  .website-logos {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 40px;
+    border-top: 1px solid var(--stroke);
+  }
+
+  .website-logo-badge {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── TOKEN REFERENCE ─── */
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .token-card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .token-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+
+  .token-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .token-desc {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ─── PAGE NUMBERS / FOOTER ─── */
+  .page-footer {
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid var(--stroke);
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ─── NAV SIDEBAR ─── */
+  .sidebar {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 100;
+  }
+
+  .sidebar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--stroke);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sidebar-dot:hover, .sidebar-dot.active {
+    background: var(--blue);
+    transform: scale(1.4);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .logo-grid, .color-secondary-row, .color-state-row { grid-template-columns: 1fr; }
+    .color-primary-row { grid-template-columns: 1fr; }
+    .logo-variations, .component-grid, .social-grid, .token-grid { grid-template-columns: 1fr; }
+    .color-neutral-row { grid-template-columns: repeat(4, 1fr); }
+    .sidebar { display: none; }
+  }
+
+  /* ─── GLASSMORPHISM DEMO ─── */
+  .glass-demo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .glass-card-demo {
+    padding: 24px;
+    border-radius: 20px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  .glass-standard {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .glass-blue {
+    background: rgba(27,111,255,0.08);
+    backdrop-filter: blur(32px);
+    border: 1px solid rgba(27,111,255,0.2);
+  }
+
+  .glass-teal {
+    background: rgba(0,212,180,0.06);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(0,212,180,0.15);
+  }
+
+  .glass-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .glass-spec {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ─── ELEVATION DEMO ─── */
+  .elevation-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    padding: 48px 32px;
+    background: var(--void);
+    border-radius: 20px;
+    border: 1px solid var(--stroke);
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .elevation-card {
+    width: 120px;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .elevation-level {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .elevation-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+/* ── TIMELINE SIDEBAR ── */
+body{padding-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:0;height:100vh;overflow-y:auto;border-right:1px solid rgba(255,255,255,0.08);background:var(--abyss,#111526);z-index:200;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(13,148,136,0.2);color:#14b8a6;padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.07) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.04);}
+.tl-item.tl-active{background:rgba(13,148,136,.07);}
+.tl-item.tl-active .tl-name{color:#e2e8f0;}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(13,148,136,.25);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(29,78,216,.2);border:2px solid #3b82f6;color:#3b82f6;}
+.tl-dot-yellow{background:rgba(217,119,6,.15);border:2px solid #f59e0b;color:#f59e0b;}
+.tl-dot-green{background:rgba(22,163,74,.15);border:2px solid #22c55e;color:#22c55e;}
+.tl-dot-red{background:rgba(220,38,38,.12);border:2px solid #ef4444;color:#ef4444;}
+.tl-dot-gray{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.2);color:rgba(255,255,255,.4);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.tl-info:hover .tl-name{color:#e2e8f0;}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:#4b5563;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:#94a3b8;}
+.tl-highlight{outline:3px solid rgba(13,148,136,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:inherit;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.15);border-radius:6px;padding:5px 10px;}
+.tlp-branches{margin-bottom:8px;}
+.tlp-branch-title{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.tlp-branch-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(46,51,79,.35);}
+.tlp-branch-row:last-child{border-bottom:none;}
+.tlp-bcond{font-size:10px;font-weight:700;background:rgba(13,148,136,.1);color:#14b8a6;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.tlp-baction{font-size:11px;color:#64748b;line-height:1.4;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:#0d9488;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#0f766e;}
+@media(max-width:900px){
+  body{padding-left:0;}
+  #tl-sidebar{position:relative;height:auto;width:100%;border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+</style>
+</head>
+<body>
+<aside id="tl-sidebar">
+  <div class="tl-head">Seções <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
+
+<!-- SIDEBAR NAV -->
+<nav class="sidebar">
+  <div class="sidebar-dot active" title="Cover" onclick="document.getElementById('cover').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Logo" onclick="document.getElementById('logo').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Colors" onclick="document.getElementById('colors').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Typography" onclick="document.getElementById('typography').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Components" onclick="document.getElementById('components').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="App" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Social" onclick="document.getElementById('social').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Website" onclick="document.getElementById('website').scrollIntoView({behavior:'smooth'})"></div>
+  <div class="sidebar-dot" title="Tokens" onclick="document.getElementById('tokens').scrollIntoView({behavior:'smooth'})"></div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════ -->
+<section class="cover" id="cover">
+  <div class="logo-mark">
+    <svg class="logo-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoGrad" x1="0" y1="0" x2="80" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00D4B4"/>
+          <stop offset="100%" stop-color="#1B6FFF"/>
+        </linearGradient>
+      </defs>
+      <path d="M8 44 C14 44 18 32 26 32 C34 32 38 52 46 52 C54 52 58 36 66 36 C70 36 72 40 74 40"
+            stroke="url(#logoGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="66" cy="36" r="5" fill="#1B6FFF" opacity="0.3"/>
+      <circle cx="66" cy="36" r="3" fill="#1B6FFF"/>
+    </svg>
+  </div>
+
+  <p class="cover-eyebrow">Brand Identity System</p>
+  <h1 class="cover-title">GLUCO AI</h1>
+  <p class="cover-subtitle">Metabolic Intelligence for Peak Humans</p>
+  <div class="cover-divider"></div>
+  <p class="cover-meta">Brand Book v1.0 · March 2026 · Confidential</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     LOGO
+═══════════════════════════════════════════ -->
+<section class="section" id="logo">
+  <p class="section-label">01 — Logo System</p>
+  <h2 class="section-title">Identity Mark</h2>
+  <p class="section-desc">Três conceitos exploram os pilares da marca: precisão metabólica, inteligência artificial e performance humana.</p>
+
+  <div class="logo-grid">
+
+    <!-- Concept A -->
+    <div class="logo-card featured">
+      <span class="badge-recommended">Recommended</span>
+      <div class="logo-preview">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="32" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#00D4B4"/>
+              <stop offset="100%" stop-color="#1B6FFF"/>
+            </linearGradient>
+          </defs>
+          <path d="M2 18 C5 18 7 12 11 12 C15 12 17 22 21 22 C25 22 27 14 30 14"
+                stroke="url(#lg1)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <circle cx="27" cy="14" r="3" fill="#1B6FFF" opacity="0.4"/>
+          <circle cx="27" cy="14" r="1.5" fill="#1B6FFF"/>
+        </svg>
+        <span class="logo-text-mark">GLUCO <span>AI</span></span>
+      </div>
+      <span class="logo-card-name">Pure Signal</span>
+      <p class="logo-card-desc">Curva de glicose em range ótimo. Linha contínua evoca fluxo de dados em tempo real.</p>
+    </div>
+
+    <!-- Concept B -->
+    <div class="logo-card">
+      <div class="logo-preview">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path d="M16 3 L28 10 L28 22 L16 29 L4 22 L4 10 Z"
+                stroke="#1B6FFF" stroke-width="1.5" fill="rgba(27,111,255,0.08)"/>
+          <circle cx="16" cy="16" r="3" fill="#1B6FFF"/>
+          <line x1="16" y1="13" x2="16" y2="7" stroke="#1B6FFF" stroke-width="1" opacity="0.5"/>
+          <line x1="19" y1="17.5" x2="25" y2="20.5" stroke="#1B6FFF" stroke-width="1" opacity="0.5"/>
+          <line x1="13" y1="17.5" x2="7" y2="20.5" stroke="#1B6FFF" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="logo-text-mark">GLUCO <span>AI</span></span>
+      </div>
+      <span class="logo-card-name">Neural Glucose</span>
+      <p class="logo-card-desc">Hexágono molecular (C₆H₁₂O₆) com nós de rede neural. Credibilidade científica.</p>
+    </div>
+
+    <!-- Concept C -->
+    <div class="logo-card">
+      <div class="logo-preview">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="lg2" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#1B6FFF"/>
+              <stop offset="100%" stop-color="#00D4B4"/>
+            </linearGradient>
+          </defs>
+          <path d="M5 22 A12 12 0 0 1 27 22"
+                stroke="#2E334F" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <path d="M5 22 A12 12 0 0 1 22 8"
+                stroke="url(#lg2)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <circle cx="22" cy="8" r="3" fill="#1B6FFF"/>
+        </svg>
+        <span class="logo-text-mark">GLUCO<span style="font-weight:400;opacity:0.6"> · </span><span>AI</span></span>
+      </div>
+      <span class="logo-card-name">Vital Arc</span>
+      <p class="logo-card-desc">Gauge de performance com ponto na zona ótima. Health-forward, aspiracional.</p>
+    </div>
+  </div>
+
+  <!-- Variations -->
+  <p class="section-label" style="margin-bottom: 24px;">Logo Variations</p>
+  <div class="logo-variations">
+    <div class="logo-var-card">
+      <svg width="100" height="28" viewBox="0 0 100 28" fill="none">
+        <defs><linearGradient id="lg3" x1="0" y1="0" x2="32" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#00D4B4"/><stop offset="1" stop-color="#1B6FFF"/></linearGradient></defs>
+        <path d="M2 16 C4 16 5.5 10 8.5 10 C11.5 10 13 19 16 19 C19 19 20.5 12 23 12" stroke="url(#lg3)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <circle cx="21" cy="12" r="2.5" fill="#1B6FFF" opacity="0.4"/>
+        <circle cx="21" cy="12" r="1.2" fill="#1B6FFF"/>
+        <text x="30" y="19" font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="#E8EEFF" letter-spacing="-0.5">GLUCO</text>
+        <text x="79" y="19" font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="#1B6FFF" letter-spacing="-0.5">AI</text>
+      </svg>
+      <span class="var-label">Primary</span>
+    </div>
+
+    <div class="logo-var-card dark-bg">
+      <svg width="100" height="28" viewBox="0 0 100 28" fill="none">
+        <defs><linearGradient id="lg4" x1="0" y1="0" x2="32" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#00D4B4"/><stop offset="1" stop-color="#1B6FFF"/></linearGradient></defs>
+        <path d="M2 16 C4 16 5.5 10 8.5 10 C11.5 10 13 19 16 19 C19 19 20.5 12 23 12" stroke="url(#lg4)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <circle cx="21" cy="12" r="1.2" fill="#1B6FFF"/>
+        <text x="30" y="19" font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="white" letter-spacing="-0.5">GLUCO</text>
+        <text x="79" y="19" font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="#1B6FFF" letter-spacing="-0.5">AI</text>
+      </svg>
+      <span class="var-label">On Dark</span>
+    </div>
+
+    <div class="logo-var-card light-bg">
+      <svg width="100" height="28" viewBox="0 0 100 28" fill="none">
+        <defs><linearGradient id="lg5" x1="0" y1="0" x2="32" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#00B89A"/><stop offset="1" stop-color="#1558CC"/></linearGradient></defs>
+        <path d="M2 16 C4 16 5.5 10 8.5 10 C11.5 10 13 19 16 19 C19 19 20.5 12 23 12" stroke="url(#lg5)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <circle cx="21" cy="12" r="1.2" fill="#1558CC"/>
+        <text x="30" y="19" font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="#0A0E1A" letter-spacing="-0.5">GLUCO</text>
+        <text x="79" y="19" font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="#1558CC" letter-spacing="-0.5">AI</text>
+      </svg>
+      <span class="var-label" style="color:#4A5070">On Light</span>
+    </div>
+
+    <div class="logo-var-card" style="justify-content:center; align-items:center;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="12" fill="#1A1E2E"/>
+        <defs><linearGradient id="lg6" x1="6" y1="24" x2="42" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#00D4B4"/><stop offset="1" stop-color="#1B6FFF"/></linearGradient></defs>
+        <path d="M6 26 C10 26 13 18 18 18 C23 18 26 32 31 32 C36 32 39 22 42 22" stroke="url(#lg6)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="39" cy="22" r="4" fill="#1B6FFF" opacity="0.3"/>
+        <circle cx="39" cy="22" r="2" fill="#1B6FFF"/>
+      </svg>
+      <span class="var-label">App Icon</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     COLORS
+═══════════════════════════════════════════ -->
+<section class="section" id="colors">
+  <p class="section-label">02 — Color System</p>
+  <h2 class="section-title">Color Palette</h2>
+  <p class="section-desc">Paleta construída sobre autoridade médica (azul profundo), vitalidade metabólica (teal) e acabamento premium (near-black).</p>
+
+  <!-- Primary -->
+  <p class="section-label" style="margin-bottom: 16px; font-size: 10px;">Primary</p>
+  <div class="color-primary-row">
+    <div class="color-swatch-large" style="background: #0A0E1A; border: 1px solid #2E334F;">
+      <div class="swatch-name">Midnight Void</div>
+      <div class="swatch-hex">#0A0E1A · rgb(10,14,26)</div>
+      <div class="swatch-use">Background principal · 40% proportion</div>
+    </div>
+    <div class="color-swatch-large" style="background: #1B6FFF; box-shadow: 0 0 40px rgba(27,111,255,0.4);">
+      <div class="swatch-name">Intelligence Blue</div>
+      <div class="swatch-hex">#1B6FFF · rgb(27,111,255)</div>
+      <div class="swatch-use">CTA, links, ação primária · 15% proportion</div>
+    </div>
+  </div>
+
+  <!-- Secondary -->
+  <p class="section-label" style="margin-bottom: 16px; font-size: 10px;">Secondary</p>
+  <div class="color-secondary-row">
+    <div class="color-swatch-med" style="background: #00D4B4; box-shadow: 0 0 30px rgba(0,212,180,0.3);">
+      <div class="swatch-name" style="color:#0A0E1A">Optimal Teal</div>
+      <div class="swatch-hex" style="color:rgba(10,14,26,0.7)">#00D4B4</div>
+      <div class="swatch-use" style="color:rgba(10,14,26,0.6)">Estado ótimo, sucesso, range ideal</div>
+    </div>
+    <div class="color-swatch-med" style="background: #1A1E2E; border: 1px solid #2E334F;">
+      <div class="swatch-name">Deep Carbon</div>
+      <div class="swatch-hex">#1A1E2E</div>
+      <div class="swatch-use">Cards, surfaces, elevação base</div>
+    </div>
+    <div class="color-swatch-med" style="background: #F0F4FF;">
+      <div class="swatch-name" style="color:#0A0E1A">Arctic Mist</div>
+      <div class="swatch-hex" style="color:rgba(10,14,26,0.6)">#F0F4FF</div>
+      <div class="swatch-use" style="color:rgba(10,14,26,0.5)">Background light mode</div>
+    </div>
+  </div>
+
+  <!-- State -->
+  <p class="section-label" style="margin-bottom: 16px; font-size: 10px;">State / Accent</p>
+  <div class="color-state-row">
+    <div class="color-swatch-small" style="background: #00C48C;">
+      <div class="swatch-name" style="color:#0A0E1A; font-size:14px;">Optimal</div>
+      <div class="swatch-hex" style="color:rgba(10,14,26,0.7); font-size:12px;">#00C48C</div>
+    </div>
+    <div class="color-swatch-small" style="background: #FFB020;">
+      <div class="swatch-name" style="color:#0A0E1A; font-size:14px;">Warning</div>
+      <div class="swatch-hex" style="color:rgba(10,14,26,0.7); font-size:12px;">#FFB020</div>
+    </div>
+    <div class="color-swatch-small" style="background: #FF4B4B;">
+      <div class="swatch-name" style="font-size:14px;">Alert</div>
+      <div class="swatch-hex" style="font-size:12px;">#FF4B4B</div>
+    </div>
+    <div class="color-swatch-small" style="background: #6C8EFF;">
+      <div class="swatch-name" style="color:#0A0E1A; font-size:14px;">Info</div>
+      <div class="swatch-hex" style="color:rgba(10,14,26,0.7); font-size:12px;">#6C8EFF</div>
+    </div>
+  </div>
+
+  <!-- Neutrals -->
+  <p class="section-label" style="margin-bottom: 16px; font-size: 10px;">Neutral Scale</p>
+  <div class="color-neutral-row">
+    <div class="color-neutral-chip" style="background:#0A0E1A;">
+      <span class="neutral-hex">#0A0E1A</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#111526;">
+      <span class="neutral-hex">#111526</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#1A1E2E;">
+      <span class="neutral-hex">#1A1E2E</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#242840;">
+      <span class="neutral-hex">#242840</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#2E334F;">
+      <span class="neutral-hex">#2E334F</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#4A5070;">
+      <span class="neutral-hex">#4A5070</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#8B93B8;">
+      <span class="neutral-hex">#8B93B8</span>
+    </div>
+    <div class="color-neutral-chip" style="background:#E8EEFF;">
+      <span class="neutral-hex" style="color:rgba(10,14,26,0.5)">#E8EEFF</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     TYPOGRAPHY
+═══════════════════════════════════════════ -->
+<section class="section" id="typography">
+  <p class="section-label">03 — Typography</p>
+  <h2 class="section-title">Type System</h2>
+  <p class="section-desc">Inter Variable para UI e headlines. JetBrains Mono exclusivo para dados biométricos — credibilidade científica em cada número.</p>
+
+  <div class="type-showcase">
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">display-xl</span>
+        <span class="type-specs">72px / 700<br>lh: 1.1 / ls: -0.03em</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--white);">Intelligence.</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">h1</span>
+        <span class="type-specs">40px / 700<br>lh: 1.2 / ls: -0.02em</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--white);">Metabolic Score</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">h2</span>
+        <span class="type-specs">32px / 600<br>lh: 1.25 / ls: -0.015em</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 32px; font-weight: 600; letter-spacing: -0.015em; color: var(--white);">Your Optimal Zone</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">h3</span>
+        <span class="type-specs">24px / 600<br>lh: 1.3 / ls: -0.01em</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--white);">AI Insight — Cortisol Pattern</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">body-l</span>
+        <span class="type-specs">18px / 400<br>lh: 1.6 / ls: 0</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 18px; font-weight: 400; color: var(--text-secondary); line-height: 1.6;">Seu pico de glicose às 14h está correlacionado com cortisol — não com carboidratos. Reduza stress antes do almoço.</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">body-m</span>
+        <span class="type-specs">16px / 400<br>lh: 1.6 / ls: 0</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 16px; font-weight: 400; color: var(--text-secondary); line-height: 1.6;">Standard body text for UI descriptions and explanatory content across all surfaces.</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">caption</span>
+        <span class="type-specs">12px / 400<br>lh: 1.4 / ls: 0.01em</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0.01em;">Last reading · 3 minutes ago · Sensor G7</span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">data-xl</span>
+        <span class="type-specs">JetBrains Mono<br>48px / 700 / lh: 1</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1;">112 <span style="font-size:20px; color:var(--muted); font-weight:400;">mg/dL</span></span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-token">data-l</span>
+        <span class="type-specs">JetBrains Mono<br>32px / 600 / lh: 1</span>
+      </div>
+      <div class="type-sample">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 600; color: var(--white); letter-spacing: -0.015em; line-height: 1;">87 <span style="font-size:16px; color:var(--muted); font-weight:400;">/ 100</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Font Families -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top: 16px;">
+    <div style="background:var(--surface); border:1px solid var(--stroke); border-radius:16px; padding:28px;">
+      <div class="type-token" style="margin-bottom:12px;">Primary — Inter Variable</div>
+      <div style="font-size:36px; font-weight:800; letter-spacing:-0.03em; margin-bottom:4px;">Aa Bb Cc</div>
+      <div style="font-size:14px; color:var(--muted);">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789 .,;:!?</div>
+    </div>
+    <div style="background:var(--surface); border:1px solid var(--stroke); border-radius:16px; padding:28px;">
+      <div class="type-token" style="margin-bottom:12px;">Data — JetBrains Mono</div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:36px; font-weight:700; letter-spacing:-0.02em; margin-bottom:4px; color:var(--teal);">0-9</div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--muted);">112 mg/dL · 87/100<br>08:43 AM · +2.3 trend<br>#FF4B4B · rgba(0,212,180)</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     COMPONENTS
+═══════════════════════════════════════════ -->
+<section class="section" id="components">
+  <p class="section-label">04 — Components</p>
+  <h2 class="section-title">UI Components</h2>
+  <p class="section-desc">Componentes construídos sobre glassmorphism, dados em tempo real e AI-first experience design.</p>
+
+  <!-- Glucose Chart -->
+  <p class="section-label" style="margin-bottom:16px; font-size:10px;">Glucose Chart</p>
+  <div class="chart-container">
+    <div class="chart-header">
+      <div>
+        <div style="display:flex; align-items:baseline; gap:8px;">
+          <span class="chart-value-big">112</span>
+          <span class="chart-unit">mg/dL</span>
+        </div>
+        <div class="chart-trend">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 12 L8 5 L13 8" stroke="#00D4B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Rising slowly · +3 in 15min
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+        <span class="status-badge status-optimal">
+          <span class="status-dot"></span>
+          Optimal
+        </span>
+        <span style="font-size:12px; color:var(--muted);">Last update: just now</span>
+      </div>
+    </div>
+
+    <!-- SVG Chart -->
+    <div class="chart-svg-wrap">
+      <svg width="100%" height="200" viewBox="0 0 800 200" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00D4B4" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#00D4B4" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#00D4B4"/>
+            <stop offset="100%" stop-color="#1B6FFF"/>
+          </linearGradient>
+          <!-- Zone fills -->
+        </defs>
+
+        <!-- Zone backgrounds -->
+        <rect x="0" y="0" width="800" height="30" fill="rgba(255,75,75,0.06)"/>
+        <rect x="0" y="30" width="800" height="40" fill="rgba(255,176,32,0.06)"/>
+        <rect x="0" y="70" width="800" height="90" fill="rgba(0,212,180,0.05)"/>
+        <rect x="0" y="160" width="800" height="40" fill="rgba(255,75,75,0.06)"/>
+
+        <!-- Zone labels -->
+        <text x="8" y="20" font-family="JetBrains Mono" font-size="10" fill="rgba(255,75,75,0.5)">HIGH &gt;180</text>
+        <text x="8" y="58" font-family="JetBrains Mono" font-size="10" fill="rgba(255,176,32,0.5)">WARN 140</text>
+        <text x="8" y="115" font-family="JetBrains Mono" font-size="10" fill="rgba(0,212,180,0.6)">OPTIMAL</text>
+        <text x="8" y="190" font-family="JetBrains Mono" font-size="10" fill="rgba(255,75,75,0.5)">LOW &lt;70</text>
+
+        <!-- Area fill -->
+        <path d="M60 130 C100 128 140 120 180 115 C220 110 260 108 300 112 C340 116 380 120 420 118 C460 116 500 110 540 105 C580 100 620 98 660 95 C700 92 740 90 780 88 L780 200 L60 200 Z"
+              fill="url(#chartGrad)"/>
+
+        <!-- Line -->
+        <path d="M60 130 C100 128 140 120 180 115 C220 110 260 108 300 112 C340 116 380 120 420 118 C460 116 500 110 540 105 C580 100 620 98 660 95 C700 92 740 90 780 88"
+              stroke="url(#lineGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Current point -->
+        <circle cx="780" cy="88" r="6" fill="#1B6FFF" opacity="0.3">
+          <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="780" cy="88" r="4" fill="#1B6FFF" stroke="white" stroke-width="2"/>
+
+        <!-- Time labels -->
+        <text x="56" y="196" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.6)" text-anchor="middle">08:00</text>
+        <text x="256" y="196" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.6)" text-anchor="middle">10:00</text>
+        <text x="456" y="196" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.6)" text-anchor="middle">12:00</text>
+        <text x="656" y="196" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.6)" text-anchor="middle">14:00</text>
+        <text x="780" y="196" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.6)" text-anchor="middle">Now</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Score + AI Cards -->
+  <div class="component-grid">
+    <!-- Metabolic Score -->
+    <div class="score-card">
+      <span style="font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted);">Metabolic Score</span>
+      <div class="gauge-wrap">
+        <svg width="200" height="130" viewBox="0 0 200 130">
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#00D4B4"/>
+              <stop offset="100%" stop-color="#1B6FFF"/>
+            </linearGradient>
+          </defs>
+          <!-- Background arc -->
+          <path d="M20 110 A80 80 0 0 1 180 110"
+                stroke="#242840" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Progress arc (87%) -->
+          <path d="M20 110 A80 80 0 0 1 175 45"
+                stroke="url(#gaugeGrad)" stroke-width="10" fill="none" stroke-linecap="round"
+                stroke-dasharray="220 251" stroke-dashoffset="0"/>
+          <!-- Tick marks -->
+          <text x="14" y="120" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.5)">0</text>
+          <text x="91" y="22" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.5)" text-anchor="middle">50</text>
+          <text x="182" y="120" font-family="JetBrains Mono" font-size="10" fill="rgba(139,147,184,0.5)">100</text>
+        </svg>
+        <div class="score-number">87</div>
+      </div>
+      <div class="score-status">Optimal</div>
+      <div class="score-label">3rd best day this month</div>
+      <div style="display:flex; gap:16px; margin-top:8px;">
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; color:var(--teal);">94%</div>
+          <div style="font-size:10px; color:var(--muted); margin-top:2px;">Time in range</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; color:var(--white);">18</div>
+          <div style="font-size:10px; color:var(--muted); margin-top:2px;">Day streak 🔥</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; color:var(--white);">+2.3</div>
+          <div style="font-size:10px; color:var(--muted); margin-top:2px;">Trend vs. last wk</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insights Stack -->
+    <div>
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span class="ai-badge">✦ AI Insight</span>
+          <span class="ai-card-tag">Metabolic</span>
+        </div>
+        <p class="ai-card-text">Seu pico de glicose às 14h está correlacionado com cortisol elevado — não com carboidratos. Reduza estresse 30min antes do almoço.</p>
+        <div class="confidence-row">
+          <span class="confidence-label">Confidence</span>
+          <div class="confidence-bar-bg">
+            <div class="confidence-bar-fill" style="width:82%"></div>
+          </div>
+          <span class="confidence-pct">82%</span>
+        </div>
+        <div class="ai-actions">
+          <button class="btn btn-primary" style="font-size:12px; padding:8px 14px;">View Protocol →</button>
+          <button class="btn btn-ghost" style="font-size:12px; padding:8px 14px;">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="ai-card" style="background:rgba(0,212,180,0.04); border-color:rgba(0,212,180,0.15); border-left-color:var(--teal);">
+        <div class="ai-card-header">
+          <span class="ai-badge" style="color:var(--teal); background:rgba(0,212,180,0.12); border-color:rgba(0,212,180,0.3);">✦ AI Insight</span>
+          <span class="ai-card-tag">Recovery</span>
+        </div>
+        <p class="ai-card-text">Janela anabólica ativa nas próximas 2h. Glicemia estável em 112 mg/dL — condição ideal para síntese proteica.</p>
+        <div class="confidence-row">
+          <span class="confidence-label">Confidence</span>
+          <div class="confidence-bar-bg">
+            <div class="confidence-bar-fill" style="width:91%; background:linear-gradient(90deg, var(--teal), var(--blue))"></div>
+          </div>
+          <span class="confidence-pct">91%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <p class="section-label" style="margin-bottom:16px; font-size:10px;">Buttons & States</p>
+  <div style="display:flex; gap:12px; flex-wrap:wrap; padding:32px; background:var(--surface); border:1px solid var(--stroke); border-radius:16px; margin-bottom:24px;">
+    <button class="btn btn-primary">Get Started →</button>
+    <button class="btn btn-teal">View Insights ✦</button>
+    <button class="btn btn-ghost">Learn More</button>
+    <button class="btn" style="background:rgba(255,75,75,0.12); color:#FF4B4B; border:1px solid rgba(255,75,75,0.3);">⚠ Alert</button>
+    <button class="btn btn-primary" disabled style="opacity:0.4; cursor:not-allowed;">Disabled</button>
+  </div>
+
+  <!-- Glassmorphism -->
+  <p class="section-label" style="margin-bottom:16px; font-size:10px;">Glassmorphism System</p>
+  <div class="glass-demo-grid" style="background:radial-gradient(ellipse at center, rgba(27,111,255,0.15) 0%, var(--void) 70%); padding:32px; border-radius:20px; border:1px solid var(--stroke);">
+    <div class="glass-card-demo glass-standard">
+      <span class="glass-label">Standard Glass</span>
+      <span class="glass-spec">bg: rgba(255,255,255,0.04)<br>blur: 20px · border: rgba(255,255,255,0.08)</span>
+    </div>
+    <div class="glass-card-demo glass-blue">
+      <span class="glass-label" style="color:var(--info);">Blue Glass</span>
+      <span class="glass-spec">bg: rgba(27,111,255,0.08)<br>blur: 32px · border: rgba(27,111,255,0.2)</span>
+    </div>
+    <div class="glass-card-demo glass-teal">
+      <span class="glass-label" style="color:var(--teal);">Teal Glass</span>
+      <span class="glass-spec">bg: rgba(0,212,180,0.06)<br>blur: 24px · border: rgba(0,212,180,0.15)</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     APP MOCKUP
+═══════════════════════════════════════════ -->
+<section class="section" id="app">
+  <p class="section-label">05 — App Mockup</p>
+  <h2 class="section-title">Mobile Experience</h2>
+  <p class="section-desc">Interface iOS — design system aplicado em contexto real. Dark mode first, data-forward, AI-driven.</p>
+
+  <div class="phone-wrap">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <!-- Status Bar -->
+        <div class="phone-status-bar">
+          <span>9:41</span>
+          <span>●●●●</span>
+          <span>⚡ 87%</span>
+        </div>
+
+        <!-- Header -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+          <div>
+            <div class="phone-nav">Good morning, Marco</div>
+            <div class="phone-date">Tuesday · March 17</div>
+          </div>
+          <div style="width:32px; height:32px; background:linear-gradient(135deg,var(--blue),var(--teal)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:var(--void);">M</div>
+        </div>
+
+        <!-- Glucose Card -->
+        <div class="phone-glucose-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div>
+              <div class="phone-glucose-val">112</div>
+              <div class="phone-glucose-unit">mg/dL</div>
+              <div style="display:flex; align-items:center; gap:4px; margin-top:4px;">
+                <span style="font-size:11px; color:var(--teal); font-weight:600;">↗ Rising slowly</span>
+              </div>
+            </div>
+            <span class="status-badge status-optimal" style="font-size:11px; padding:4px 10px;">
+              <span class="status-dot"></span> Optimal
+            </span>
+          </div>
+
+          <!-- Mini chart -->
+          <svg width="100%" height="48" viewBox="0 0 260 48" style="overflow:visible;">
+            <defs>
+              <linearGradient id="phoneChartGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00D4B4" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#00D4B4" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="phoneLineGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00D4B4"/>
+                <stop offset="100%" stop-color="#1B6FFF"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 35 C20 34 40 30 60 28 C80 26 100 27 120 30 C140 33 160 35 180 33 C200 31 220 27 240 24 C248 22 254 21 260 20 L260 48 L0 48 Z"
+                  fill="url(#phoneChartGrad)"/>
+            <path d="M0 35 C20 34 40 30 60 28 C80 26 100 27 120 30 C140 33 160 35 180 33 C200 31 220 27 240 24 C248 22 254 21 260 20"
+                  stroke="url(#phoneLineGrad)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="260" cy="20" r="3" fill="#1B6FFF" stroke="white" stroke-width="1.5">
+              <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+
+        <!-- Mini Grid -->
+        <div class="phone-mini-grid">
+          <div class="phone-mini-card">
+            <div class="phone-mini-label">Metabolic Score</div>
+            <div class="phone-mini-val" style="color:var(--teal);">87</div>
+            <div class="phone-mini-sub">+4 vs yesterday</div>
+          </div>
+          <div class="phone-mini-card">
+            <div class="phone-mini-label">Time in Range</div>
+            <div class="phone-mini-val">94%</div>
+            <div class="phone-mini-sub" style="color:var(--info);">🔥 18d streak</div>
+          </div>
+        </div>
+
+        <!-- AI Insight -->
+        <div class="phone-insight-card">
+          <div class="phone-insight-label">✦ AI Insight</div>
+          <div class="phone-insight-text">Janela anabólica ativa. Condição ideal para treino nas próximas 2h.</div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <div class="phone-bottom-nav">
+          <div class="phone-nav-item active">
+            <span class="phone-nav-icon">⬡</span>
+            <span>Home</span>
+          </div>
+          <div class="phone-nav-item">
+            <span class="phone-nav-icon">📈</span>
+            <span>Trends</span>
+          </div>
+          <div class="phone-nav-item">
+            <span class="phone-nav-icon">✦</span>
+            <span>AI</span>
+          </div>
+          <div class="phone-nav-item">
+            <span class="phone-nav-icon">✏</span>
+            <span>Log</span>
+          </div>
+          <div class="phone-nav-item">
+            <span class="phone-nav-icon">◎</span>
+            <span>Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     SOCIAL MEDIA
+═══════════════════════════════════════════ -->
+<section class="section" id="social">
+  <p class="section-label">06 — Social Media</p>
+  <h2 class="section-title">Content Templates</h2>
+  <p class="section-desc">Instagram Feed, Stories e LinkedIn — consistência visual que reforça autoridade e premium.</p>
+
+  <div class="social-grid">
+    <!-- Instagram Feed Post -->
+    <div>
+      <p style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; margin-bottom:12px;">Feed Post (1:1)</p>
+      <div class="ig-post">
+        <div class="ig-brand">GLUCO AI</div>
+        <div>
+          <div style="display:flex; align-items:baseline; gap:6px;">
+            <span class="ig-value-huge">94</span>
+            <span style="font-size:18px; color:var(--text-secondary); font-weight:400;">%</span>
+          </div>
+          <div class="ig-unit">Time in optimal zone — today</div>
+          <div class="ig-message">Your metabolism is performing at peak. 18-day streak.</div>
+        </div>
+        <div class="ig-cta">glucoai.com → Start your journey</div>
+      </div>
+    </div>
+
+    <!-- Instagram Story -->
+    <div>
+      <p style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; margin-bottom:12px;">Story (9:16)</p>
+      <div class="ig-story" style="max-height:400px;">
+        <div class="ig-story-top">
+          <div class="ig-story-progress">
+            <div class="ig-story-bar active"></div>
+            <div class="ig-story-bar active"></div>
+            <div class="ig-story-bar"></div>
+          </div>
+          <div class="ig-story-header">
+            <div class="ig-avatar">G</div>
+            <div>
+              <div class="ig-story-name">gluco.ai</div>
+              <div class="ig-story-time">2h · Metabolic Daily</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center; padding:24px 0;">
+          <div style="font-size:13px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); margin-bottom:16px;">Daily Summary</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:64px; font-weight:900; color:var(--white); line-height:1; letter-spacing:-0.04em;">87</div>
+          <div style="font-size:16px; color:var(--text-secondary); margin-top:8px;">Metabolic Score</div>
+          <div style="margin-top:20px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+            <div style="text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700; color:var(--teal);">94%</div>
+              <div style="font-size:11px; color:var(--muted);">Time in range</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700;">🔥18</div>
+              <div style="font-size:11px; color:var(--muted);">Day streak</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn btn-teal" style="width:100%; justify-content:center;">View full report ↑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     WEBSITE
+═══════════════════════════════════════════ -->
+<section class="section" id="website">
+  <p class="section-label">07 — Website</p>
+  <h2 class="section-title">Web Presence</h2>
+  <p class="section-desc">Hero section e componentes chave — first impression que valida autoridade e converte premium audiences.</p>
+
+  <div class="website-hero">
+    <!-- Nav -->
+    <div class="website-nav">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <defs><linearGradient id="navLogo" x1="0" y1="12" x2="24" y2="12" gradientUnits="userSpaceOnUse"><stop stop-color="#00D4B4"/><stop offset="1" stop-color="#1B6FFF"/></linearGradient></defs>
+          <path d="M2 14 C4 14 5.5 9 8 9 C10.5 9 12 16 14.5 16 C17 16 18.5 11 21 11" stroke="url(#navLogo)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <circle cx="20" cy="11" r="2" fill="#1B6FFF"/>
+        </svg>
+        <span style="font-weight:800; font-size:16px; letter-spacing:-0.02em;">GLUCO<span style="color:var(--blue);">AI</span></span>
+      </div>
+      <div class="website-nav-links">
+        <a href="#" style="color:var(--text-secondary); text-decoration:none;">Features</a>
+        <a href="#" style="color:var(--text-secondary); text-decoration:none;">Science</a>
+        <a href="#" style="color:var(--text-secondary); text-decoration:none;">Pricing</a>
+        <a href="#" style="color:var(--text-secondary); text-decoration:none;">Blog</a>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" style="font-size:13px; padding:8px 14px;">Login</button>
+        <button class="btn btn-primary" style="font-size:13px; padding:8px 14px;">Get Started →</button>
+      </div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="website-hero-content">
+      <div class="website-hero-eyebrow">
+        <span style="width:6px;height:6px;background:var(--teal);border-radius:50%;display:inline-block;"></span>
+        Now with AI-powered metabolic intelligence
+      </div>
+
+      <h1 class="website-hero-h1">
+        Metabolic Intelligence.<br>Engineered for Peak Humans.
+      </h1>
+
+      <p class="website-hero-sub">
+        Real-time glucose monitoring meets adaptive AI — delivering personalized metabolic insights that evolve with your biology.
+      </p>
+
+      <div class="website-hero-ctas">
+        <button class="btn btn-primary" style="font-size:15px; padding:14px 28px;">Start Free Trial →</button>
+        <button class="btn btn-ghost" style="font-size:15px; padding:14px 28px;">▶ Watch Demo</button>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:flex; gap:48px; justify-content:center; margin-bottom:48px; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:32px; font-weight:700; color:var(--white); letter-spacing:-0.02em;">50K+</div>
+          <div style="font-size:13px; color:var(--muted);">Active optimizers</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:32px; font-weight:700; color:var(--teal); letter-spacing:-0.02em;">94%</div>
+          <div style="font-size:13px; color:var(--muted);">Avg time in range</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:32px; font-weight:700; color:var(--white); letter-spacing:-0.02em;">4.9★</div>
+          <div style="font-size:13px; color:var(--muted);">App store rating</div>
+        </div>
+      </div>
+
+      <div class="website-logos">
+        <span class="website-logo-badge">FORBES</span>
+        <span style="color:var(--stroke);">·</span>
+        <span class="website-logo-badge">TECHCRUNCH</span>
+        <span style="color:var(--stroke);">·</span>
+        <span class="website-logo-badge">HARVARD MEDICAL</span>
+        <span style="color:var(--stroke);">·</span>
+        <span class="website-logo-badge">VEJA SAÚDE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     DESIGN TOKENS
+═══════════════════════════════════════════ -->
+<section class="section" id="tokens">
+  <p class="section-label">08 — Design Tokens</p>
+  <h2 class="section-title">Token Reference</h2>
+  <p class="section-desc">CSS custom properties prontas para implementação. Base para design system escalável.</p>
+
+  <div style="background:var(--surface); border:1px solid var(--stroke); border-radius:16px; padding:32px; margin-bottom:48px; overflow-x:auto;">
+    <pre style="font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.8; color:var(--text-secondary);">
+<span style="color:var(--muted);">/* GLUCO AI — Design Tokens v1.0 */</span>
+<span style="color:var(--blue);">:root</span> {
+  <span style="color:var(--muted);">/* Colors — Brand */</span>
+  <span style="color:var(--teal);">--color-void</span>:          <span style="color:var(--warning);">#0A0E1A</span>;
+  <span style="color:var(--teal);">--color-blue</span>:          <span style="color:var(--warning);">#1B6FFF</span>;
+  <span style="color:var(--teal);">--color-teal</span>:          <span style="color:var(--warning);">#00D4B4</span>;
+  <span style="color:var(--teal);">--color-success</span>:       <span style="color:var(--warning);">#00C48C</span>;
+  <span style="color:var(--teal);">--color-warning</span>:       <span style="color:var(--warning);">#FFB020</span>;
+  <span style="color:var(--teal);">--color-alert</span>:         <span style="color:var(--warning);">#FF4B4B</span>;
+
+  <span style="color:var(--muted);">/* Colors — Surfaces */</span>
+  <span style="color:var(--teal);">--surface-0</span>:           <span style="color:var(--warning);">#0A0E1A</span>;
+  <span style="color:var(--teal);">--surface-1</span>:           <span style="color:var(--warning);">#111526</span>;
+  <span style="color:var(--teal);">--surface-2</span>:           <span style="color:var(--warning);">#1A1E2E</span>;
+  <span style="color:var(--teal);">--surface-3</span>:           <span style="color:var(--warning);">#242840</span>;
+  <span style="color:var(--teal);">--surface-4</span>:           <span style="color:var(--warning);">#2E334F</span>;
+
+  <span style="color:var(--muted);">/* Colors — Text */</span>
+  <span style="color:var(--teal);">--text-primary</span>:        <span style="color:var(--warning);">#E8EEFF</span>;
+  <span style="color:var(--teal);">--text-secondary</span>:      <span style="color:var(--warning);">#8B93B8</span>;
+  <span style="color:var(--teal);">--text-muted</span>:          <span style="color:var(--warning);">#4A5070</span>;
+
+  <span style="color:var(--muted);">/* Typography */</span>
+  <span style="color:var(--teal);">--font-sans</span>:           <span style="color:var(--warning);">'Inter Variable', Inter, sans-serif</span>;
+  <span style="color:var(--teal);">--font-mono</span>:           <span style="color:var(--warning);">'JetBrains Mono', monospace</span>;
+
+  <span style="color:var(--muted);">/* Spacing */</span>
+  <span style="color:var(--teal);">--space-1</span>: <span style="color:var(--warning);">4px</span>;   <span style="color:var(--teal);">--space-2</span>: <span style="color:var(--warning);">8px</span>;
+  <span style="color:var(--teal);">--space-3</span>: <span style="color:var(--warning);">12px</span>;  <span style="color:var(--teal);">--space-4</span>: <span style="color:var(--warning);">16px</span>;
+  <span style="color:var(--teal);">--space-6</span>: <span style="color:var(--warning);">24px</span>;  <span style="color:var(--teal);">--space-8</span>: <span style="color:var(--warning);">32px</span>;
+  <span style="color:var(--teal);">--space-12</span>: <span style="color:var(--warning);">48px</span>; <span style="color:var(--teal);">--space-16</span>: <span style="color:var(--warning);">64px</span>;
+
+  <span style="color:var(--muted);">/* Border Radius */</span>
+  <span style="color:var(--teal);">--radius-sm</span>:   <span style="color:var(--warning);">8px</span>;
+  <span style="color:var(--teal);">--radius-md</span>:   <span style="color:var(--warning);">12px</span>;
+  <span style="color:var(--teal);">--radius-lg</span>:   <span style="color:var(--warning);">16px</span>;
+  <span style="color:var(--teal);">--radius-xl</span>:   <span style="color:var(--warning);">20px</span>;
+  <span style="color:var(--teal);">--radius-pill</span>: <span style="color:var(--warning);">99px</span>;
+
+  <span style="color:var(--muted);">/* Motion */</span>
+  <span style="color:var(--teal);">--duration-micro</span>:    <span style="color:var(--warning);">100ms</span>;
+  <span style="color:var(--teal);">--duration-short</span>:    <span style="color:var(--warning);">200ms</span>;
+  <span style="color:var(--teal);">--duration-medium</span>:   <span style="color:var(--warning);">350ms</span>;
+  <span style="color:var(--teal);">--duration-long</span>:     <span style="color:var(--warning);">500ms</span>;
+  <span style="color:var(--teal);">--ease-enter</span>:  <span style="color:var(--warning);">cubic-bezier(0, 0, 0.2, 1)</span>;
+  <span style="color:var(--teal);">--ease-exit</span>:   <span style="color:var(--warning);">cubic-bezier(0.4, 0, 1, 1)</span>;
+  <span style="color:var(--teal);">--ease-spring</span>: <span style="color:var(--warning);">cubic-bezier(0.34, 1.56, 0.64, 1)</span>;
+}</pre>
+  </div>
+
+  <!-- Spacing visual -->
+  <p class="section-label" style="margin-bottom:24px; font-size:10px;">Spacing Scale</p>
+  <div class="spacing-grid" style="margin-bottom:48px;">
+    <div class="spacing-row"><span class="spacing-label">space-1</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:4px;"></div></div><span class="spacing-value">4px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-2</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:8px;"></div></div><span class="spacing-value">8px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-3</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:12px;"></div></div><span class="spacing-value">12px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-4</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:16px;"></div></div><span class="spacing-value">16px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-6</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:24px;"></div></div><span class="spacing-value">24px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-8</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:32px;"></div></div><span class="spacing-value">32px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-12</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:48px;"></div></div><span class="spacing-value">48px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-16</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:64px;"></div></div><span class="spacing-value">64px</span></div>
+    <div class="spacing-row"><span class="spacing-label">space-24</span><div class="spacing-bar-wrap"><div class="spacing-bar" style="width:96px;"></div></div><span class="spacing-value">96px</span></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid var(--stroke);">
+  <div class="page-footer">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <defs><linearGradient id="ftLogo" x1="0" y1="10" x2="20" y2="10" gradientUnits="userSpaceOnUse"><stop stop-color="#00D4B4"/><stop offset="1" stop-color="#1B6FFF"/></linearGradient></defs>
+        <path d="M2 11 C4 11 5.5 7 8 7 C10.5 7 12 14 14.5 14 C17 14 18 10 19 10" stroke="url(#ftLogo)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+      GLUCO AI
+    </div>
+    <span>Brand Book v1.0 · March 2026</span>
+    <span>Confidential — Uma @ AIOX Design</span>
+  </div>
+</footer>
+
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Ver na página</button>
+    <button class="tlp-btn-edit">✏️ Editar</button>
+  </div>
+</div>
+<script src="timeline.js"></script>
+<script>
+  // Sidebar active state on scroll
+  const sections = ['cover','logo','colors','typography','components','app','social','website','tokens'];
+  const dots = document.querySelectorAll('.sidebar-dot');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = sections.indexOf(entry.target.id);
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[idx]) dots[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
+<script src="editor.js"></script>
+</body>
+</html>

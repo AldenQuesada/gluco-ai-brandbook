@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gluco AI — Funil SaaS Visual</title>
+<style>
+  :root {
+    --teal: #0d9488;
+    --teal-light: #14b8a6;
+    --teal-dark: #0f766e;
+    --blue: #1d4ed8;
+    --blue-light: #3b82f6;
+    --purple: #7c3aed;
+    --purple-light: #8b5cf6;
+    --amber: #d97706;
+    --amber-light: #f59e0b;
+    --green: #16a34a;
+    --green-light: #22c55e;
+    --red: #dc2626;
+    --red-light: #ef4444;
+    --gray-400: #9ca3af;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #080d1a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #080d1a 0%, #0a1628 100%);
+    border-bottom: 1px solid rgba(13,148,136,0.25);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-logo { width: 38px; height: 38px; }
+  .header-title { font-size: 18px; font-weight: 700; color: #f0fdf9; }
+  .header-subtitle { font-size: 12px; color: var(--teal-light); margin-top: 2px; }
+  .back-btn {
+    background: rgba(13,148,136,0.12);
+    border: 1px solid rgba(13,148,136,0.35);
+    color: var(--teal-light);
+    padding: 7px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 12px;
+    transition: all .2s;
+  }
+  .back-btn:hover { background: rgba(13,148,136,0.25); }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 52px 40px 36px;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--teal-light), var(--blue-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    color: var(--gray-400);
+    font-size: 15px;
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* MAIN */
+  .funnel { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* STAGE WRAPPER */
+  .stage { margin-bottom: 0; }
+
+  /* STAGE HEADER */
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    margin-top: 44px;
+  }
+  .stage-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 5px 14px 5px 8px;
+    white-space: nowrap;
+  }
+  .stage-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+  }
+  .stage-label { font-size: 12px; font-weight: 700; color: #e2e8f0; letter-spacing: .3px; }
+  .stage-line { flex: 1; height: 1px; background: linear-gradient(to right, rgba(255,255,255,0.08), transparent); }
+  .stage-desc { font-size: 12px; color: var(--gray-400); white-space: nowrap; }
+
+  /* CONNECTOR */
+  .connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 0;
+    gap: 2px;
+  }
+  .connector-line { width: 2px; height: 28px; }
+  .connector-tip {
+    width: 0; height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+  }
+  .connector-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ============ STAGE 1: PÓS-ONBOARDING ============ */
+  .s1 .stage-num { background: rgba(13,148,136,0.3); color: var(--teal-light); }
+
+  .profile-card {
+    background: linear-gradient(135deg, rgba(13,148,136,0.1), rgba(13,148,136,0.04));
+    border: 1px solid rgba(13,148,136,0.3);
+    border-radius: 18px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .profile-icon { font-size: 48px; flex-shrink: 0; }
+  .profile-body { flex: 1; }
+  .profile-title { font-size: 17px; font-weight: 800; color: #f0fdf9; margin-bottom: 6px; }
+  .profile-desc { font-size: 13px; color: var(--gray-400); line-height: 1.6; margin-bottom: 16px; }
+  .profile-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .profile-tag {
+    background: rgba(13,148,136,0.15);
+    border: 1px solid rgba(13,148,136,0.25);
+    color: var(--teal-light);
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .profile-badge {
+    flex-shrink: 0;
+    background: rgba(13,148,136,0.15);
+    border: 1px solid rgba(13,148,136,0.3);
+    border-radius: 14px;
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .profile-badge-icon { font-size: 28px; margin-bottom: 6px; }
+  .profile-badge-label { font-size: 11px; color: var(--teal-light); font-weight: 600; }
+
+  /* ============ STAGE 2: PLANO GRATUITO ============ */
+  .s2 .stage-num { background: rgba(34,197,94,0.25); color: var(--green-light); }
+
+  .free-card {
+    background: linear-gradient(135deg, rgba(22,163,74,0.1), rgba(22,163,74,0.04));
+    border: 1px solid rgba(34,197,94,0.3);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .free-header {
+    padding: 22px 28px 16px;
+    border-bottom: 1px solid rgba(34,197,94,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .free-title-wrap {}
+  .free-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green-light);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .free-badge .dot { width: 7px; height: 7px; background: var(--green-light); border-radius: 50%; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+  .free-title { font-size: 18px; font-weight: 800; color: #f0fdf9; }
+  .free-tagline { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
+  .free-price {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .free-price-value { font-size: 32px; font-weight: 900; color: var(--green-light); }
+  .free-price-label { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+  .free-features {
+    padding: 20px 28px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .free-feature {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .free-feature-icon { font-size: 22px; margin-bottom: 8px; }
+  .free-feature-title { font-size: 13px; font-weight: 700; color: #f0fdf9; margin-bottom: 4px; }
+  .free-feature-desc { font-size: 11px; color: var(--gray-400); line-height: 1.5; }
+
+  /* ============ STAGE 3: ENTREGA DE VALOR ============ */
+  .s3 .stage-num { background: rgba(245,158,11,0.25); color: var(--amber-light); }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .value-card {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 14px;
+    padding: 18px;
+    position: relative;
+  }
+  .value-icon { font-size: 22px; margin-bottom: 8px; }
+  .value-title { font-size: 13px; font-weight: 700; color: #fde68a; margin-bottom: 6px; }
+  .value-example {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: var(--gray-400);
+    line-height: 1.5;
+    border-left: 2px solid rgba(245,158,11,0.4);
+    font-style: italic;
+  }
+
+  /* ============ STAGE 4: TRIGGER DE UPGRADE ============ */
+  .s4 .stage-num { background: rgba(59,130,246,0.25); color: var(--blue-light); }
+
+  .trigger-upgrade-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .trigger-upgrade-card {
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+  }
+  .trigger-upgrade-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+  .tu-1 { background: rgba(13,148,136,0.08); border-color: rgba(13,148,136,0.25); }
+  .tu-1::before { background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
+  .tu-2 { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); }
+  .tu-2::before { background: linear-gradient(90deg, var(--blue), var(--blue-light)); }
+  .tu-3 { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.25); }
+  .tu-3::before { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+
+  .tu-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .tu-1 .tu-tag { background: rgba(13,148,136,0.2); color: var(--teal-light); }
+  .tu-2 .tu-tag { background: rgba(59,130,246,0.2); color: var(--blue-light); }
+  .tu-3 .tu-tag { background: rgba(124,58,237,0.2); color: var(--purple-light); }
+
+  .tu-icon { font-size: 22px; margin-bottom: 8px; }
+  .tu-title { font-size: 13px; font-weight: 700; color: #f0fdf9; margin-bottom: 6px; }
+  .tu-conditions { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+  .tu-conditions li {
+    font-size: 11px;
+    color: var(--gray-400);
+    display: flex; align-items: flex-start; gap: 6px;
+    line-height: 1.4;
+  }
+  .tu-conditions li::before { content: '→'; flex-shrink: 0; color: var(--gray-600); }
+  .tu-message {
+    background: rgba(0,0,0,0.35);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: #c7d2de;
+    line-height: 1.5;
+    border-left: 2px solid;
+    font-style: italic;
+  }
+  .tu-1 .tu-message { border-color: var(--teal); }
+  .tu-2 .tu-message { border-color: var(--blue-light); }
+  .tu-3 .tu-message { border-color: var(--purple-light); }
+
+  /* ============ STAGE 5: PLANOS PAGOS ============ */
+  .s5 .stage-num { background: rgba(59,130,246,0.25); color: var(--blue-light); }
+
+  /* Cumulative indicator */
+  .cumulative-banner {
+    background: rgba(59,130,246,0.07);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--blue-light);
+  }
+  .cumulative-banner span { font-size: 18px; flex-shrink: 0; }
+  .cumulative-banner strong { color: #bfdbfe; }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .plan-card {
+    border-radius: 20px;
+    border: 1px solid;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .plan-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+
+  .plan-card.p1 { background: linear-gradient(160deg, rgba(13,148,136,0.12), rgba(13,148,136,0.04)); border-color: rgba(13,148,136,0.35); }
+  .plan-card.p2 { background: linear-gradient(160deg, rgba(29,78,216,0.15), rgba(29,78,216,0.05)); border-color: rgba(59,130,246,0.4); transform: scale(1.025); }
+  .plan-card.p2:hover { transform: scale(1.025) translateY(-3px); }
+  .plan-card.p3 { background: linear-gradient(160deg, rgba(124,58,237,0.12), rgba(124,58,237,0.04)); border-color: rgba(139,92,246,0.35); }
+
+  .plan-top {
+    padding: 22px 22px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .popular-tag {
+    position: absolute;
+    top: -1px; right: 18px;
+    background: linear-gradient(90deg, var(--blue), var(--blue-light));
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 4px 12px;
+    border-radius: 0 0 10px 10px;
+    text-transform: uppercase;
+  }
+  .plan-num { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .p1 .plan-num { color: var(--teal-light); }
+  .p2 .plan-num { color: var(--blue-light); }
+  .p3 .plan-num { color: var(--purple-light); }
+  .plan-icon { font-size: 28px; margin-bottom: 8px; }
+  .plan-name { font-size: 16px; font-weight: 800; color: #f0fdf9; margin-bottom: 4px; line-height: 1.3; }
+  .plan-tagline { font-size: 11px; color: var(--gray-400); line-height: 1.4; }
+
+  /* Cumulative stack */
+  .plan-includes {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .inc-chip {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  .inc-teal { background: rgba(13,148,136,0.15); color: var(--teal-light); border-color: rgba(13,148,136,0.3); }
+  .inc-blue { background: rgba(59,130,246,0.15); color: var(--blue-light); border-color: rgba(59,130,246,0.3); }
+  .inc-purple { background: rgba(139,92,246,0.15); color: var(--purple-light); border-color: rgba(139,92,246,0.3); }
+  .inc-plus { font-size: 12px; color: var(--gray-400); font-weight: 700; }
+
+  .plan-body { padding: 16px 22px; flex: 1; }
+
+  .method-block { margin-bottom: 14px; }
+  .method-block-header {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .method-block-header .line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+  .p1 .method-block-header { color: var(--teal-light); }
+  .p2 .mb-blue .method-block-header { color: var(--blue-light); }
+  .p2 .mb-teal .method-block-header { color: var(--teal); }
+  .p3 .mb-purple .method-block-header { color: var(--purple-light); }
+  .p3 .mb-blue .method-block-header { color: var(--blue); }
+  .p3 .mb-teal2 .method-block-header { color: var(--teal); }
+
+  .feat-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .feat-list li {
+    display: flex; align-items: flex-start; gap: 7px;
+    font-size: 11px; color: #c7d2de; line-height: 1.45;
+  }
+  .feat-list li .ck { flex-shrink: 0; margin-top: 1px; }
+
+  /* AQS mini */
+  .aqs-mini {
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .aqs-mini-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    font-size: 10px; color: var(--gray-400);
+  }
+  .aqs-mini-row:first-child { border-top: none; }
+  .aqs-b {
+    font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+  }
+  .aqs-b.a1 { background: rgba(245,158,11,0.2); color: #fbbf24; }
+  .aqs-b.a2 { background: rgba(239,68,68,0.2); color: #f87171; }
+  .aqs-b.a3 { background: rgba(220,38,38,0.3); color: #fca5a5; }
+
+  /* Ritual mini */
+  .ritual-mini {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .ritual-slot {
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 5px 3px;
+    text-align: center;
+    font-size: 9px;
+    color: var(--gray-400);
+    line-height: 1.3;
+  }
+  .ritual-slot .si { font-size: 12px; display: block; margin-bottom: 1px; }
+
+  /* Comp tags mini */
+  .comp-mini { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .comp-tag {
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(139,92,246,0.2);
+    color: #c4b5fd;
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .plan-footer { padding: 16px 22px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .price-row { display: flex; align-items: flex-end; gap: 3px; margin-bottom: 12px; }
+  .pr-curr { font-size: 14px; font-weight: 700; color: var(--gray-400); margin-bottom: 5px; }
+  .pr-val { font-size: 34px; font-weight: 900; color: #f0fdf9; line-height: 1; }
+  .pr-per { font-size: 13px; color: var(--gray-400); margin-bottom: 3px; }
+  .price-note { font-size: 10px; color: var(--gray-400); margin-bottom: 14px; display: block; }
+
+  .cta {
+    display: block; width: 100%; padding: 12px;
+    border-radius: 11px; font-size: 12px; font-weight: 700;
+    text-align: center; border: none; cursor: pointer;
+    transition: all .2s; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .p1 .cta { background: linear-gradient(135deg, var(--teal-dark), var(--teal)); color: white; }
+  .p2 .cta { background: linear-gradient(135deg, var(--blue), var(--blue-light)); color: white; box-shadow: 0 4px 18px rgba(59,130,246,0.3); }
+  .p3 .cta { background: linear-gradient(135deg, var(--purple), var(--purple-light)); color: white; }
+  .cta:hover { opacity: .88; transform: translateY(-1px); }
+
+  /* ============ STAGE 6: RETENÇÃO ============ */
+  .s6 .stage-num { background: rgba(139,92,246,0.25); color: var(--purple-light); }
+
+  .retention-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .retention-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+  .ret-icon { font-size: 26px; margin-bottom: 8px; }
+  .ret-title { font-size: 13px; font-weight: 700; color: #f0fdf9; margin-bottom: 6px; }
+  .ret-desc { font-size: 11px; color: var(--gray-400); line-height: 1.5; }
+
+  /* JOURNEY MAP */
+  .journey {
+    margin-top: 48px;
+    background: rgba(13,148,136,0.05);
+    border: 1px solid rgba(13,148,136,0.18);
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .journey-title { font-size: 14px; font-weight: 700; color: var(--teal-light); margin-bottom: 22px; }
+  .journey-steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .j-step {
+    flex: 1;
+    min-width: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .j-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+    border: 2px solid;
+    flex-shrink: 0;
+  }
+  .j-step:nth-child(1) .j-num,
+  .j-step:nth-child(3) .j-num { background: rgba(13,148,136,0.2); border-color: var(--teal); color: var(--teal-light); }
+  .j-step:nth-child(5) .j-num { background: rgba(34,197,94,0.2); border-color: var(--green-light); color: var(--green-light); }
+  .j-step:nth-child(7) .j-num { background: rgba(245,158,11,0.2); border-color: var(--amber-light); color: var(--amber-light); }
+  .j-step:nth-child(9) .j-num { background: rgba(59,130,246,0.2); border-color: var(--blue-light); color: var(--blue-light); }
+  .j-step:nth-child(11) .j-num { background: rgba(59,130,246,0.2); border-color: var(--blue-light); color: var(--blue-light); }
+  .j-step:nth-child(13) .j-num { background: rgba(139,92,246,0.2); border-color: var(--purple-light); color: var(--purple-light); }
+
+  .j-label { font-size: 11px; font-weight: 600; color: #e2e8f0; line-height: 1.3; }
+  .j-sub { font-size: 10px; color: var(--gray-400); }
+  .j-arrow { color: var(--gray-600); font-size: 16px; flex-shrink: 0; margin-top: 10px; padding: 0 2px; }
+
+  /* CONNECTOR STYLES */
+  .c-teal .connector-line { background: linear-gradient(to bottom, var(--teal), rgba(13,148,136,.3)); }
+  .c-teal .connector-tip { border-top: 10px solid rgba(13,148,136,.5); }
+  .c-teal .connector-label { color: var(--teal-light); }
+  .c-green .connector-line { background: linear-gradient(to bottom, var(--green-light), rgba(34,197,94,.3)); }
+  .c-green .connector-tip { border-top: 10px solid rgba(34,197,94,.5); }
+  .c-green .connector-label { color: var(--green-light); }
+  .c-amber .connector-line { background: linear-gradient(to bottom, var(--amber-light), rgba(245,158,11,.3)); }
+  .c-amber .connector-tip { border-top: 10px solid rgba(245,158,11,.5); }
+  .c-amber .connector-label { color: var(--amber-light); }
+  .c-blue .connector-line { background: linear-gradient(to bottom, var(--blue-light), rgba(59,130,246,.3)); }
+  .c-blue .connector-tip { border-top: 10px solid rgba(59,130,246,.5); }
+  .c-blue .connector-label { color: var(--blue-light); }
+  .c-purple .connector-line { background: linear-gradient(to bottom, var(--purple-light), rgba(139,92,246,.3)); }
+  .c-purple .connector-tip { border-top: 10px solid rgba(139,92,246,.5); }
+  .c-purple .connector-label { color: var(--purple-light); }
+
+  @media (max-width: 768px) {
+    .free-features, .value-grid, .trigger-upgrade-grid, .plans-grid, .retention-grid { grid-template-columns: 1fr; }
+    .plan-card.p2 { transform: none; }
+    .plan-card.p2:hover { transform: translateY(-3px); }
+    .profile-card { flex-direction: column; }
+    .profile-badge { align-self: stretch; display: flex; align-items: center; gap: 12px; justify-content: center; }
+  }
+
+/* ── TIMELINE SIDEBAR ── */
+body{padding-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:0;height:100vh;overflow-y:auto;border-right:1px solid rgba(255,255,255,0.08);background:#080d1a;z-index:200;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(13,148,136,0.2);color:#14b8a6;padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.07) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.04);}
+.tl-item.tl-active{background:rgba(13,148,136,.07);}
+.tl-item.tl-active .tl-name{color:#e2e8f0;}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(13,148,136,.25);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(29,78,216,.2);border:2px solid #3b82f6;color:#3b82f6;}
+.tl-dot-yellow{background:rgba(217,119,6,.15);border:2px solid #f59e0b;color:#f59e0b;}
+.tl-dot-green{background:rgba(22,163,74,.15);border:2px solid #22c55e;color:#22c55e;}
+.tl-dot-red{background:rgba(220,38,38,.12);border:2px solid #ef4444;color:#ef4444;}
+.tl-dot-gray{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.2);color:rgba(255,255,255,.4);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.tl-info:hover .tl-name{color:#e2e8f0;}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:#4b5563;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:#94a3b8;}
+.tl-highlight{outline:3px solid rgba(13,148,136,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:inherit;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.15);border-radius:6px;padding:5px 10px;}
+.tlp-branches{margin-bottom:8px;}
+.tlp-branch-title{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.tlp-branch-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(46,51,79,.35);}
+.tlp-branch-row:last-child{border-bottom:none;}
+.tlp-bcond{font-size:10px;font-weight:700;background:rgba(13,148,136,.1);color:#14b8a6;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.tlp-baction{font-size:11px;color:#64748b;line-height:1.4;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:#0d9488;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#0f766e;}
+@media(max-width:900px){
+  body{padding-left:0;}
+  #tl-sidebar{position:relative;height:auto;width:100%;border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+</style>
+</head>
+<body>
+<aside id="tl-sidebar">
+  <div class="tl-head">Seções <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <svg class="header-logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#0d9488"/>
+      <path d="M8 28 C10 24, 12 20, 14 22 C16 24, 17 16, 19 14 C21 12, 22 18, 24 20 C26 22, 27 18, 29 16 C31 14, 32 20, 34 22" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="14" cy="22" r="2" fill="#5eead4"/>
+      <circle cx="24" cy="20" r="2" fill="#5eead4"/>
+    </svg>
+    <div>
+      <div class="header-title">Gluco AI</div>
+      <div class="header-subtitle">Funil SaaS — Pós-Onboarding</div>
+    </div>
+  </div>
+  <a href="index.html" class="back-btn">← Central</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Funil Pós-Onboarding</h1>
+  <p>Do primeiro uso no plano gratuito até a conversão nos planos pagos — com entrega de valor antes de qualquer oferta.</p>
+</div>
+
+<div class="funnel">
+
+  <!-- ======== STAGE 1: PÓS-ONBOARDING ======== -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-pill s1">
+        <div class="stage-num">1</div>
+        <div class="stage-label">Ponto de Partida</div>
+      </div>
+      <div class="stage-line"></div>
+      <div class="stage-desc">Usuário já perfilado</div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-icon">✅</div>
+      <div class="profile-body">
+        <div class="profile-title">Onboarding Concluído — Perfil Ativo</div>
+        <div class="profile-desc">O usuário já passou pelas 12 perguntas de onboarding. O bot conhece nome, tipo de diabetes, HbA1c, medicação, tempo de diagnóstico, sintomas, complicações diagnosticadas e IMC. O roteamento para o plano certo já está calculado.</div>
+        <div class="profile-tags">
+          <span class="profile-tag">✓ Nome e perfil</span>
+          <span class="profile-tag">✓ Tipo de diabetes (Q5)</span>
+          <span class="profile-tag">✓ Medicação (Q6)</span>
+          <span class="profile-tag">✓ HbA1c (Q6B)</span>
+          <span class="profile-tag">✓ Glicosímetro (Q11)</span>
+          <span class="profile-tag">✓ Sintomas (Q12)</span>
+          <span class="profile-tag">✓ Complicações diagnosticadas (Q12B)</span>
+          <span class="profile-tag">✓ IMC calculado</span>
+          <span class="profile-tag">✓ Score de risco</span>
+        </div>
+      </div>
+      <div class="profile-badge">
+        <div class="profile-badge-icon">🎯</div>
+        <div class="profile-badge-label">Perfil<br>completo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector c-teal">
+    <div class="connector-label">Acesso imediato ao plano free</div>
+    <div class="connector-line"></div>
+    <div class="connector-tip"></div>
+  </div>
+
+  <!-- ======== STAGE 2: PLANO GRATUITO ======== -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-pill s2">
+        <div class="stage-num">2</div>
+        <div class="stage-label">Plano Gratuito</div>
+      </div>
+      <div class="stage-line"></div>
+      <div class="stage-desc">Uso diário — sem cartão</div>
+    </div>
+
+    <div class="free-card">
+      <div class="free-header">
+        <div class="free-title-wrap">
+          <div class="free-badge"><div class="dot"></div>Gratuito para sempre</div>
+          <div class="free-title">Monitoramento Básico</div>
+          <div class="free-tagline">O usuário começa a usar, o app entrega valor, a confiança cresce</div>
+        </div>
+        <div class="free-price">
+          <div class="free-price-value">R$ 0</div>
+          <div class="free-price-label">sem limite de tempo</div>
+        </div>
+      </div>
+      <div class="free-features">
+        <div class="free-feature">
+          <div class="free-feature-icon">📸</div>
+          <div class="free-feature-title">Leitura de Glicemia</div>
+          <div class="free-feature-desc">Foto do glicosímetro ou digitação manual — o bot lê, registra e responde com feedback imediato</div>
+        </div>
+        <div class="free-feature">
+          <div class="free-feature-icon">🥗</div>
+          <div class="free-feature-title">Análise de Foto de Comida</div>
+          <div class="free-feature-desc">Foto do prato → IA identifica alimentos e informa impacto na glicemia para aquele perfil específico</div>
+        </div>
+        <div class="free-feature">
+          <div class="free-feature-icon">📊</div>
+          <div class="free-feature-title">Histórico e Tendências</div>
+          <div class="free-feature-desc">Registro de todas as medições e refeições com evolução da curva glicêmica ao longo do tempo</div>
+        </div>
+      </div>
+      <div style="padding:14px 28px 20px;border-top:1px solid rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div style="font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:8px;">
+          <span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);color:#22c55e;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">✅ O QUÊ é entregue grátis</span>
+          <span style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);color:#8b5cf6;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">🔒 O COMO ativa o plano pago</span>
+          <span style="font-size:11px;color:#64748b;">· Limite: 5 análises/mês</span>
+        </div>
+        <a href="gluco-ai-upgrade-flow.html" style="font-size:11px;font-weight:700;color:#8b5cf6;text-decoration:none;display:flex;align-items:center;gap:6px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);padding:6px 12px;border-radius:8px;">
+          Ver arquitetura de upgrade →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector c-amber">
+    <div class="connector-label">Bot entrega valor — gera dados comportamentais</div>
+    <div class="connector-line"></div>
+    <div class="connector-tip"></div>
+  </div>
+
+  <!-- ======== STAGE 3: ENTREGA DE VALOR ======== -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-pill s3">
+        <div class="stage-num">3</div>
+        <div class="stage-label">Entrega de Valor</div>
+      </div>
+      <div class="stage-line"></div>
+      <div class="stage-desc">Confiança antes da oferta</div>
+    </div>
+
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-icon">📈</div>
+        <div class="value-title">Padrões identificados</div>
+        <div class="value-example">"João, percebi que sua glicemia sobe consistentemente após o almoço. Isso é um padrão que posso te ajudar a controlar."</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🍽️</div>
+        <div class="value-title">Alertas de alimentos</div>
+        <div class="value-example">"Este prato tem alto índice glicêmico. Para o seu perfil, ele pode elevar sua glicemia em até 60 mg/dL nas próximas 2h."</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">⚠️</div>
+        <div class="value-title">Alertas de risco proativos</div>
+        <div class="value-example">"Você registrou 3 glicemias acima de 200 mg/dL esta semana. Tenho um protocolo que pode evitar isso — quer saber?"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector c-blue">
+    <div class="connector-label">Momento de upgrade — oferta contextual e personalizada</div>
+    <div class="connector-line"></div>
+    <div class="connector-tip"></div>
+  </div>
+
+  <!-- ======== STAGE 4: TRIGGER DE UPGRADE ======== -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-pill s4">
+        <div class="stage-num">4</div>
+        <div class="stage-label">Gatilho de Upgrade</div>
+      </div>
+      <div class="stage-line"></div>
+      <div class="stage-desc">Oferta baseada em comportamento real</div>
+    </div>
+
+    <div class="trigger-upgrade-grid">
+      <div class="trigger-upgrade-card tu-1">
+        <div class="tu-tag">→ Método 1</div>
+        <div class="tu-icon">🛡️</div>
+        <div class="tu-title">Gatilhos de Controle</div>
+        <ul class="tu-conditions">
+          <li>HbA1c &lt;7% no onboarding (Q6B)</li>
+          <li>Glicemia alta registrada 2+ vezes na semana</li>
+          <li>Alimentos de alto IG frequentes nas fotos</li>
+          <li>Q12B: nenhuma complicação ativa</li>
+        </ul>
+        <div class="tu-message">"Posso te ensinar o que fazer <em>antes e durante</em> cada refeição para nunca mais ter esse pico. Quer ativar o protocolo?"</div>
+      </div>
+      <div class="trigger-upgrade-card tu-2">
+        <div class="tu-tag">→ Método 2</div>
+        <div class="tu-icon">🔄</div>
+        <div class="tu-title">Gatilhos de Reversão</div>
+        <ul class="tu-conditions">
+          <li>HbA1c 7–9% (Q6B) — diabetes precisa de reversão</li>
+          <li>Medicação confirmada no onboarding (Q6)</li>
+          <li>Sintomas presentes: formigamento, fadiga, visão turva (Q12)</li>
+          <li>Q12B: nenhuma complicação ativa diagnosticada</li>
+        </ul>
+        <div class="tu-message">"Em 30 dias você pode reverter esses sintomas e reduzir seus medicamentos. Tenho um protocolo do jejum até dormir. Vamos começar?"</div>
+      </div>
+      <div class="trigger-upgrade-card tu-3">
+        <div class="tu-tag">→ Método 3</div>
+        <div class="tu-icon">🏥</div>
+        <div class="tu-title">Gatilhos de Complicações</div>
+        <ul class="tu-conditions">
+          <li>Q12B: 1+ complicação diagnosticada selecionada</li>
+          <li>HbA1c &gt;9% com sintomas graves (Q6B + Q12)</li>
+          <li>IRC, retinopatia, neuropatia, úlcera, HTA, cardiopatia, disfunção sexual</li>
+        </ul>
+        <div class="tu-message">"Para o que você está enfrentando existe um protocolo específico. Ele precisa de acompanhamento diário intensivo. Posso te guiar?"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector c-blue">
+    <div class="connector-label">Conversão — planos cumulativos e progressivos</div>
+    <div class="connector-line"></div>
+    <div class="connector-tip"></div>
+  </div>
+
+  <!-- ======== STAGE 5: PLANOS PAGOS ======== -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-pill s5">
+        <div class="stage-num">5</div>
+        <div class="stage-label">Planos Pagos</div>
+      </div>
+      <div class="stage-line"></div>
+      <div class="stage-desc">Estrutura cumulativa — cada plano inclui o anterior</div>
+    </div>
+
+    <div class="cumulative-banner">
+      <span>🔗</span>
+      <div><strong>Estrutura cumulativa:</strong> O Plano 2 inclui tudo do Plano 1. O Plano 3 inclui tudo dos Planos 1 e 2. O usuário sempre tem acesso a todos os recursos do nível em que está.</div>
+    </div>
+
+    <div class="plans-grid">
+
+      <!-- PLANO 1 -->
+      <div class="plan-card p1">
+        <div class="plan-top">
+          <div class="plan-num">Plano 01 — Controle</div>
+          <div class="plan-icon">🛡️</div>
+          <div class="plan-name">Controle Rápido &amp; Prevenção</div>
+          <div class="plan-tagline">Pare os picos de glicemia sem medicamentos e sem sair de casa</div>
+          <div class="plan-includes">
+            <span class="inc-chip inc-teal">Método 1</span>
+          </div>
+        </div>
+        <div class="plan-body">
+          <div class="method-block">
+            <div class="method-block-header">
+              Protocolo de Refeições
+              <div class="line"></div>
+            </div>
+            <ul class="feat-list">
+              <li><span class="ck">✅</span> O que fazer antes de cada refeição</li>
+              <li><span class="ck">✅</span> Ritmo de ingestão e hidratação</li>
+              <li><span class="ck">✅</span> Protocolo para eventos e comemorações</li>
+            </ul>
+          </div>
+          <div class="method-block">
+            <div class="method-block-header">
+              Resgate AQS
+              <div class="line"></div>
+            </div>
+            <div class="aqs-mini">
+              <div class="aqs-mini-row"><div class="aqs-b a1">AQS-1</div> 180–299 mg/dL — chás, vitaminas, respiração</div>
+              <div class="aqs-mini-row"><div class="aqs-b a2">AQS-2</div> 300–500 mg/dL — protocolo intensivo, controle 1h</div>
+              <div class="aqs-mini-row"><div class="aqs-b a3">AQS-3</div> &gt;500 mg/dL — escala-pés + orientação PS</div>
+            </div>
+          </div>
+        </div>
+        <div class="plan-footer">
+          <div class="price-row">
+            <span class="pr-curr">R$</span>
+            <span class="pr-val">49,90</span>
+            <span class="pr-per">/mês</span>
+          </div>
+          <span class="price-note">Até 20 refeições analisadas/mês</span>
+          <button class="cta">Ativar Plano 1</button>
+        </div>
+      </div>
+
+      <!-- PLANO 2 -->
+      <div class="plan-card p2">
+        <div class="plan-top">
+          <div class="popular-tag">⭐ Mais Popular</div>
+          <div class="plan-num">Plano 02 — Reversão</div>
+          <div class="plan-icon">🔄</div>
+          <div class="plan-name">Reversão em 30 Dias</div>
+          <div class="plan-tagline">Reverta danos, reduza medicamentos e elimine sintomas</div>
+          <div class="plan-includes">
+            <span class="inc-chip inc-teal">Método 1</span>
+            <span class="inc-plus">+</span>
+            <span class="inc-chip inc-blue">Método 2</span>
+          </div>
+        </div>
+        <div class="plan-body">
+          <div class="method-block mb-teal">
+            <div class="method-block-header" style="color:var(--teal)">
+              Tudo do Plano 1 incluído
+              <div class="line"></div>
+            </div>
+            <ul class="feat-list">
+              <li><span class="ck" style="color:var(--teal-light)">✅</span> Protocolos de refeição + AQS completo</li>
+            </ul>
+          </div>
+          <div class="method-block mb-blue">
+            <div class="method-block-header" style="color:var(--blue-light)">
+              Método 2 — Exclusivo
+              <div class="line"></div>
+            </div>
+            <ul class="feat-list">
+              <li><span class="ck">✅</span> Resultados visíveis em 7 dias</li>
+              <li><span class="ck">✅</span> Redução progressiva de medicamentos</li>
+              <li><span class="ck">✅</span> Relatório mensal de evolução</li>
+              <li><span class="ck">✅</span> Ajuste semanal do protocolo</li>
+            </ul>
+            <div class="ritual-mini">
+              <div class="ritual-slot"><span class="si">🌅</span>Jejum</div>
+              <div class="ritual-slot"><span class="si">☕</span>Café</div>
+              <div class="ritual-slot"><span class="si">🍎</span>Lanche</div>
+              <div class="ritual-slot"><span class="si">⏰</span>Pré-almoço</div>
+              <div class="ritual-slot"><span class="si">🍽️</span>Almoço</div>
+              <div class="ritual-slot"><span class="si">🍊</span>Lanche T.</div>
+              <div class="ritual-slot"><span class="si">🌆</span>Pré-janta</div>
+              <div class="ritual-slot"><span class="si">🥗</span>Janta</div>
+              <div class="ritual-slot"><span class="si">🌙</span>Dormir</div>
+            </div>
+          </div>
+        </div>
+        <div class="plan-footer">
+          <div class="price-row">
+            <span class="pr-curr">R$</span>
+            <span class="pr-val">69,90</span>
+            <span class="pr-per">/mês</span>
+          </div>
+          <span class="price-note">Refeições ilimitadas + ritual diário completo</span>
+          <button class="cta">Ativar Plano 2</button>
+        </div>
+      </div>
+
+      <!-- PLANO 3 -->
+      <div class="plan-card p3">
+        <div class="plan-top">
+          <div class="plan-num">Plano 03 — Complicações</div>
+          <div class="plan-icon">🏥</div>
+          <div class="plan-name">Protocolo de Complicações</div>
+          <div class="plan-tagline">Protocolo especializado para complicações ativas + tudo dos planos anteriores</div>
+          <div class="plan-includes">
+            <span class="inc-chip inc-teal">Método 1</span>
+            <span class="inc-plus">+</span>
+            <span class="inc-chip inc-blue">Método 2</span>
+            <span class="inc-plus">+</span>
+            <span class="inc-chip inc-purple">Método 3</span>
+          </div>
+        </div>
+        <div class="plan-body">
+          <div class="method-block mb-teal2">
+            <div class="method-block-header" style="color:var(--teal)">
+              Tudo dos Planos 1 e 2 incluídos
+              <div class="line"></div>
+            </div>
+            <ul class="feat-list">
+              <li><span class="ck" style="color:var(--teal-light)">✅</span> AQS + ritual diário + reversão 30 dias</li>
+            </ul>
+          </div>
+          <div class="method-block mb-purple">
+            <div class="method-block-header" style="color:var(--purple-light)">
+              Método 3 — Exclusivo
+              <div class="line"></div>
+            </div>
+            <ul class="feat-list">
+              <li><span class="ck">✅</span> Protocolo específico por complicação</li>
+              <li><span class="ck">✅</span> Acompanhamento diário intensivo</li>
+              <li><span class="ck">✅</span> Alertas de emergência automáticos</li>
+              <li><span class="ck">✅</span> Monitoramento de progressão/regressão</li>
+            </ul>
+            <div class="comp-mini">
+              <span class="comp-tag">🦵 Úlceras</span>
+              <span class="comp-tag">🫀 IRC G1</span>
+              <span class="comp-tag">👁️ Retinopatia</span>
+              <span class="comp-tag">💢 HTA</span>
+              <span class="comp-tag">⚡ Disfunção sexual</span>
+              <span class="comp-tag">🦶 Neuropatia</span>
+              <span class="comp-tag">❤️ Cardiopatia isquêmica</span>
+            </div>
+          </div>
+        </div>
+        <div class="plan-footer">
+          <div class="price-row">
+            <span class="pr-curr">R$</span>
+            <span class="pr-val">97</span>
+            <span class="pr-per">/mês</span>
+          </div>
+          <span class="price-note">Tudo ilimitado + protocolo especializado</span>
+          <button class="cta">Ativar Plano 3</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="connector c-purple">
+    <div class="connector-label">Retenção por resultado</div>
+    <div class="connector-line"></div>
+    <div class="connector-tip"></div>
+  </div>
+
+  <!-- ======== STAGE 6: RETENÇÃO ======== -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-pill s6">
+        <div class="stage-num">6</div>
+        <div class="stage-label">Retenção &amp; Progressão</div>
+      </div>
+      <div class="stage-line"></div>
+      <div class="stage-desc">Ciclos mensais com motivo de continuar</div>
+    </div>
+
+    <div class="retention-grid">
+      <div class="retention-card">
+        <div class="ret-icon">📊</div>
+        <div class="ret-title">Relatório Mensal de Evolução</div>
+        <div class="ret-desc">Ao fim de cada ciclo o bot apresenta um resumo do progresso — queda da glicemia, refeições analisadas, dias sem pico — reforçando o valor tangível do plano.</div>
+      </div>
+      <div class="retention-card">
+        <div class="ret-icon">🆙</div>
+        <div class="ret-title">Upgrade Natural por Resultado</div>
+        <div class="ret-desc">Resultados do Plano 1 geram desejo de reverter danos → oferta Plano 2. Sintomas identificados no Plano 2 → oferta Plano 3. O upgrade acontece por necessidade real, não por pressão.</div>
+      </div>
+      <div class="retention-card">
+        <div class="ret-icon">🔁</div>
+        <div class="ret-title">Engajamento Diário Garantido</div>
+        <div class="ret-desc">Rituais diários do Plano 2, alertas proativos e registro contínuo de glicemia criam hábito de uso. O usuário volta ao WhatsApp todos os dias — o app é parte da rotina.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== JOURNEY MAP ======== -->
+  <div class="journey">
+    <div class="journey-title">🗺️ Jornada Completa do Usuário — Visão Linear</div>
+    <div class="journey-steps">
+      <div class="j-step">
+        <div class="j-num">1</div>
+        <div class="j-label">Onboarding<br>concluído</div>
+        <div class="j-sub">Perfil ativo</div>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">2</div>
+        <div class="j-label">Plano Free</div>
+        <div class="j-sub">Foto / glicemia / comida</div>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">3</div>
+        <div class="j-label">Valor<br>entregue</div>
+        <div class="j-sub">Padrões + alertas</div>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">4</div>
+        <div class="j-label">Gatilho<br>contextual</div>
+        <div class="j-sub">Comportamento real</div>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">5</div>
+        <div class="j-label">Plano 1<br>R$ 49,90</div>
+        <div class="j-sub">Controle + AQS</div>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">6</div>
+        <div class="j-label">Plano 2<br>R$ 69,90</div>
+        <div class="j-sub">+ Reversão 30d</div>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">7</div>
+        <div class="j-label">Plano 3<br>R$ 97</div>
+        <div class="j-sub">+ Complicações</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /funnel -->
+
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Ver na página</button>
+    <button class="tlp-btn-edit">✏️ Editar</button>
+  </div>
+</div>
+<script src="timeline.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>

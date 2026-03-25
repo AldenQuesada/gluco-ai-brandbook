@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Fluxo de Conversão para Planos Pagos v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#0A0E1A; --abyss:#111526; --surface:#1A1E2E;
+  --elevated:#242840; --stroke:#2E334F; --muted:#4A5070;
+  --t2:#8B93B8; --t1:#E8EEFF; --white:#FFFFFF;
+  --blue:#1B6FFF; --teal:#00D4B4; --green:#00C48C;
+  --yellow:#FFB020; --red:#FF4B4B; --orange:#FF8C00;
+  --wa:#25D366; --wa-dark:#128C7E;
+  --fixed:rgba(255,176,32,0.08); --ok:rgba(0,196,140,0.08); --new:rgba(27,111,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.6;font-size:14px;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.page{max-width:1100px;margin:0 auto;padding:0 24px 80px;}
+
+/* ── HEADER ── */
+.doc-header{background:var(--abyss);border-bottom:1px solid var(--stroke);padding:0;position:sticky;top:0;z-index:100;}
+.doc-header-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.doc-logo{font-weight:800;font-size:17px;letter-spacing:-0.04em;display:flex;align-items:center;gap:10px;}
+.doc-logo span{color:var(--blue);}
+.version-badge{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;background:rgba(0,212,180,0.1);border:1px solid rgba(0,212,180,0.3);color:var(--teal);padding:4px 10px;border-radius:6px;}
+.status-badge{font-size:11px;font-weight:700;background:rgba(255,176,32,0.12);border:1px solid rgba(255,176,32,0.3);color:var(--yellow);padding:4px 10px;border-radius:6px;}
+
+/* ── TITLE ── */
+.doc-title-area{padding:48px 0 32px;}
+.doc-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+.doc-title{font-size:clamp(28px,3.5vw,44px);font-weight:900;letter-spacing:-0.04em;line-height:1.05;margin-bottom:12px;}
+.doc-desc{font-size:15px;color:var(--t2);max-width:640px;line-height:1.7;}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--stroke);margin:36px 0;}
+.sec-title{font-size:clamp(18px,2.5vw,26px);font-weight:900;letter-spacing:-0.03em;margin-bottom:8px;}
+.sec-desc{font-size:13px;color:var(--t2);max-width:620px;margin-bottom:24px;line-height:1.7;}
+
+/* ── STAGE ── */
+.stage{background:var(--abyss);border:1px solid var(--stroke);border-radius:20px;margin-bottom:20px;overflow:hidden;}
+.stage-header{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--stroke);}
+.stage-num{width:44px;height:44px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;flex-shrink:0;}
+.stage-num.red{background:var(--red);}
+.stage-num.green{background:var(--green);}
+.stage-num.orange{background:var(--orange);}
+.stage-num.yellow{background:var(--yellow);}
+.stage-name{font-size:16px;font-weight:800;letter-spacing:-0.02em;}
+.stage-desc{font-size:12px;color:var(--t2);margin-top:2px;}
+.stage-obj{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;}
+.obj-tag{font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--stroke);border-radius:6px;padding:3px 10px;color:var(--t2);}
+.obj-tag.red{background:rgba(255,75,75,.1);border-color:rgba(255,75,75,.3);color:var(--red);}
+.obj-tag.green{background:rgba(0,196,140,.1);border-color:rgba(0,196,140,.3);color:var(--green);}
+.obj-tag.blue{background:rgba(27,111,255,.1);border-color:rgba(27,111,255,.3);color:var(--blue);}
+.obj-tag.yellow{background:rgba(255,176,32,.1);border-color:rgba(255,176,32,.3);color:var(--yellow);}
+
+/* ── MSG BLOCK ── */
+.msg-block{border-radius:14px;margin:0 16px 14px;border:1px solid;}
+.msg-block.ok{background:var(--ok);border-color:rgba(0,196,140,0.2);}
+.msg-block.new{background:var(--new);border-color:rgba(27,111,255,0.2);}
+.msg-block.fixed{background:var(--fixed);border-color:rgba(255,176,32,0.2);}
+.msg-block.danger{background:rgba(255,75,75,0.06);border-color:rgba(255,75,75,0.25);}
+.msg-block.convert{background:rgba(27,111,255,0.12);border-color:rgba(27,111,255,0.4);}
+.msg-block-header{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.msg-id{font-size:12px;font-weight:700;color:var(--t1);}
+.msg-type{font-size:10px;font-weight:700;border-radius:4px;padding:2px 8px;}
+.tag-ok{background:rgba(0,196,140,.15);color:var(--green);}
+.tag-new{background:rgba(27,111,255,.15);color:var(--blue);}
+.tag-fixed{background:rgba(255,176,32,.15);color:var(--yellow);}
+.tag-danger{background:rgba(255,75,75,.15);color:var(--red);}
+.tag-convert{background:rgba(27,111,255,.25);color:#93BCFF;}
+.msg-block-body{padding:14px 16px;}
+
+/* ── WA ── */
+.wa-wrap{display:flex;flex-direction:column;gap:10px;}
+.wa-bot,.wa-user{border-radius:16px;padding:12px 16px;max-width:88%;font-size:13.5px;line-height:1.65;white-space:pre-wrap;}
+.wa-bot{background:var(--surface);border:1px solid var(--stroke);border-radius:16px 16px 16px 0;align-self:flex-start;}
+.wa-user{background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);border-radius:16px 16px 0 16px;align-self:flex-end;color:var(--t1);}
+.wa-label{font-size:10px;font-weight:700;color:var(--teal);margin-bottom:4px;letter-spacing:.04em;}
+.wa-label.user{color:var(--wa);}
+.wa-options{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-width:280px;}
+.wa-opt{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.3);border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--wa);cursor:pointer;transition:background .15s;}
+.wa-opt:hover{background:rgba(37,211,102,0.15);}
+
+/* ── ANNOTATION ── */
+.annotation{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:10px 14px;margin-top:10px;font-size:12px;line-height:1.6;}
+.annotation.info{background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.2);}
+.annotation.warn{background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.2);}
+.annotation.danger{background:rgba(255,75,75,.08);border:1px solid rgba(255,75,75,.2);}
+.annotation.success{background:rgba(0,196,140,.08);border:1px solid rgba(0,196,140,.2);}
+.ann-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.ann-text{color:var(--t2);}
+.ann-text strong{color:var(--t1);}
+
+/* ── BRANCH ── */
+.branch{background:var(--surface);border:1px solid var(--stroke);border-radius:12px;overflow:hidden;margin:14px 0;}
+.branch-row{display:flex;align-items:stretch;border-bottom:1px solid var(--stroke);}
+.branch-row:last-child{border-bottom:none;}
+.branch-cond{padding:10px 14px;font-size:12px;font-weight:700;border-right:1px solid var(--stroke);min-width:140px;display:flex;align-items:center;}
+.branch-cond.sim{color:var(--green);background:rgba(0,196,140,.06);}
+.branch-cond.nao{color:var(--red);background:rgba(255,75,75,.06);}
+.branch-cond.else{color:var(--yellow);background:rgba(255,176,32,.06);}
+.branch-dest{padding:10px 14px;font-size:12px;color:var(--t2);flex:1;display:flex;align-items:center;}
+.branch-dest strong{color:var(--t1);}
+
+/* ── TRIGGER CARDS ── */
+.trigger-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+.trigger-card{background:var(--surface);border:1px solid var(--stroke);border-radius:14px;padding:18px 20px;text-align:center;}
+.trigger-icon{font-size:28px;margin-bottom:10px;}
+.trigger-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:6px;}
+.trigger-desc{font-size:12px;color:var(--t2);line-height:1.5;}
+
+/* ── URGENCY METER ── */
+.urgency-bar{background:var(--surface);border:1px solid var(--stroke);border-radius:12px;padding:16px 20px;margin:14px 0;}
+.urgency-label{font-size:11px;font-weight:700;color:var(--t2);margin-bottom:10px;letter-spacing:.08em;text-transform:uppercase;}
+.urgency-track{display:flex;gap:4px;height:8px;}
+.urgency-seg{flex:1;border-radius:99px;}
+.urgency-seg.low{background:var(--green);}
+.urgency-seg.med{background:var(--yellow);}
+.urgency-seg.high{background:var(--orange);}
+.urgency-seg.crit{background:var(--red);}
+.urgency-seg.empty{background:var(--stroke);}
+.urgency-markers{display:flex;justify-content:space-between;margin-top:6px;}
+.urgency-mark{font-size:10px;color:var(--muted);}
+
+/* ── PLAN CARDS ── */
+.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:20px 0;}
+.plan-card{background:var(--surface);border:1px solid var(--stroke);border-radius:18px;padding:24px;position:relative;overflow:hidden;}
+.plan-card.highlight{border-color:var(--blue);background:rgba(27,111,255,.05);}
+.plan-card.highlight::before{content:'MAIS POPULAR';position:absolute;top:16px;right:16px;font-size:9px;font-weight:800;letter-spacing:.1em;background:var(--blue);color:#fff;padding:3px 8px;border-radius:4px;}
+.plan-name{font-size:14px;font-weight:800;color:var(--t1);margin-bottom:4px;}
+.plan-price{font-size:30px;font-weight:900;letter-spacing:-0.04em;color:var(--t1);margin:12px 0 4px;}
+.plan-price span{font-size:14px;font-weight:400;color:var(--t2);}
+.plan-desc{font-size:12px;color:var(--t2);margin-bottom:16px;line-height:1.5;}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.plan-features li{font-size:12.5px;color:var(--t2);display:flex;align-items:flex-start;gap:8px;}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px;}
+.plan-cta{display:block;margin-top:20px;background:var(--blue);color:#fff;text-align:center;padding:12px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;}
+.plan-card.highlight .plan-cta{background:var(--blue);}
+.plan-card:not(.highlight) .plan-cta{background:var(--surface);border:1px solid var(--stroke);color:var(--t1);}
+
+/* ── FLOW OVERVIEW ── */
+.flow-overview{display:flex;align-items:stretch;gap:0;margin:20px 0;overflow-x:auto;}
+.flow-step{background:var(--surface);border:1px solid var(--stroke);border-radius:0;padding:14px 18px;min-width:140px;flex:1;position:relative;}
+.flow-step:first-child{border-radius:12px 0 0 12px;}
+.flow-step:last-child{border-radius:0 12px 12px 0;}
+.flow-step::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);z-index:1;background:var(--void);padding:0 2px;}
+.flow-step:last-child::after{display:none;}
+.flow-step-num{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.flow-step-name{font-size:12px;font-weight:700;color:var(--t1);}
+.flow-step-desc{font-size:11px;color:var(--t2);margin-top:3px;line-height:1.4;}
+.flow-step.hot{border-color:rgba(255,75,75,.4);background:rgba(255,75,75,.06);}
+.flow-step.hot .flow-step-num{color:var(--red);}
+.flow-step.convert-step{border-color:rgba(27,111,255,.4);background:rgba(27,111,255,.06);}
+.flow-step.convert-step .flow-step-num{color:var(--blue);}
+
+/* ── HORMOZI ── */
+.hormozi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0;}
+.hormozi-card{background:var(--surface);border:1px solid var(--stroke);border-radius:12px;padding:14px 16px;}
+.hormozi-icon{font-size:18px;margin-bottom:6px;}
+.hormozi-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px;}
+.hormozi-value{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.hormozi-desc{font-size:12px;color:var(--t2);line-height:1.5;}
+/* ── TIMELINE SIDEBAR ── */
+.tl-layout{margin-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-right:1px solid var(--stroke,#2E334F);background:var(--abyss,#111526);z-index:50;scrollbar-width:thin;scrollbar-color:var(--stroke,#2E334F) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:var(--stroke,#2E334F);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted,#4A5070);border-bottom:1px solid var(--stroke,#2E334F);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(27,111,255,.15);color:var(--blue,#1B6FFF);padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--stroke,#2E334F),var(--stroke,#2E334F) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.03);}
+.tl-item.tl-active{background:rgba(27,111,255,.05);}
+.tl-item.tl-active .tl-name{color:var(--t1,#E8EEFF);}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(27,111,255,.22);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(27,111,255,.18);border:2px solid var(--blue,#1B6FFF);color:var(--blue,#1B6FFF);}
+.tl-dot-yellow{background:rgba(255,176,32,.14);border:2px solid var(--yellow,#FFB020);color:var(--yellow,#FFB020);}
+.tl-dot-green{background:rgba(0,196,140,.12);border:2px solid var(--green,#00C48C);color:var(--green,#00C48C);}
+.tl-dot-red{background:rgba(255,75,75,.12);border:2px solid var(--red,#FF4B4B);color:var(--red,#FF4B4B);}
+.tl-dot-gray{background:rgba(139,147,184,.1);border:2px solid var(--muted,#4A5070);color:var(--muted,#4A5070);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:var(--t2,#8B93B8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:var(--muted,#4A5070);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.tl-info:hover .tl-name{color:var(--t1,#E8EEFF);}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:var(--muted,#4A5070);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:var(--stroke,#2E334F);color:var(--t2,#8B93B8);}
+.tl-highlight{outline:3px solid rgba(27,111,255,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:'Inter',sans-serif;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;font-family:inherit;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.15);border-radius:6px;padding:5px 10px;}
+.tlp-branches{margin-bottom:8px;}
+.tlp-branch-title{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.tlp-branch-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(46,51,79,.35);}
+.tlp-branch-row:last-child{border-bottom:none;}
+.tlp-bcond{font-size:10px;font-weight:700;background:rgba(27,111,255,.1);color:#93c5fd;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.tlp-baction{font-size:11px;color:#64748b;line-height:1.4;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:#1B6FFF;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#1559cc;}
+@media(max-width:900px){
+  .tl-layout{margin-left:0;}
+  #tl-sidebar{position:relative;top:0;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--stroke,#2E334F);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-logo">
+      <img src="gluco-ai-icon.svg" width="28" height="28" alt="GLUCO AI">
+      <span>GLUCO</span> AI
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="index.html" style="font-size:12px;font-weight:700;color:var(--t2);text-decoration:none;padding:5px 12px;border:1px solid var(--stroke);border-radius:8px;background:var(--surface);transition:color .15s;" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--t2)'">← Central</a>
+      <span class="version-badge">Conversão v1.0</span>
+      <span class="status-badge">📝 Em Revisão</span>
+    </div>
+  </div>
+</div>
+
+<div class="tl-layout">
+<aside id="tl-sidebar">
+  <div class="tl-head">Mensagens <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
+<div class="page">
+
+<!-- TÍTULO -->
+<div class="doc-title-area">
+  <div class="doc-eyebrow">Fluxo de Conversão — Planos Pagos</div>
+  <h1 class="doc-title">Do Primeiro Dado<br>ao Plano Pago</h1>
+  <p class="doc-desc">Quando o usuário envia sua primeira leitura de glicemia, foto de refeição ou valor manual — esse é o momento de maior dor e maior abertura para conversão. Este fluxo transforma a urgência em decisão de compra.</p>
+</div>
+
+<!-- VISÃO GERAL DO FLUXO -->
+<div class="flow-overview">
+  <div class="flow-step">
+    <div class="flow-step-num">Trigger</div>
+    <div class="flow-step-name">Dado recebido</div>
+    <div class="flow-step-desc">Foto, valor ou refeição</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-step-num">Análise</div>
+    <div class="flow-step-name">Interpretação IA</div>
+    <div class="flow-step-desc">Classifica e contextualiza</div>
+  </div>
+  <div class="flow-step hot">
+    <div class="flow-step-num">🚨 Urgência</div>
+    <div class="flow-step-name">Glicemia alta?</div>
+    <div class="flow-step-desc">Ativa protocolo de conversão</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-step-num">Médico</div>
+    <div class="flow-step-name">Recomendação</div>
+    <div class="flow-step-desc">Mas o AQS age agora</div>
+  </div>
+  <div class="flow-step convert-step">
+    <div class="flow-step-num">💳 Conversão</div>
+    <div class="flow-step-name">Pitch AQS</div>
+    <div class="flow-step-desc">CTA para plano pago</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     ETAPA 1 — TRIGGERS DE ENTRADA
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Etapa 1 — Triggers de Entrada</div>
+<div class="sec-desc">O usuário pode ativar o fluxo de conversão por 3 caminhos. Todos levam para a mesma análise inicial.</div>
+
+<div class="trigger-grid">
+  <div class="trigger-card">
+    <div class="trigger-icon">📷</div>
+    <div class="trigger-title">Foto do Glicosímetro</div>
+    <div class="trigger-desc">IA lê o valor na tela do aparelho via visão computacional.</div>
+  </div>
+  <div class="trigger-card">
+    <div class="trigger-icon">🩺</div>
+    <div class="trigger-title">Valor Manual</div>
+    <div class="trigger-desc">Usuário digita o número da última leitura (ex: "380 mg/dL" ou apenas "380").</div>
+  </div>
+  <div class="trigger-card">
+    <div class="trigger-icon">🍽️</div>
+    <div class="trigger-title">Foto de Refeição</div>
+    <div class="trigger-desc">IA analisa a composição e prediz o impacto glicêmico esperado.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     ETAPA 1B — ANÁLISE DE FOTO DE REFEIÇÃO
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Etapa 1B — Análise de Foto de Refeição</div>
+<div class="sec-desc">Quando o usuário envia uma foto do prato, o GLUCO AI entrega uma análise completa em 30 segundos — 15 pontos de análise. O equivalente a nutricionista + educador + preditor no WhatsApp.</div>
+
+<!-- Mapa dos 15 pontos -->
+<div class="trigger-grid" style="grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;">
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">👤</div>
+    <div class="trigger-title" style="font-size:11px;">1. Personalização</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">📸</div>
+    <div class="trigger-title" style="font-size:11px;">2. Identificação</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">🔥</div>
+    <div class="trigger-title" style="font-size:11px;">3. Calorias</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">🧬</div>
+    <div class="trigger-title" style="font-size:11px;">4. Macros</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">⚖️</div>
+    <div class="trigger-title" style="font-size:11px;">5. Equilíbrio</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">🥗</div>
+    <div class="trigger-title" style="font-size:11px;">6. Qualidade</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">🍞</div>
+    <div class="trigger-title" style="font-size:11px;">7. Índice Glicêmico</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;border-color:rgba(27,111,255,.4);background:rgba(27,111,255,.06);">
+    <div class="trigger-icon" style="font-size:18px;">⚡</div>
+    <div class="trigger-title" style="font-size:11px;color:var(--blue);">8. Carga Glicêmica</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;border-color:rgba(255,75,75,.4);background:rgba(255,75,75,.06);">
+    <div class="trigger-icon" style="font-size:18px;">🚨</div>
+    <div class="trigger-title" style="font-size:11px;color:var(--red);">9. Risco Glicêmico</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;border-color:rgba(0,212,180,.4);background:rgba(0,212,180,.06);">
+    <div class="trigger-icon" style="font-size:18px;">🔮</div>
+    <div class="trigger-title" style="font-size:11px;color:var(--teal);">10. Predição</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;border-color:rgba(27,111,255,.4);background:rgba(27,111,255,.06);">
+    <div class="trigger-icon" style="font-size:18px;">🧠</div>
+    <div class="trigger-title" style="font-size:11px;color:var(--blue);">11. Combinação</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">💡</div>
+    <div class="trigger-title" style="font-size:11px;">12. Orientação</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;">
+    <div class="trigger-icon" style="font-size:18px;">❤️</div>
+    <div class="trigger-title" style="font-size:11px;">13. Mensagem Emocional</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;border-color:rgba(0,196,140,.4);background:rgba(0,196,140,.06);">
+    <div class="trigger-icon" style="font-size:18px;">⏱️</div>
+    <div class="trigger-title" style="font-size:11px;color:var(--green);">14. Próxima Ação</div>
+  </div>
+  <div class="trigger-card" style="padding:12px 10px;border-color:rgba(255,176,32,.4);background:rgba(255,176,32,.06);">
+    <div class="trigger-icon" style="font-size:18px;">🧲</div>
+    <div class="trigger-title" style="font-size:11px;color:var(--yellow);">15. Gancho Pago</div>
+  </div>
+</div>
+
+<!-- STAGE R1: Análise Completa -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num">R1</div>
+    <div>
+      <div class="stage-name">Análise Completa da Refeição (Pontos 1–14)</div>
+      <div class="stage-desc">Resposta automática após envio da foto. Exemplo real: almoço brasileiro (arroz, feijão, frango, salada).</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag blue">Gratuito</span><span class="obj-tag">14 Pontos</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-REFEIÇÃO-01 · Análise completa — Almoço</span>
+        <span class="msg-type tag-new">🍽️ Refeição</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>[📷 foto do almoço]</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>👤 *{nome}, analisei seu {contexto}!* 🍽️
+
+📸 *O QUE EU VI NO SEU PRATO:*
+• Arroz branco (porção média)
+• Feijão carioca (porção média)
+• Frango grelhado (porção média)
+• Salada verde (generosa) ✅
+
+━━━━━━━━━━━━━━
+🔥 *CALORIAS*
+Total: ~620 kcal
+📊 Meta diária: 31% consumido
+Saldo do dia: ~1.380 kcal
+Classificação: ⚠️ Moderada
+
+━━━━━━━━━━━━━━
+🧬 *MACRONUTRIENTES*
+Proteínas: 38g 💪
+Carboidratos: 72g ⚠️
+Gorduras: 12g ✅
+Fibras: 9g ✅
+
+━━━━━━━━━━━━━━
+⚖️ *EQUILÍBRIO DO PRATO*
+Vegetais: ~35% ✅
+Proteínas: ~30% ✅
+Carboidratos: ~35% ✅
+Classificação: ✅ *Equilibrado*
+
+━━━━━━━━━━━━━━
+🥗 *QUALIDADE*
+Classificação: ⚠️ *Moderada*
+• Arroz branco tem IG alto — integral seria melhor
+• Feijão excelente: fibra + proteína ✅
+• Frango: ótima escolha de proteína ✅
+• Salada vai suavizar o pico glicêmico ✅
+
+━━━━━━━━━━━━━━
+🍞 *ÍNDICE GLICÊMICO*
+Arroz branco: Alto IG ⚠️
+Feijão: Baixo IG ✅
+Frango: Neutro ✅
+Salada verde: Baixíssimo IG ✅
+
+━━━━━━━━━━━━━━
+⚡ *CARGA GLICÊMICA TOTAL*
+~18 pontos → ⚠️ *Moderada*
+_(Baixa &lt;10 | Moderada 10–19 | Alta &gt;20)_
+
+👉 _A Carga Glicêmica é mais precisa que o IG isolado — considera a quantidade real que você vai comer._
+
+━━━━━━━━━━━━━━
+🚨 *RISCO GLICÊMICO*
+🟡 *Médio risco*
+"Essa refeição pode elevar sua glicemia de forma moderada nas próximas 2 horas."
+
+━━━━━━━━━━━━━━
+🔮 *PREDIÇÃO DE GLICEMIA*
+Estimativa: pode subir *+60 a +90 mg/dL*
+_(baseado na carga glicêmica, combinação alimentar e fibras presentes)_
+
+━━━━━━━━━━━━━━
+🧠 *ANÁLISE INTELIGENTE*
+A combinação arroz + feijão + frango é clássica — mas o arroz branco acelera a absorção. O feijão e a salada (fibras) vão suavizar o pico. Comer a salada primeiro faz diferença real!
+
+━━━━━━━━━━━━━━
+💡 *ORIENTAÇÕES PRÁTICAS*
+✅ Coma a salada primeiro — reduz velocidade de absorção
+✅ Mastigue devagar
+⚠️ Evite repetir o arroz
+💡 Troque arroz branco por integral na próxima refeição
+
+━━━━━━━━━━━━━━
+❤️ *{nome}, você está no caminho certo!* 💙
+Essa refeição tem boas escolhas. Pequenos ajustes vão fazer uma diferença real na sua glicemia.
+
+━━━━━━━━━━━━━━
+⏱️ *PRÓXIMO PASSO*
+Me envie sua glicemia em *2 horas* para ver como seu corpo reagiu a esse almoço! 📊</div>
+          <div class="wa-options">
+            <div class="wa-opt">📊 Te mando em 2 horas</div>
+            <div class="wa-opt">🍽️ Analisar outra refeição</div>
+            <div class="wa-opt">❓ O que é carga glicêmica?</div>
+          </div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">🧠</span>
+          <div class="ann-text"><strong>Nutricionista + educador + preditor em 30 segundos.</strong> A análise usa o nome e contexto reais do usuário. O hook final (glicemia em 2h) garante retenção e cria o dado de retroalimentação mais valioso do produto — conectando refeição → glicemia real.</div>
+        </div>
+        <div class="annotation warn">
+          <span class="ann-icon">⚡</span>
+          <div class="ann-text"><strong>Por que Carga Glicêmica é o ponto mais valioso (ponto 8):</strong> O IG isolado é incompleto — uma melancia tem IG alto mas CG baixa. A CG considera porção real, combinação e fibras. Ensinar isso diferencia o GLUCO AI de qualquer app de contagem calórica.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE R2: Gancho de Conversão por Risco -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num orange">R2</div>
+    <div>
+      <div class="stage-name">Gancho de Conversão — Ponto 15 (Baseado no Risco)</div>
+      <div class="stage-desc">Após a análise gratuita, o GLUCO AI insere um gancho para o plano pago. A intensidade varia com o risco glicêmico da refeição.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag yellow">Ponto 15</span><span class="obj-tag yellow">Conversão</span></div>
+  </div>
+  <div style="padding:16px;">
+
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-REFEIÇÃO-02A · Gancho — Risco Baixo 🟢</span>
+        <span class="msg-type tag-ok">🟢 Baixo Risco</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>💡 *Sabia que posso prever o impacto ANTES de você comer?*
+
+Com o plano ativo, você me manda a foto antes de sentar à mesa — e eu te digo se vale a pena, o que trocar e como montar o prato ideal para _sua_ glicemia.
+
+👉 *Quer ativar essa função?*</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Quero saber mais</div>
+            <div class="wa-opt">⏰ Talvez depois</div>
+          </div>
+        </div>
+        <div class="annotation success">
+          <span class="ann-icon">💡</span>
+          <div class="ann-text"><strong>Gancho por curiosidade:</strong> "Posso prever antes de você comer" é o diferencial mais poderoso do produto. Para quem está bem, o argumento é conveniência e prevenção — não urgência.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-block fixed" style="margin-top:12px;">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-REFEIÇÃO-02B · Gancho — Risco Médio 🟡</span>
+        <span class="msg-type tag-fixed">🟡 Médio Risco</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>⚠️ *{nome}, com risco médio nessa refeição…*
+
+3 refeições por dia × 30 dias = 90 escolhas que definem se sua glicemia vai melhorar ou piorar.
+
+Com o *acompanhamento diário*, eu analiso cada refeição, monitoro a evolução e te digo exatamente o que ajustar — antes que vire problema.
+
+👉 *Quer que eu comece a acompanhar você hoje?*</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Sim, quero acompanhamento</div>
+            <div class="wa-opt">ℹ️ Como funciona?</div>
+          </div>
+        </div>
+        <div class="annotation warn">
+          <span class="ann-icon">📊</span>
+          <div class="ann-text"><strong>Argumento de acumulação:</strong> "90 escolhas em 30 dias" torna o padrão concreto e urgente. Não é sobre essa refeição — é sobre o impacto cumulativo de decisões diárias.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-block danger" style="margin-top:12px;">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-REFEIÇÃO-02C · Gancho — Risco Alto 🔴</span>
+        <span class="msg-type tag-danger">🔴 Alto Risco</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🚨 *{nome}, essa refeição tem ALTO risco glicêmico.*
+
+Em 2 horas, sua glicemia pode subir *+{predicao} mg/dL*. Se já estiver elevada, esse pico pode ser perigoso.
+
+*Eu posso monitorar isso em tempo real.*
+
+Com o *Protocolo AQS ativo*, assim que você me enviar a glicemia em 2 horas, já te digo o que fazer — antes que a situação escape do controle.
+
+👉 *Ativar o monitoramento agora?*</div>
+          <div class="wa-options">
+            <div class="wa-opt">🚨 Ativar monitoramento agora</div>
+            <div class="wa-opt">ℹ️ Como funciona o AQS?</div>
+            <div class="wa-opt">⏰ Me lembra em 2 horas</div>
+          </div>
+        </div>
+        <div class="annotation danger">
+          <span class="ann-icon">🚨</span>
+          <div class="ann-text"><strong>Urgência real + predição personalizada:</strong> "+{predicao} mg/dL" torna o risco concreto. O CTA usa o Protocolo AQS — o mesmo do fluxo de glicemia alta — criando consistência no produto e no argumento de venda.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- STAGE R3: Ramificações -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num green">R3</div>
+    <div>
+      <div class="stage-name">Lógica de Ramificações — Fluxo de Refeição</div>
+      <div class="stage-desc">O que acontece após a análise gratuita, baseado na resposta do usuário.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag">Lógica</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="branch">
+      <div class="branch-row">
+        <div class="branch-cond sim" style="font-size:11px;min-width:200px;">🟢 Risco baixo</div>
+        <div class="branch-dest">→ <strong>CONV-REFEIÇÃO-02A</strong> (gancho por curiosidade / prevenção)</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond else" style="font-size:11px;min-width:200px;">🟡 Risco médio</div>
+        <div class="branch-dest">→ <strong>CONV-REFEIÇÃO-02B</strong> (argumento de acumulação / 90 escolhas)</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond nao" style="font-size:11px;min-width:200px;">🔴 Risco alto</div>
+        <div class="branch-dest">→ <strong>CONV-REFEIÇÃO-02C</strong> (urgência real + Protocolo AQS)</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond sim" style="font-size:11px;min-width:200px;">📊 Envia glicemia em 2h</div>
+        <div class="branch-dest">→ Entra no <strong>Fluxo de Glicemia</strong> (CONV-01A ou CONV-01B) com contexto da refeição vinculado</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond else" style="font-size:11px;min-width:200px;">❓ O que é carga glicêmica?</div>
+        <div class="branch-dest">→ Resposta educativa sobre CG → reforça valor da IA → loop de engajamento</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond sim" style="font-size:11px;min-width:200px;">✅ Quer acompanhamento</div>
+        <div class="branch-dest">→ <strong>CONV-04</strong> (apresentação dos planos pagos)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     ETAPA 1C — MÉTODO AQS
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Etapa 1C — Método AQS: O Ciclo Completo (Plano Pago)</div>
+<div class="sec-desc">O Método AQS cobre todo o ciclo alimentar em 3 fases com protocolos naturais. É o que transforma o GLUCO AI de um analisador de fotos em um sistema completo de controle glicêmico — e é o principal argumento de venda do plano pago.</div>
+
+<!-- Ciclo visual AQS -->
+<div class="flow-overview" style="margin-bottom:24px;">
+  <div class="flow-step convert-step">
+    <div class="flow-step-num">⚙️ Fase 1</div>
+    <div class="flow-step-name">PRÉ-REFEIÇÃO</div>
+    <div class="flow-step-desc">Preparar o corpo antes de comer</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-step-num">📸 Análise</div>
+    <div class="flow-step-name">FOTO DO PRATO</div>
+    <div class="flow-step-desc">15 pontos — grátis ou pago</div>
+  </div>
+  <div class="flow-step convert-step">
+    <div class="flow-step-num">🍽️ Fase 2</div>
+    <div class="flow-step-name">DURANTE</div>
+    <div class="flow-step-desc">Absorção e saciedade controladas</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-step-num">⏱️ 2 horas</div>
+    <div class="flow-step-name">CHECK GLICEMIA</div>
+    <div class="flow-step-desc">Medir e reportar ao GLUCO AI</div>
+  </div>
+  <div class="flow-step hot">
+    <div class="flow-step-num">🚨 Fase 3</div>
+    <div class="flow-step-name">PROTOCOLO AQS</div>
+    <div class="flow-step-desc">Se elevada — agir com protocolo natural</div>
+  </div>
+</div>
+
+<!-- PITCH DO MÉTODO AQS (mensagem de apresentação) -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num blue">AQS</div>
+    <div>
+      <div class="stage-name">Apresentação do Método AQS (Resposta ao "Como funciona?")</div>
+      <div class="stage-desc">Ativado quando o usuário clica em "Como funciona o AQS?" ou "Quero saber mais" no gancho pós-análise.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag blue">Pitch</span><span class="obj-tag yellow">Conversão</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block convert">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-00 · Apresentação do Método AQS</span>
+        <span class="msg-type tag-convert">🛡️ AQS</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>Como funciona o AQS?</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🛡️ *{nome}, o Método AQS é o protocolo que eu ativo para cuidar de você antes, durante e depois de cada refeição.*
+
+Funciona em 3 fases:
+
+━━━━━━━━━━━━━━
+⚙️ *FASE 1 — ANTES DE COMER*
+Antes de você sentar à mesa, te envio um protocolo natural específico para aquele prato.
+
+O objetivo? *Preparar seu corpo para absorver sem picos* — mesmo que você vá comer alimentos de alto IG ou CG.
+
+━━━━━━━━━━━━━━
+🍽️ *FASE 2 — DURANTE A REFEIÇÃO*
+Orientações personalizadas de ordem, ritmo e saciedade para _aquela refeição específica._
+
+Isso reduz a absorção de carboidratos e te ajuda a chegar na saciedade *sem comer em excesso.*
+
+━━━━━━━━━━━━━━
+🚨 *FASE 3 — SE A GLICEMIA SUBIR*
+Se em 2 horas sua glicemia estiver elevada, eu ativo o protocolo natural calibrado para o seu nível — de 180 a +500 mg/dL.
+
+*Sem remédio. Sem sair de casa. Só pelo WhatsApp.*
+
+━━━━━━━━━━━━━━
+💙 *Tudo natural. Tudo personalizado. Ciclo completo.*
+
+{nome}, quer que eu ative esse ciclo para você a partir de hoje?</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Sim, quero ativar o AQS</div>
+            <div class="wa-opt">🔵 Ver planos e preços</div>
+            <div class="wa-opt">❓ Como é o protocolo da Fase 1?</div>
+          </div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">📐</span>
+          <div class="ann-text"><strong>Estrutura de 3 fases é o argumento definitivo:</strong> O usuário entende que não está comprando uma análise isolada — está comprando um ciclo contínuo de proteção. Antes, durante e depois. Isso justifica a assinatura mensal, não um pagamento único.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE AQS FASE 1: PRÉ-REFEIÇÃO -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num blue">AQS-1</div>
+    <div>
+      <div class="stage-name">Fase 1 — Protocolo Pré-Refeição (Plano Pago)</div>
+      <div class="stage-desc">Enviado ANTES do usuário comer. Prepara o corpo para absorver com menos impacto glicêmico — mesmo com alimentos de alto IG e CG.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag blue">Pré-Refeição</span><span class="obj-tag green">Natural</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-01 · Protocolo Pré-Refeição — Exemplo almoço</span>
+        <span class="msg-type tag-new">⚙️ Fase 1</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>⚙️ *{nome}, antes de você almoçar — Protocolo AQS de Preparação:*
+
+Analisei que você vai comer arroz branco (alto IG). Então faça isso *antes de sentar à mesa:*
+
+━━━━━━━━━━━━━━
+✅ *[Protocolo natural 1]*
+_[ação específica + tempo]_
+
+✅ *[Protocolo natural 2]*
+_[ação específica + tempo]_
+
+✅ *[Protocolo natural 3]*
+_[ação específica + tempo]_
+
+━━━━━━━━━━━━━━
+🎯 *Por que isso funciona?*
+Esses protocolos naturais reduzem a velocidade de absorção dos carboidratos — mesmo com alimentos de alto IG. Não é sobre evitar, é sobre *comer com inteligência.*
+
+⏰ Quando estiver à mesa, me avise. Vou te guiar durante a refeição também.</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Fiz! Estou à mesa agora</div>
+            <div class="wa-opt">❓ Por que esses protocolos funcionam?</div>
+          </div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">⚙️</span>
+          <div class="ann-text"><strong>Diferencial do produto:</strong> Nenhum app de contagem calórica faz isso. O GLUCO AI entrega orientação ANTES da refeição, calibrada para o prato específico que o usuário vai comer. Isso é inédito no WhatsApp.</div>
+        </div>
+        <div class="annotation warn">
+          <span class="ann-icon">🎯</span>
+          <div class="ann-text"><strong>Argumento de conversão:</strong> "Não é sobre evitar, é sobre comer com inteligência." Remove a culpa e reposiciona o produto — não é uma dieta restritiva, é um protocolo de proteção. Muito mais fácil de vender.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE AQS FASE 2: DURANTE A REFEIÇÃO -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num blue">AQS-2</div>
+    <div>
+      <div class="stage-name">Fase 2 — Protocolo Durante a Refeição (Plano Pago)</div>
+      <div class="stage-desc">Enviado quando o usuário avisa que está à mesa. Orienta absorção, ritmo e saciedade sem julgamento.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag blue">Durante</span><span class="obj-tag green">Natural</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-02 · Protocolo Durante a Refeição</span>
+        <span class="msg-type tag-new">🍽️ Fase 2</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>Estou à mesa agora ✅</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🍽️ *Ótimo, {nome}! Protocolo AQS durante o almoço:*
+
+━━━━━━━━━━━━━━
+🥗 *ORDEM DO PRATO — faça nessa sequência:*
+1️⃣ Comece pela salada e vegetais (fibras primeiro)
+2️⃣ Passe para a proteína (frango)
+3️⃣ Por último, o arroz e feijão
+
+_Isso reduz a velocidade de absorção dos carboidratos em até 40%._
+
+━━━━━━━━━━━━━━
+⏱️ *RITMO — muito importante:*
+• Mastigue cada garfada pelo menos *20 vezes*
+• Faça uma pausa no meio da refeição (30 segundos)
+• Beba água entre as garfadas, não durante
+
+━━━━━━━━━━━━━━
+🎯 *SACIEDADE — pare no momento certo:*
+Quando sentir que está *70–80% satisfeito*, pare.
+
+O sinal de saciedade chega com 20 minutos de atraso — quem come rápido sempre come a mais.
+
+━━━━━━━━━━━━━━
+💙 Aproveite! Lembro de você em 2 horas para checar como seu corpo reagiu. 📊</div>
+        </div>
+        <div class="annotation success">
+          <span class="ann-icon">🍽️</span>
+          <div class="ann-text"><strong>Ordem + ritmo + saciedade = 3 alavancas de absorção.</strong> Cada uma tem base científica e é acionável imediatamente. O usuário sente valor real durante a refeição — não depois de semanas de uso.</div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">❤️</span>
+          <div class="ann-text"><strong>Tom sem julgamento:</strong> "Aproveite!" — o GLUCO AI não é uma dieta restritiva. Reforça a mensagem de que comer com prazer é possível. Isso reduz churn e aumenta NPS.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE AQS FASE 3: PÓS-REFEIÇÃO com 3 protocolos -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num red">AQS-3</div>
+    <div>
+      <div class="stage-name">Fase 3 — Protocolo Pós-Refeição: 3 Níveis (Plano Pago)</div>
+      <div class="stage-desc">Ativado quando o usuário envia a glicemia 2h após a refeição. 3 protocolos naturais calibrados para cada faixa de risco.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag red">Pós-Refeição</span><span class="obj-tag green">Natural</span><span class="obj-tag yellow">3 Protocolos</span></div>
+  </div>
+  <div style="padding:16px;">
+
+    <!-- Glicemia 2h depois -->
+    <div class="msg-block ok" style="margin-bottom:14px;">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-03-CHECK · Check de glicemia pós-refeição</span>
+        <span class="msg-type tag-ok">⏱️ Check 2h</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>⏱️ *{nome}, já faz 2 horas desde o almoço!*
+
+Hora de checar como seu corpo reagiu. Me envie sua glicemia agora — valor ou foto do glicosímetro.
+
+📊 _Vou analisar e, se necessário, ativar o protocolo AQS de resposta._</div>
+          <div class="wa-options">
+            <div class="wa-opt">📷 Enviando foto do glicosímetro</div>
+            <div class="wa-opt">🩺 Digitar o valor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Protocolo AQS — 180 a 299 mg/dL -->
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-03A · Protocolo AQS Moderado — 180 a 299 mg/dL</span>
+        <span class="msg-type tag-fixed">🟡 Moderado</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>230</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🟡 *{nome}, {valor} mg/dL — nível moderadamente elevado.*
+
+Seu corpo reagiu acima do esperado. Vamos agir agora com o *Protocolo AQS Moderado:*
+
+━━━━━━━━━━━━━━
+🌿 *PROTOCOLO NATURAL — NÍVEL MODERADO*
+
+✅ *[Protocolo natural 1]* — age nos próximos {tempo}
+✅ *[Protocolo natural 2]* — reduz absorção residual
+✅ *[Protocolo natural 3]* — ativa sensibilidade natural
+
+━━━━━━━━━━━━━━
+⏰ *Me envie novamente em 1 hora* para checar a evolução.
+
+🎯 *Meta:* voltar abaixo de 140 mg/dL até o fim da tarde.</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Iniciando o protocolo agora</div>
+            <div class="wa-opt">❓ Por que está elevada?</div>
+          </div>
+        </div>
+        <div class="annotation warn">
+          <span class="ann-icon">🟡</span>
+          <div class="ann-text"><strong>180–299 mg/dL:</strong> Faixa de ação moderada. O protocolo natural consegue resolver sem intervenção médica imediata. Importante dar meta clara (abaixo de 140 mg/dL) e prazo — cria engajamento e curiosidade para o check de 1h.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Protocolo AQS — 300 a 500 mg/dL -->
+    <div class="msg-block danger" style="margin-top:12px;">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-03B · Protocolo AQS Alto — 300 a 500 mg/dL</span>
+        <span class="msg-type tag-danger">🔴 Alto</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>380</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🔴 *{nome}, {valor} mg/dL — nível elevado. Preciso da sua atenção agora.*
+
+Nessa faixa, o risco de complicações metabólicas aumenta com cada hora. Ativando o *Protocolo AQS Alto:*
+
+━━━━━━━━━━━━━━
+🚨 *PROTOCOLO NATURAL — NÍVEL ALTO*
+
+⚡ *[Protocolo de ação imediata 1]* — faça agora
+⚡ *[Protocolo de ação imediata 2]* — nos próximos 15 min
+⚡ *[Protocolo de ação imediata 3]* — mantém por 2h
+⚡ *[Protocolo de ação imediata 4]* — reforço adicional
+
+━━━━━━━━━━━━━━
+🩺 *Importante:* Se tiver sintomas como tontura, visão turva ou náusea — procure atendimento médico imediatamente. Esses protocolos complementam, não substituem, o cuidado médico.
+
+━━━━━━━━━━━━━━
+⏰ *Me envie novamente em 45 minutos.*
+
+Vou monitorar até sua glicemia entrar na faixa segura.</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Iniciando agora</div>
+            <div class="wa-opt">🚨 Estou com sintomas</div>
+            <div class="wa-opt">❓ O que pode ter causado?</div>
+          </div>
+        </div>
+        <div class="annotation danger">
+          <span class="ann-icon">🔴</span>
+          <div class="ann-text"><strong>300–500 mg/dL:</strong> Urgência real. Protocolo mais intenso, monitoramento mais frequente (45min). A menção de sintomas graves e orientação médica é essencial — protege juridicamente e reforça credibilidade.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Protocolo AQS — acima de 500 mg/dL -->
+    <div class="msg-block danger" style="margin-top:12px;border-color:rgba(255,75,75,0.6);">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-AQS-03C · Protocolo AQS Crítico — acima de 500 mg/dL</span>
+        <span class="msg-type tag-danger">🚨 Crítico</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>520</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🚨 *{nome}, {valor} mg/dL — NÍVEL CRÍTICO.*
+
+*Você precisa buscar atendimento médico agora.* Com glicemia nessa faixa, o risco de cetoacidose é real e a janela de ação é pequena.
+
+━━━━━━━━━━━━━━
+🏥 *AÇÃO IMEDIATA:*
+👉 Ligue para o SAMU (192) ou vá ao pronto-socorro mais próximo.
+👉 Informe a leitura: {valor} mg/dL.
+
+━━━━━━━━━━━━━━
+🌿 *ENQUANTO AGUARDA ATENDIMENTO — Protocolo AQS Intensivo:*
+
+⚡ *[Protocolo de estabilização 1]* — faça agora
+⚡ *[Protocolo de estabilização 2]* — mantém a cada 30 min
+⚡ *Não coma nada* até avaliação médica
+
+━━━━━━━━━━━━━━
+💙 *Estou com você.* Me avise quando chegar ao atendimento ou assim que tiver uma nova leitura.
+
+_Esse protocolo é de suporte — o médico precisa avaliar você agora._</div>
+          <div class="wa-options">
+            <div class="wa-opt">🏥 Estou indo ao pronto-socorro</div>
+            <div class="wa-opt">✅ Iniciando protocolo de estabilização</div>
+          </div>
+        </div>
+        <div class="annotation danger">
+          <span class="ann-icon">🚨</span>
+          <div class="ann-text"><strong>Acima de 500 mg/dL:</strong> Emergência médica. O GLUCO AI sempre direciona para o pronto-socorro PRIMEIRO — sem exceção. O protocolo natural é apenas suporte enquanto aguarda atendimento. Essa postura protege o produto juridicamente e salva vidas.</div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">❤️</span>
+          <div class="ann-text"><strong>"Estou com você":</strong> Mesmo na emergência, o tom acolhedor se mantém. Isso é fundamental — o usuário está em pânico e a presença do GLUCO AI transmite tranquilidade sem minimizar a gravidade.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de referência dos 3 protocolos -->
+    <div class="branch" style="margin-top:20px;">
+      <div class="branch-row">
+        <div class="branch-cond else" style="font-size:11px;min-width:200px;">🟡 180–299 mg/dL</div>
+        <div class="branch-dest">→ <strong>CONV-AQS-03A</strong> Protocolo Moderado · Check em 1h · Meta: &lt;140 mg/dL</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond nao" style="font-size:11px;min-width:200px;">🔴 300–500 mg/dL</div>
+        <div class="branch-dest">→ <strong>CONV-AQS-03B</strong> Protocolo Alto · Check em 45min · Alerta de sintomas graves</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond nao" style="font-size:11px;min-width:200px;">🚨 Acima de 500 mg/dL</div>
+        <div class="branch-dest">→ <strong>CONV-AQS-03C</strong> Protocolo Crítico · Pronto-socorro PRIMEIRO · Suporte natural enquanto aguarda</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond sim" style="font-size:11px;min-width:200px;">✅ 80–179 mg/dL (normal)</div>
+        <div class="branch-dest">→ Reforço positivo + registro de evolução + orientação para próxima refeição</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- STAGE: Como o Ciclo AQS entra no funil de conversão -->
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num orange">AQS-4</div>
+    <div>
+      <div class="stage-name">Posicionamento do AQS no Funil de Conversão</div>
+      <div class="stage-desc">Como as 3 fases do AQS aparecem como argumento de venda — em qual momento do fluxo e com qual intensidade.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag yellow">Estratégia</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="branch">
+      <div class="branch-row">
+        <div class="branch-cond sim" style="font-size:11px;min-width:220px;">🟢 Após análise (risco baixo)</div>
+        <div class="branch-dest">→ Teaser: <em>"Posso enviar o protocolo PRÉ-refeição da próxima vez"</em> → gancho curiosidade</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond else" style="font-size:11px;min-width:220px;">🟡 Após análise (risco médio)</div>
+        <div class="branch-dest">→ Preview Fases 1+2: <em>"Te guio antes e durante — para essa refeição não elevar"</em> → argumento padrão</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond nao" style="font-size:11px;min-width:220px;">🔴 Após análise (risco alto)</div>
+        <div class="branch-dest">→ Preview completo Fase 1+2+3: urgência real → pitch AQS completo → CONV-04</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond else" style="font-size:11px;min-width:220px;">❓ "Como funciona o AQS?"</div>
+        <div class="branch-dest">→ <strong>CONV-AQS-00</strong> apresentação das 3 fases → CONV-04 (planos)</div>
+      </div>
+      <div class="branch-row">
+        <div class="branch-cond nao" style="font-size:11px;min-width:220px;">🚨 Glicemia alta (pós-refeição)</div>
+        <div class="branch-dest">→ AQS-3 ativado imediatamente → reforça urgência de manter o plano ativo</div>
+      </div>
+    </div>
+    <div class="annotation info" style="margin-top:14px;">
+      <span class="ann-icon">📐</span>
+      <div class="ann-text"><strong>Regra de ouro do ciclo AQS:</strong> A análise gratuita (14 pontos) mostra o <em>problema</em>. O Método AQS mostra a <em>solução completa</em>. A predição de glicemia (+X mg/dL) cria a <em>urgência</em>. E os 3 protocolos pós-refeição entregam a <em>segurança</em>. Esses 4 elementos juntos constroem o argumento mais forte para conversão.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     ETAPA 2 — ANÁLISE GRATUITA
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Etapa 2 — Análise Gratuita (Resposta Imediata)</div>
+<div class="sec-desc">Independente do valor, o sistema sempre entrega uma análise inicial gratuita. Isso demonstra valor antes de pedir dinheiro.</div>
+
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num">2A</div>
+    <div>
+      <div class="stage-name">Glicemia Normal — 80 a 180 mg/dL</div>
+      <div class="stage-desc">Reforço positivo. Foco em manter o controle. Caminho para upgrade via prevenção.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag green">Normal</span><span class="obj-tag">Retenção</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block ok">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-01A · Resposta — Glicemia normal</span>
+        <span class="msg-type tag-ok">✓ Normal</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>127</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>✅ *{nome}, sua glicemia está ótima!*
+
+📊 *Leitura registrada:* 127 mg/dL
+🎯 *Faixa ideal (SBD 2023):* 80 – 130 mg/dL
+✅ *Status:* Dentro do controle
+
+Você está no caminho certo! Continue assim. 💪
+
+Quer que eu registre isso e acompanhe a tendência das últimas leituras?</div>
+          <div class="wa-options">
+            <div class="wa-opt">📈 Sim, acompanhar evolução</div>
+            <div class="wa-opt">ℹ️ Ver minha tendência</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num red">2B</div>
+    <div>
+      <div class="stage-name">Glicemia Alta — Acima de 180 mg/dL</div>
+      <div class="stage-desc">Urgência real. Ponto de maior dor = maior abertura para conversão. Ativar protocolo de conversão.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag red">Alta</span><span class="obj-tag yellow">Conversão</span></div>
+  </div>
+  <div style="padding:16px;">
+
+    <!-- MSG de análise -->
+    <div class="msg-block danger">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-01B · Análise — Glicemia alta detectada</span>
+        <span class="msg-type tag-danger">🚨 Alta</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>380</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>⚠️ *{nome}, preciso ser honesto com você.*
+
+📊 *Leitura registrada:* {valor} mg/dL
+🚨 *Classificação:* Glicemia muito elevada
+📍 *Faixa ideal:* 80 – 130 mg/dL
+📉 *Distância da meta:* +{diferenca} mg/dL acima do limite
+
+Nessa faixa, seu corpo está sob estresse metabólico real.
+
+Com {valor} mg/dL de glicemia, cada hora que passa sem ação aumenta o risco de:
+❌ Cetoacidose diabética.
+❌ Dano nos vasos sanguíneos.
+❌ Comprometimento renal.</div>
+        </div>
+        </div>
+        <div class="annotation danger">
+          <span class="ann-icon">🚨</span>
+          <div class="ann-text"><strong>Urgência real, não alarme falso.</strong> A mensagem usa o valor real do usuário e o delta até a meta. Isso torna o problema concreto e pessoal — não genérico.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG recomendação médico + AQS -->
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-02 · Recomendação médica + Introdução AQS</span>
+        <span class="msg-type tag-fixed">💊 Orientação</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🩺 *O que você deve fazer:*
+
+Recomendo fortemente que você procure seu médico para *ajustar o seu tratamento* — com {valor} mg/dL, o protocolo atual pode não estar sendo suficiente.
+
+*Mas enquanto você agenda essa consulta…*
+
+⏱️ A glicemia não pode esperar.
+
+O mais importante agora é baixar sua glicemia para a faixa normal *o mais rápido possível* — e isso é possível *sem sair de casa*, com o *Método AQS*.</div>
+        </div>
+        </div>
+        <div class="annotation warn">
+          <span class="ann-icon">⚕️</span>
+          <div class="ann-text"><strong>Responsabilidade:</strong> Sempre recomendar o médico primeiro. O AQS não substitui o médico — <em>complementa</em> enquanto o atendimento não acontece. Isso protege juridicamente e aumenta credibilidade.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG pitch AQS -->
+    <div class="msg-block convert">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-03 · Pitch do Método AQS</span>
+        <span class="msg-type tag-convert">💳 Conversão</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🛡️ *O que é o Método AQS?*
+
+AQS significa *Acompanhamento de Qualidade e Segurança* — é o protocolo que ativo quando a glicemia está fora de controle.
+
+Com ele, eu:
+
+📊 *Monitoro* sua glicemia a cada hora até normalizar.
+🍽️ *Analiso cada refeição* em tempo real e te digo o que fazer.
+🧬 *Ajusto suas metas* diariamente com base na sua evolução.
+🚨 *Ativo alertas de emergência* se o valor subir mais.
+💊 *Oriento a alimentação* para reduzir a glicemia naturalmente.
+
+👉 *Tudo isso sem sair de casa. Agora. Pelo WhatsApp.*
+
+{nome}, você quer que eu ative o Método AQS para você hoje?</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Sim, quero ativar o AQS!</div>
+            <div class="wa-opt">ℹ️ Como funciona os planos?</div>
+            <div class="wa-opt">⏰ Me lembra mais tarde</div>
+          </div>
+        </div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">📐</span>
+          <div class="ann-text"><strong>Fórmula Hormozi aplicada:</strong> Dream Outcome (glicemia normalizada) + Likelihood (protocolo ativo, monitoramento real) + Time Delay (começa AGORA, resultado no mesmo dia) + Effort (sem sair de casa, pelo WhatsApp).</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     ETAPA 3 — PITCH DOS PLANOS
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Etapa 3 — Apresentação dos Planos</div>
+<div class="sec-desc">Ativada quando o usuário clica em "Sim, quero ativar!" ou "Como funcionam os planos?". Apresentar 2 opções claras — uma intermediária e uma completa.</div>
+
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num blue">3A</div>
+    <div>
+      <div class="stage-name">Apresentação dos Planos no WhatsApp</div>
+      <div class="stage-desc">Mensagem de apresentação antes de redirecionar para página de pagamento.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag blue">CTA</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block convert">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-04 · Apresentação dos planos</span>
+        <span class="msg-type tag-convert">💳 Conversão</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>💙 *{nome}, temos duas opções para você:*
+
+━━━━━━━━━━━━━━━━━━
+🔵 *GLUCO AI Essencial — R$ 79/mês*
+✅ Análise de até 20 refeições/mês.
+✅ Monitoramento de glicemia ilimitado.
+✅ Protocolo AQS quando necessário.
+✅ Metas diárias personalizadas.
+
+━━━━━━━━━━━━━━━━━━
+🟣 *GLUCO AI Pro — R$ 149/mês*
+✅ Tudo do Essencial.
+✅ Análise de refeições ilimitada.
+✅ Relatório mensal para o seu médico.
+✅ Prioridade no AQS (resposta em até 5 min).
+✅ Ajuste de metas semanais com IA avançada.
+━━━━━━━━━━━━━━━━━━
+
+👉 Qual faz mais sentido para o seu caso?</div>
+          <div class="wa-options">
+            <div class="wa-opt">🔵 Quero o Essencial — R$ 79/mês</div>
+            <div class="wa-opt">🟣 Quero o Pro — R$ 149/mês</div>
+            <div class="wa-opt">❓ Qual é melhor para mim?</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG ajuda para decidir -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-04B · "Qual é melhor para mim?" — Resposta personalizada</span>
+        <span class="msg-type tag-new">★ Inteligente</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Com base no seu perfil, {nome}…
+
+Seu score de risco é *{nivel_risco}* e sua glicemia atual está em *{valor} mg/dL*.
+
+Para o seu caso, eu recomendo o *Pro* — porque:
+
+🔴 Sua glicemia está {diferenca} mg/dL acima da meta.
+📊 Você vai precisar de monitoramento mais intenso nos primeiros 30 dias.
+🩺 O relatório para o médico vai ajudar no ajuste do tratamento.
+
+*Mas se o orçamento for uma preocupação agora*, o Essencial já ativa o Protocolo AQS e vai fazer diferença real no seu controle.</div>
+          <div class="wa-options">
+            <div class="wa-opt">🟣 Ativar Pro agora</div>
+            <div class="wa-opt">🔵 Começar com Essencial</div>
+          </div>
+        </div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">🧠</span>
+          <div class="ann-text"><strong>Personalização inteligente:</strong> A recomendação usa o score de risco e o valor real de glicemia do usuário. Quem tem glicemia alta recebe recomendação do Pro. Quem está mais próximo da meta pode ser indicado para o Essencial.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSG CTA final -->
+    <div class="msg-block convert">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-05 · CTA Final — Link de pagamento</span>
+        <span class="msg-type tag-convert">💳 Pagamento</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🚀 *Ótima escolha, {nome}!*
+
+Aqui está seu link de ativação:
+
+👉 *[Link seguro para pagamento]*
+
+✅ Pagamento 100% seguro.
+✅ Cancele quando quiser, sem multa.
+✅ Ativação imediata após confirmação.
+
+Assim que confirmado, eu ativo o *Protocolo AQS* aqui no WhatsApp e a gente começa a trabalhar na sua glicemia imediatamente. 💪
+
+*Qualquer dúvida, estou aqui.* 🩺</div>
+        </div>
+        </div>
+        <div class="annotation warn">
+          <span class="ann-icon">⏱️</span>
+          <div class="ann-text"><strong>Urgência real:</strong> A frase "ativo o AQS imediatamente após confirmação" cria urgência genuína — o usuário está com glicemia alta e sabe que cada hora importa. Não é urgência artificial.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     ETAPA 4 — OBJEÇÕES
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Etapa 4 — Tratamento de Objeções</div>
+<div class="sec-desc">Fluxos para os usuários que não compram imediatamente. Cada objeção tem uma resposta específica.</div>
+
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num yellow">4A</div>
+    <div>
+      <div class="stage-name">"Me lembra mais tarde"</div>
+      <div class="stage-desc">Usuário não disse não — apenas adiou. Follow-up automático em 2 horas.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag yellow">Follow-up</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-OBJ-01 · Follow-up 2 horas</span>
+        <span class="msg-type tag-fixed">⏰ Automático</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>⏰ {nome}, voltei conforme combinado.
+
+Sua glicemia estava em *{valor} mg/dL* há 2 horas.
+
+Você teve chance de medir de novo?
+
+Se ainda estiver alta, cada hora importa — e o Método AQS pode começar a agir *agora*.</div>
+          <div class="wa-options">
+            <div class="wa-opt">📊 Medir agora e te enviar</div>
+            <div class="wa-opt">✅ Quero ativar o AQS</div>
+            <div class="wa-opt">🔕 Não me lembre mais hoje</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="stage-header">
+    <div class="stage-num yellow">4B</div>
+    <div>
+      <div class="stage-name">Objeção de Preço</div>
+      <div class="stage-desc">Usuário demonstra interesse mas hesita no valor.</div>
+    </div>
+    <div class="stage-obj"><span class="obj-tag yellow">Objeção</span></div>
+  </div>
+  <div style="padding:16px;">
+    <div class="msg-block fixed">
+      <div class="msg-block-header">
+        <span class="msg-id">CONV-OBJ-02 · Resposta — objeção de preço</span>
+        <span class="msg-type tag-fixed">💬 Objeção</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-user"><div class="wa-label user">Você</div>Está caro para mim agora</div>
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Entendo, {nome}.
+
+Posso te mostrar uma perspectiva?
+
+Uma internação por cetoacidose diabética custa em média *R$ 3.000 a R$ 8.000* pelo plano de saúde — ou é uma semana de sofrimento no SUS.
+
+O plano Essencial é *R$ 79/mês* — menos que uma consulta particular.
+
+Não estou falando só de dinheiro. Estou falando de *evitar uma emergência* com sua glicemia em {valor} mg/dL.
+
+_Se mesmo assim o momento não for esse_, tudo bem — mas me deixa pelo menos te enviar uma orientação gratuita sobre como agir nas próximas horas com a glicemia nessa faixa?</div>
+          <div class="wa-options">
+            <div class="wa-opt">✅ Sim, me manda a orientação</div>
+            <div class="wa-opt">💙 Ok, vou ativar o Essencial</div>
+          </div>
+        </div>
+        </div>
+        <div class="annotation info">
+          <span class="ann-icon">💡</span>
+          <div class="ann-text"><strong>Estratégia:</strong> Comparar com o custo real de uma emergência (âncora alta). Não forçar — oferecer valor gratuito como step-down. Quem aceita a orientação gratuita continua no funil.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     LÓGICA DE RAMIFICAÇÕES
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Lógica de Ramificações — Resumo</div>
+
+<div class="branch">
+  <div class="branch-row">
+    <div class="branch-cond else" style="font-size:11px;min-width:180px;">Glicemia 80–180 mg/dL</div>
+    <div class="branch-dest">→ <strong>CONV-01A</strong> (Normal) → retenção e monitoramento passivo</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond nao" style="font-size:11px;min-width:180px;">Glicemia 181–299 mg/dL</div>
+    <div class="branch-dest">→ <strong>CONV-01B</strong> (Alta) → CONV-02 → CONV-03 → Pitch AQS</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond nao" style="font-size:11px;min-width:180px;">Glicemia 300–500 mg/dL</div>
+    <div class="branch-dest">→ <strong>CONV-01B</strong> com urgência máxima → AQS Moderado ativado → pitch imediato</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond nao" style="font-size:11px;min-width:180px;">Glicemia &gt;500 mg/dL</div>
+    <div class="branch-dest">→ Orientação de emergência para pronto-socorro PRIMEIRO → AQS Intensivo</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond sim" style="font-size:11px;min-width:180px;">Foto de refeição</div>
+    <div class="branch-dest">→ Análise de impacto glicêmico previsto → se risco alto: CONV-03 (pitch AQS)</div>
+  </div>
+</div>
+
+<div class="branch" style="margin-top:12px;">
+  <div class="branch-row">
+    <div class="branch-cond sim" style="font-size:11px;min-width:180px;">Sim, quero ativar!</div>
+    <div class="branch-dest">→ <strong>CONV-04</strong> (apresentação de planos)</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond else" style="font-size:11px;min-width:180px;">Como funcionam os planos?</div>
+    <div class="branch-dest">→ <strong>CONV-04</strong> (mesma apresentação)</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond else" style="font-size:11px;min-width:180px;">Me lembra mais tarde</div>
+    <div class="branch-dest">→ <strong>CONV-OBJ-01</strong> (follow-up automático em 2h)</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond else" style="font-size:11px;min-width:180px;">Qual é melhor para mim?</div>
+    <div class="branch-dest">→ <strong>CONV-04B</strong> (recomendação personalizada por score de risco)</div>
+  </div>
+  <div class="branch-row">
+    <div class="branch-cond nao" style="font-size:11px;min-width:180px;">Objeção de preço</div>
+    <div class="branch-dest">→ <strong>CONV-OBJ-02</strong> (âncora de internação + orientação gratuita como step-down)</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     FÓRMULA HORMOZI APLICADA
+═══════════════════════════════ -->
+<div class="divider"></div>
+<div class="sec-title">Fórmula Hormozi — Aplicação no Pitch</div>
+<div class="sec-desc">Cada elemento da Irresistible Offer está mapeado para o contexto de glicemia alta.</div>
+
+<div class="hormozi-grid">
+  <div class="hormozi-card">
+    <div class="hormozi-icon">🎯</div>
+    <div class="hormozi-label">Dream Outcome</div>
+    <div class="hormozi-value">Glicemia normalizada — hoje.</div>
+    <div class="hormozi-desc">Não "controle a longo prazo" — baixar de {valor} mg/dL para a faixa normal o mais rápido possível.</div>
+  </div>
+  <div class="hormozi-card">
+    <div class="hormozi-icon">✅</div>
+    <div class="hormozi-label">Likelihood of Success</div>
+    <div class="hormozi-value">Protocolo ativo, monitoramento real.</div>
+    <div class="hormozi-desc">"Eu monitoro a cada hora até normalizar" — elimina a incerteza de agir sozinho.</div>
+  </div>
+  <div class="hormozi-card">
+    <div class="hormozi-icon">⚡</div>
+    <div class="hormozi-label">Time Delay</div>
+    <div class="hormozi-value">Ativação imediata. Resultado no mesmo dia.</div>
+    <div class="hormozi-desc">Assim que confirmar o pagamento, o AQS é ativado. A glicemia começa a ser monitorada nesta hora.</div>
+  </div>
+  <div class="hormozi-card">
+    <div class="hormozi-icon">🪶</div>
+    <div class="hormozi-label">Effort & Sacrifice</div>
+    <div class="hormozi-value">Sem sair de casa. Pelo WhatsApp.</div>
+    <div class="hormozi-desc">Nenhuma instalação, nenhum app novo. O usuário já está aqui. Basta continuar a conversa.</div>
+  </div>
+</div>
+
+<!-- RODAPÉ -->
+<div class="divider"></div>
+<div style="text-align:center;color:var(--muted);font-size:12px;padding-bottom:20px;">
+  GLUCO AI · Fluxo de Conversão v1.0 · Março 2026 · Documento Interno
+</div>
+
+</div><!-- /.page -->
+</div><!-- /.tl-layout -->
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Ver na página</button>
+    <button class="tlp-btn-edit">✏️ Editar</button>
+  </div>
+</div>
+<script src="timeline.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>

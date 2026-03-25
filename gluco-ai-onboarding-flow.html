@@ -174,6 +174,117 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;line-
   .changes-grid,.trigger-grid{grid-template-columns:1fr;}
   .flow-map{overflow-x:scroll;}
 }
+
+/* ── TIMELINE LAYOUT ── */
+.tl-layout{margin-left:230px;}
+
+#tl-sidebar{
+  width:230px;
+  position:fixed;left:0;top:60px;
+  height:calc(100vh - 60px);overflow-y:auto;
+  border-right:1px solid var(--stroke);
+  background:var(--abyss);z-index:50;
+  scrollbar-width:thin;scrollbar-color:var(--stroke) transparent;
+}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:var(--stroke);border-radius:2px;}
+.tl-head{
+  padding:14px 14px 10px;
+  font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);border-bottom:1px solid var(--stroke);
+  display:flex;align-items:center;justify-content:space-between;
+}
+#tl-count{
+  font-size:10px;font-weight:800;background:rgba(27,111,255,.15);
+  color:var(--blue);padding:1px 8px;border-radius:99px;
+}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{
+  content:'';position:absolute;left:26px;top:0;bottom:0;
+  width:2px;background:linear-gradient(180deg,var(--stroke),var(--stroke) 92%,transparent);
+  pointer-events:none;
+}
+.tl-item{
+  display:flex;align-items:center;gap:6px;
+  padding:5px 10px 5px 8px;
+  cursor:pointer;position:relative;transition:background .15s;
+}
+.tl-item:hover{background:rgba(255,255,255,.03);}
+.tl-item.tl-active{background:rgba(27,111,255,.05);}
+.tl-item.tl-active .tl-name{color:var(--t1);}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(27,111,255,.22);}
+
+.tl-dot{
+  width:36px;height:36px;flex-shrink:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;
+  position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;
+}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(27,111,255,.18);border:2px solid var(--blue);color:var(--blue);}
+.tl-dot-yellow{background:rgba(255,176,32,.14);border:2px solid var(--yellow);color:var(--yellow);}
+.tl-dot-green{background:rgba(0,196,140,.12);border:2px solid var(--green);color:var(--green);}
+.tl-dot-gray{background:rgba(139,147,184,.1);border:2px solid var(--muted);color:var(--muted);}
+
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.tl-info:hover .tl-name{color:var(--t1);}
+
+.tl-peek-btn{
+  width:22px;height:22px;flex-shrink:0;background:none;
+  border:1px solid transparent;border-radius:5px;
+  color:var(--muted);font-size:11px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;padding:0;
+  transition:all .15s;line-height:1;
+}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:var(--stroke);color:var(--t2);}
+
+/* Highlight ao navegar */
+.tl-highlight{outline:3px solid rgba(27,111,255,.7)!important;outline-offset:4px;transition:outline .15s;}
+
+/* ── POPOVER ── */
+#tl-popover{
+  position:fixed;z-index:8500;
+  background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;
+  box-shadow:0 16px 64px rgba(0,0,0,.65);
+  display:none;font-family:'Inter',sans-serif;
+  max-height:70vh;overflow-y:auto;
+}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;font-family:inherit;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.15);border-radius:6px;padding:5px 10px;}
+.tlp-branches{margin-bottom:8px;}
+.tlp-branch-title{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.tlp-branch-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(46,51,79,.35);}
+.tlp-branch-row:last-child{border-bottom:none;}
+.tlp-bcond{font-size:10px;font-weight:700;background:rgba(27,111,255,.1);color:#93c5fd;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.tlp-baction{font-size:11px;color:#64748b;line-height:1.4;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:#1B6FFF;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#1559cc;}
+
+/* Responsive */
+@media(max-width:900px){
+  .tl-layout{margin-left:0;}
+  #tl-sidebar{position:relative;top:0;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--stroke);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
 </style>
 </head>
 <body>
@@ -182,21 +293,22 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;line-
 <div class="doc-header">
   <div class="doc-header-inner">
     <div class="doc-logo">
-      <svg viewBox="0 0 52 52" width="26" height="26" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="g" x1="0" y1="0" x2="52" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#00D4B4"/><stop offset="100%" stop-color="#1B6FFF"/>
-        </linearGradient></defs>
-        <path d="M4 32 C9 32 12 22 18 22 C24 22 27 38 33 38 C39 38 42 27 48 27" stroke="url(#g)" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <circle cx="48" cy="27" r="2.5" fill="#1B6FFF"/>
-      </svg>
+      <img src="gluco-ai-icon.svg" width="28" height="28" alt="GLUCO AI">
       GLUCO <span>AI</span>
     </div>
     <div class="doc-meta">
+      <a href="index.html" style="font-size:12px;font-weight:700;color:var(--t2);text-decoration:none;padding:5px 12px;border:1px solid var(--stroke);border-radius:8px;background:var(--surface);transition:color .15s;" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--t2)'">← Central</a>
       <span class="version-badge">v2.0</span>
       <span class="status-badge">⚠ Em Revisão</span>
     </div>
   </div>
 </div>
+
+<div class="tl-layout">
+<aside id="tl-sidebar">
+  <div class="tl-head">Mensagens <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
 
 <div class="page">
 
@@ -265,7 +377,7 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;line-
       <div class="flow-connector"></div>
       <div class="flow-step">
         <div class="flow-step-bubble bubble-teal">E4</div>
-        <div class="flow-step-label">Coleta de Dados<br>(10 perguntas)</div>
+        <div class="flow-step-label">Coleta de Dados<br>(12 perguntas)</div>
       </div>
       <div class="flow-connector"></div>
       <div class="flow-step">
@@ -844,6 +956,35 @@ Vamos continuar? 🚀</div>
       </div>
     </div>
 
+    <!-- Q6B HbA1c -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">Q6B · HbA1c — Hemoglobina Glicada</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="msg-type tag-new">✦ Novo</span>
+          <span class="msg-type tag-critical">🎯 Roteamento de Plano</span>
+        </div>
+        <span class="msg-progress">48%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, você sabe qual foi o resultado do seu último exame de HbA1c (hemoglobina glicada)?
+
+É aquele exame de sangue que mostra como ficou sua glicemia nos últimos 3 meses. 🩸</div>
+            <div class="wa-options">
+              <div class="wa-opt">1️⃣ Abaixo de 7% — controlado</div>
+              <div class="wa-opt">2️⃣ Entre 7% e 9% — precisa melhorar</div>
+              <div class="wa-opt">3️⃣ Acima de 9% — descontrolado</div>
+              <div class="wa-opt">4️⃣ Não fiz esse exame / Não sei</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotation new"><span class="ann-icon">🎯</span><div class="ann-text"><strong>Por que é crítico para roteamento</strong>HbA1c é o indicador mais objetivo para definir o plano: &lt;7% → Método 1 (controle); 7–9% → Método 2 (reversão); &gt;9% com sintomas → Método 2 ou 3. Quem não sabe recebe orientação para pedir o exame.</div></div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:48%"></div></div><span class="progress-pct">48%</span></div>
+      </div>
+    </div>
+
     <!-- Q7 Tempo com diabetes -->
     <div class="msg-block ok">
       <div class="msg-block-header">
@@ -1035,11 +1176,52 @@ Pode marcar mais de uma opção:</div>
               <div class="wa-opt">7️⃣ Urina espumosa</div>
               <div class="wa-opt">8️⃣ Dores ou cãibras nas pernas</div>
               <div class="wa-opt">9️⃣ Queda de cabelo</div>
+              <div class="wa-opt">🔟 Formigamento ou dormência nos pés e/ou mãos</div>
             </div>
           </div>
         </div>
         <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Correção de ordem</strong>Esta pergunta estava como 8.2, após comportamento alimentar (8.3). Corrigido: sintomas (clínicos) vêm antes de comportamento alimentar, que é a transição para a "quebra".</div></div>
         <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+      </div>
+    </div>
+
+    <!-- Q12B Complicações diagnosticadas -->
+    <div class="msg-block new">
+      <div class="msg-block-header">
+        <span class="msg-id">Q12B · Complicações Diagnosticadas</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="msg-type tag-new">✦ Novo</span>
+          <span class="msg-type tag-critical">🔴 Método 3</span>
+        </div>
+        <span class="msg-progress">82%</span>
+      </div>
+      <div class="msg-block-body">
+        <div class="wa-wrap">
+          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
+            <div class="wa-text">{nome}, última pergunta sobre saúde — esta é MUITO importante para eu montar o protocolo certo para você. 🙏
+
+Algum médico já te deu algum destes diagnósticos?
+(Pode marcar mais de uma)</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Nenhum desses</div>
+              <div class="wa-opt">🫀 Insuficiência Renal (IRC) — mesmo que inicial</div>
+              <div class="wa-opt">👁️ Retinopatia diabética — comprometimento da visão</div>
+              <div class="wa-opt">🦶 Neuropatia diabética — danos nos nervos</div>
+              <div class="wa-opt">🦵 Úlcera ou ferida que não cicatriza no pé ou perna</div>
+              <div class="wa-opt">💢 Hipertensão arterial descontrolada (HTA)</div>
+              <div class="wa-opt">⚡ Disfunção erétil ou sexual relacionada ao diabetes</div>
+              <div class="wa-opt">❤️ Cardiopatia isquêmica — problemas do coração</div>
+            </div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">Ramificações</div>
+          <div class="branch-row"><span class="branch-cond green">Nenhum desses</span><div class="branch-action">→ Flag <code>complicacoes_ativas=false</code> → perfil Método 1 ou 2 conforme HbA1c e sintomas → continua para Q13</div></div>
+          <div class="branch-row"><span class="branch-cond red">1+ complicação</span><div class="branch-action">→ Flag <code>complicacoes_ativas=true</code> + registra quais → perfil Método 3 → continua para Q13 (protocolo personalizado será entregue no MSG-ATIVACAO)</div></div>
+        </div>
+        <div class="annotation warn"><span class="ann-icon">⚠️</span><div class="ann-text"><strong>Sensibilidade da pergunta</strong>Disfunção erétil/sexual raramente é relatada espontaneamente. Perguntar diretamente, com enquadramento clínico ("relacionada ao diabetes"), aumenta a taxa de resposta honesta. Phrasing neutro e sem julgamento é obrigatório.</div></div>
+        <div class="annotation new"><span class="ann-icon">🎯</span><div class="ann-text"><strong>Roteamento para Método 3</strong>Qualquer seleção diferente de "Nenhum desses" ativa a oferta do Plano 3 no MSG-ATIVACAO. O bot apresenta o protocolo específico para a(s) complicação(ões) selecionada(s).</div></div>
+        <div class="progress-demo"><span class="progress-label">Progresso</span><div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div><span class="progress-pct">82%</span></div>
       </div>
     </div>
 
@@ -1368,63 +1550,6 @@ Cada foto que você me mandar vai virar:
   </div>
 
   <!-- ──────────────────────────────────────────
-       ETAPAS 7, 8, 9
-  ─────────────────────────────────────────── -->
-  <div class="stage">
-    <div class="stage-header">
-      <div class="stage-num">E7–E9</div>
-      <div>
-        <div class="stage-name">Posicionamento + CTA Final</div>
-        <div class="stage-desc">Preparar o paciente para a jornada diária e fazer o call-to-action.</div>
-      </div>
-    </div>
-
-    <div class="msg-block ok">
-      <div class="msg-block-header"><span class="msg-id">MSG-POSICIONAMENTO</span><span class="msg-type tag-ok">✓ Aprovado</span></div>
-      <div class="msg-block-body">
-        <div class="wa-wrap">
-          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
-            <div class="wa-text">Agora vem a parte mais importante {nome}…
-
-A partir de hoje eu vou:
-✔ Analisar suas refeições 🍽️
-✔ Prever o impacto na glicemia 📈
-✔ Te ajudar a evitar picos 🚫
-✔ E te guiar até o controle real
-
-"Nos próximos 7 dias vou acompanhar você de perto… e você vai ver sua glicemia começar a responder 👀"
-
-1️⃣ Me envie a foto da sua próxima refeição
-2️⃣ Ou me envie sua glicemia atual
-
-👉 E eu te mostro exatamente o que fazer agora</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="msg-block fixed">
-      <div class="msg-block-header"><span class="msg-id">MSG-CTA · Call to action final (claim corrigido)</span><span class="msg-type tag-fixed">✏ Corrigido</span></div>
-      <div class="msg-block-body">
-        <div class="wa-wrap">
-          <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>
-            <div class="wa-text">📸 Podemos começar agora:
-
-Me envie a foto da sua próxima refeição e eu te digo exatamente o que vai acontecer com sua glicemia 😄
-
-Ou
-
-2️⃣ Me envie uma foto da sua glicemia atual e te digo como está — e caso esteja elevada, já te monto um protocolo natural complementar para auxiliar no controle da glicemia nas próximas horas 💪
-
-⚠️ O Gluco IA não substitui medicamentos. Sempre siga as orientações do seu médico.</div>
-          </div>
-        </div>
-        <div class="annotation fix"><span class="ann-icon">✏</span><div class="ann-text"><strong>Correção legal</strong>"sem precisar de remédios" → "protocolo natural complementar para auxiliar no controle". Adicionado disclaimer médico. Reduz risco regulatório sem perder a força do CTA.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ──────────────────────────────────────────
        GATILHOS DE RETENÇÃO
   ─────────────────────────────────────────── -->
   <div class="divider"></div>
@@ -1475,17 +1600,19 @@ Você ainda pode começar hoje — seu perfil está salvo e pronto 🧬"</div>
     <ul class="checklist">
       <li><span class="cl-ok">✓</span><div><strong>Consentimento LGPD</strong> — MSG-03B implementada antes da coleta de dados</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Ordem das perguntas</strong> — Q12 sintomas antes de Q13 alimentar</div></li>
-      <li><span class="cl-ok">✓</span><div><strong>Barra de progresso</strong> — sem regressão: 10→18→25→30→38→45→52→58→64→70→75→80→85 [Quebra 90%] →95→100</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Barra de progresso</strong> — sem regressão: 10→18→25→30→38→45→48(Q6B)→52→58→64→70→75→80→82(Q12B)→85 [Quebra 90%] →95→100</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Ramificação "Agora não"</strong> — MSG-01C + 3 gatilhos de retenção</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Ramificação "Como funciona?"</strong> — MSG-01B mapeada</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Gestacional/Não sei</strong> — lead retido em waitlist, não perdido</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Pergunta de medicação</strong> — Q6 adicionada (segurança AQS)</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>HbA1c — Q6B adicionada</strong> — roteamento objetivo entre Métodos 1, 2 e 3 com base na hemoglobina glicada</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Formigamento no Q12</strong> — opção 10 adicionada para capturar neuropatia (indicador Método 3)</div></li>
+      <li><span class="cl-ok">✓</span><div><strong>Complicações diagnosticadas — Q12B adicionada</strong> — pergunta direta sobre IRC, retinopatia, neuropatia, úlceras, HTA e disfunção sexual. Flag <code>complicacoes_ativas</code> para roteamento ao Método 3</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Claim médico</strong> — "sem remédios" → "complementar" + disclaimer</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Score de risco</strong> — algoritmo completo com pesos e frases automáticas</div></li>
       <li><span class="cl-ok">✓</span><div><strong>Diferenciação Tipo 1 vs Tipo 2</strong> — flag no score e intensidade de acompanhamento</div></li>
       <li><span class="cl-warn">⚠</span><div><strong>Fluxo de edição de nome</strong> — mapeado, mas depende do bot retornar ao estado correto</div></li>
       <li><span class="cl-warn">⚠</span><div><strong>Validação de e-mail</strong> — lógica de validação de formato precisa estar no backend</div></li>
-      <li><span class="cl-warn">⚠</span><div><strong>HbA1c</strong> — não incluída nesta versão para não aumentar atrito. Avaliar inclusão em v2.1</div></li>
       <li><span class="cl-err">✗</span><div><strong>Score de risco Tipo 1 com insulina</strong> — flag de hipo precisa ser implementada no motor de protocolos AQS (ponto de atenção para dev)</div></li>
     </ul>
   </div>
@@ -1496,6 +1623,19 @@ Você ainda pode começar hoje — seu perfil está salvo e pronto 🧬"</div>
     <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace;">🔴 6 críticos · 🟡 6 importantes · 🔵 6 melhorias</div>
   </div>
 
+</div><!-- /.page -->
+</div><!-- /.tl-layout -->
+
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Ver na página</button>
+    <button class="tlp-btn-edit">✏️ Editar</button>
+  </div>
 </div>
 
 <script>
@@ -1516,5 +1656,179 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 document.querySelectorAll('.progress-demo').forEach(el => io.observe(el));
 </script>
+<script>
+(function() {
+  var itemsEl = document.getElementById('tl-items');
+  var countEl = document.getElementById('tl-count');
+  var sidebar = document.getElementById('tl-sidebar');
+  if (!itemsEl) return;
+
+  var blocks = Array.from(document.querySelectorAll('.msg-block'));
+  var tlItems = [];
+
+  if (countEl) countEl.textContent = blocks.length;
+
+  blocks.forEach(function(block, i) {
+    block.id = 'tl-blk-' + i;
+
+    var msgIdEl = block.querySelector('.msg-id');
+    var fullTitle = msgIdEl ? msgIdEl.textContent.trim() : ('Mensagem ' + (i + 1));
+
+    var color = 'gray';
+    if (block.classList.contains('new')) color = 'blue';
+    else if (block.classList.contains('fixed')) color = 'yellow';
+    else if (block.classList.contains('ok')) color = 'green';
+
+    var parts = fullTitle.split('·');
+    var rawBadge = parts[0].trim();
+    var name = parts.slice(1).join('·').trim() || rawBadge;
+    var badge = String(i + 1);
+
+    var item = document.createElement('div');
+    item.className = 'tl-item';
+    item.dataset.idx = i;
+    item.title = rawBadge;
+
+    item.innerHTML =
+      '<div class="tl-dot tl-dot-' + color + '">' + badge + '</div>' +
+      '<div class="tl-info"><div class="tl-name">' + esc(name) + '</div><div class="tl-id">' + esc(rawBadge) + '</div></div>' +
+      '<button class="tl-peek-btn" title="Ver conteúdo">👁</button>';
+
+    item.querySelector('.tl-dot').addEventListener('click', function() { tlScrollTo(block); });
+    item.querySelector('.tl-info').addEventListener('click', function() { tlScrollTo(block); });
+    item.querySelector('.tl-peek-btn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      openPeek(block, item, fullTitle);
+    });
+
+    itemsEl.appendChild(item);
+    tlItems.push(item);
+  });
+
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        var idx = parseInt(e.target.id.replace('tl-blk-', ''), 10);
+        if (!isNaN(idx) && tlItems[idx]) {
+          tlItems[idx].classList.toggle('tl-active', e.isIntersecting);
+          if (e.isIntersecting && sidebar && window.innerWidth > 900) {
+            var it = tlItems[idx];
+            var off = it.offsetTop - sidebar.clientHeight / 2;
+            sidebar.scrollTo({ top: off, behavior: 'smooth' });
+          }
+        }
+      });
+    }, { rootMargin: '-8% 0px -60% 0px' });
+    blocks.forEach(function(b) { io.observe(b); });
+  }
+
+  function tlScrollTo(block) {
+    var top = block.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+    block.classList.add('tl-highlight');
+    setTimeout(function() { block.classList.remove('tl-highlight'); }, 1800);
+  }
+
+  var popover = document.getElementById('tl-popover');
+  var curBlock = null;
+
+  function openPeek(block, item, title) {
+    curBlock = block;
+
+    var waTexts = Array.from(block.querySelectorAll('.wa-text'));
+    var waOpts = Array.from(block.querySelectorAll('.wa-opt'));
+    var branchRows = Array.from(block.querySelectorAll('.branch-row'));
+
+    var titleParts = title.split('·');
+    var msgIdText = titleParts[0].trim();
+    var descText = titleParts.slice(1).join('·').trim();
+
+    popover.querySelector('.tlp-title').textContent = msgIdText;
+    var descEl = popover.querySelector('.tlp-desc');
+    descEl.textContent = descText;
+    descEl.style.display = descText ? '' : 'none';
+
+    var html = '';
+    waTexts.forEach(function(el) {
+      var txt = el.textContent.trim();
+      if (txt) html += '<div class="tlp-msg-text">' + esc(txt) + '</div>';
+    });
+    if (!html) html = '<div class="tlp-msg-text" style="color:#4A5070">— Sem texto —</div>';
+
+    if (waOpts.length) {
+      html += '<div class="tlp-opts">';
+      waOpts.forEach(function(o) { html += '<div class="tlp-opt">' + esc(o.textContent.trim()) + '</div>'; });
+      html += '</div>';
+    }
+
+    if (branchRows.length) {
+      html += '<div class="tlp-branches"><div class="tlp-branch-title">Ramificações</div>';
+      branchRows.forEach(function(row) {
+        var cond = row.querySelector('.branch-cond');
+        var action = row.querySelector('.branch-action');
+        html += '<div class="tlp-branch-row">' +
+          '<span class="tlp-bcond">' + esc(cond ? cond.textContent.trim() : '?') + '</span>' +
+          '<span class="tlp-baction">' + esc(action ? action.textContent.trim() : '') + '</span>' +
+          '</div>';
+      });
+      html += '</div>';
+    }
+
+    popover.querySelector('.tlp-body').innerHTML = html;
+    popover.classList.add('open');
+
+    var rect = item.getBoundingClientRect();
+    var sbRect = sidebar.getBoundingClientRect();
+    if (window.innerWidth > 900) {
+      var top = Math.max(64, Math.min(rect.top, window.innerHeight - 480));
+      popover.style.top = top + 'px';
+      popover.style.left = (sbRect.right + 10) + 'px';
+      popover.style.right = 'auto';
+      popover.style.bottom = 'auto';
+      popover.style.width = '340px';
+    } else {
+      popover.style.top = 'auto';
+      popover.style.left = '10px';
+      popover.style.right = '10px';
+      popover.style.bottom = '12px';
+      popover.style.width = 'auto';
+    }
+  }
+
+  function closePeek() { popover.classList.remove('open'); curBlock = null; }
+
+  popover.querySelector('.tlp-close').addEventListener('click', closePeek);
+  popover.querySelector('.tlp-btn-scroll').addEventListener('click', function() {
+    if (curBlock) { closePeek(); tlScrollTo(curBlock); }
+  });
+  popover.querySelector('.tlp-btn-edit').addEventListener('click', function() {
+    if (!curBlock) return;
+    var block = curBlock;
+    closePeek();
+    tlScrollTo(block);
+    setTimeout(function() {
+      var trigger = document.getElementById('gai-trigger');
+      if (trigger && trigger.style.display !== 'none') {
+        trigger.click();
+        setTimeout(function() { var el = block.querySelector('.gai-editable'); if (el) el.click(); }, 450);
+      } else {
+        var el = block.querySelector('.gai-editable');
+        if (el) el.click();
+      }
+    }, 700);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!popover.classList.contains('open')) return;
+    if (!popover.contains(e.target) && !e.target.classList.contains('tl-peek-btn')) closePeek();
+  });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closePeek(); });
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+})();
+</script>
+<script src="editor.js"></script>
 </body>
 </html>

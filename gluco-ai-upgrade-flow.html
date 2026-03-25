@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gluco AI — Arquitetura de Upgrade + Custos</title>
+<style>
+  :root {
+    --bg: #080d1a; --surface: #0f1628; --card: #141c30; --border: #1e2a45; --border-bright: #2a3a5c;
+    --free: #16a34a; --free-light: #22c55e; --free-bg: rgba(22,163,74,0.08); --free-border: rgba(34,197,94,0.3);
+    --warn: #d97706; --warn-light: #f59e0b; --warn-bg: rgba(217,119,6,0.08); --warn-border: rgba(245,158,11,0.3);
+    --block: #dc2626; --block-light: #ef4444; --block-bg: rgba(220,38,38,0.08); --block-border: rgba(239,68,68,0.3);
+    --upgrade: #7c3aed; --upgrade-light: #8b5cf6; --upgrade-bg: rgba(124,58,237,0.1); --upgrade-border: rgba(139,92,246,0.35);
+    --paid: #1d4ed8; --paid-light: #3b82f6; --paid-bg: rgba(29,78,216,0.1); --paid-border: rgba(59,130,246,0.35);
+    --teal: #0d9488; --teal-light: #14b8a6; --teal-bg: rgba(13,148,136,0.08); --teal-border: rgba(20,184,166,0.3);
+    --t1: #e2e8f0; --t2: #94a3b8; --t3: #64748b; --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; padding-bottom: 80px; }
+
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-text { font-size: 17px; font-weight: 800; } .logo-text span { color: var(--teal-light); }
+  .doc-badge { background: var(--teal-bg); border: 1px solid var(--teal-border); color: var(--teal-light); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
+  .back-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-bright); color: var(--t2); padding: 7px 16px; border-radius: 8px; text-decoration: none; font-size: 12px; transition: all .2s; }
+  .back-btn:hover { color: var(--teal-light); border-color: var(--teal-border); }
+
+  .hero { max-width: 960px; margin: 0 auto; padding: 44px 32px 28px; text-align: center; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-light); margin-bottom: 10px; }
+  .hero-title { font-size: 28px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .hero-sub { font-size: 14px; color: var(--t2); line-height: 1.7; max-width: 580px; margin: 0 auto; }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 0 32px 28px; max-width: 960px; margin: 0 auto; }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--t2); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* SECTION */
+  .sec { display: flex; align-items: center; gap: 14px; margin: 40px 0 18px; }
+  .sec-line { flex: 1; height: 1px; background: var(--border); }
+  .sec-tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t3); padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border); white-space: nowrap; }
+
+  /* NODE */
+  .node { border-radius: 14px; padding: 16px 20px; border: 1px solid; font-size: 13px; }
+  .node-start { background: var(--teal-bg); border-color: var(--teal-border); border-radius: 50px; text-align: center; padding: 12px 32px; display: inline-block; font-weight: 700; font-size: 13px; color: var(--teal-light); }
+  .node-action { background: var(--surface); border-color: var(--border-bright); }
+  .node-free    { background: var(--free-bg);    border-color: var(--free-border); }
+  .node-warn    { background: var(--warn-bg);    border-color: var(--warn-border); }
+  .node-block   { background: var(--block-bg);   border-color: var(--block-border); }
+  .node-upgrade { background: var(--upgrade-bg); border-color: var(--upgrade-border); }
+  .node-paid    { background: var(--paid-bg);    border-color: var(--paid-border); }
+
+  .nlabel { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .node-free .nlabel    { color: var(--free-light); }
+  .node-warn .nlabel    { color: var(--warn-light); }
+  .node-block .nlabel   { color: var(--block-light); }
+  .node-upgrade .nlabel { color: var(--upgrade-light); }
+  .node-paid .nlabel    { color: var(--paid-light); }
+  .ntitle { font-weight: 700; font-size: 13px; color: var(--t1); margin-bottom: 4px; }
+  .ndesc  { font-size: 11px; color: var(--t2); line-height: 1.5; }
+  .ncode  { font-family: var(--mono); font-size: 10px; color: var(--teal-light); background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.2); border-radius: 5px; padding: 2px 8px; margin-top: 6px; display: inline-block; }
+  .nflag  { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 5px; margin-top: 6px; display: inline-block; }
+  .node-free .nflag    { background: rgba(34,197,94,0.12); color: var(--free-light); }
+  .node-block .nflag   { background: rgba(239,68,68,0.12); color: var(--block-light); }
+  .node-upgrade .nflag { background: rgba(139,92,246,0.12); color: var(--upgrade-light); }
+  .node-paid .nflag    { background: rgba(59,130,246,0.12); color: var(--paid-light); }
+
+  /* DIAMOND */
+  .dw { display: flex; justify-content: center; padding: 4px 0; }
+  .diamond { background: var(--card); border: 1.5px solid #475569; border-radius: 10px; padding: 12px 20px; text-align: center; font-size: 12px; font-weight: 700; color: var(--t1); max-width: 340px; position: relative; }
+  .diamond::before { content: '◆'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #475569; }
+  .diamond .dsub { font-size: 10px; color: var(--t2); font-weight: 400; margin-top: 3px; font-family: var(--mono); }
+
+  /* ARROWS */
+  .arrow { display: flex; flex-direction: column; align-items: center; padding: 2px 0; gap: 0; }
+  .aline { width: 2px; height: 24px; }
+  .atip  { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; }
+  .alabel { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-bottom: 2px; }
+  .a-default .aline { background: var(--border-bright); } .a-default .atip { border-top: 8px solid var(--border-bright); } .a-default .alabel { background: rgba(255,255,255,0.05); color: var(--t3); }
+  .a-yes .aline { background: var(--free-light); } .a-yes .atip { border-top: 8px solid var(--free-light); } .a-yes .alabel { background: var(--free-bg); color: var(--free-light); border: 1px solid var(--free-border); }
+  .a-no  .aline { background: var(--block-light); } .a-no  .atip { border-top: 8px solid var(--block-light); } .a-no  .alabel { background: var(--block-bg); color: var(--block-light); border: 1px solid var(--block-border); }
+  .a-warn .aline { background: var(--warn-light); } .a-warn .atip { border-top: 8px solid var(--warn-light); } .a-warn .alabel { background: var(--warn-bg); color: var(--warn-light); border: 1px solid var(--warn-border); }
+  .a-up  .aline { background: var(--upgrade-light); } .a-up  .atip { border-top: 8px solid var(--upgrade-light); } .a-up  .alabel { background: var(--upgrade-bg); color: var(--upgrade-light); border: 1px solid var(--upgrade-border); }
+
+  /* GRID */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .bcol { display: flex; flex-direction: column; gap: 6px; }
+  .blabel { text-align: center; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 6px; letter-spacing: .5px; }
+  .bl-yes  { background: var(--free-bg);    color: var(--free-light);    border: 1px solid var(--free-border); }
+  .bl-no   { background: var(--block-bg);   color: var(--block-light);   border: 1px solid var(--block-border); }
+  .bl-up   { background: var(--upgrade-bg); color: var(--upgrade-light); border: 1px solid var(--upgrade-border); }
+  .bl-m1   { background: var(--teal-bg);    color: var(--teal-light);    border: 1px solid var(--teal-border); }
+  .bl-m2   { background: var(--paid-bg);    color: var(--paid-light);    border: 1px solid var(--paid-border); }
+  .bl-m3   { background: var(--upgrade-bg); color: var(--upgrade-light); border: 1px solid var(--upgrade-border); }
+
+  /* MSG PREVIEW */
+  .msg { background: rgba(0,0,0,0.4); border-radius: 10px; padding: 10px 14px; font-size: 11px; color: var(--t2); border-left: 2px solid; line-height: 1.6; margin-top: 8px; }
+  .msg strong { color: var(--t1); font-style: normal; }
+  .msg-free    { border-color: var(--free-light); }
+  .msg-warn    { border-color: var(--warn-light); }
+  .msg-block   { border-color: var(--block-light); }
+  .msg-upgrade { border-color: var(--upgrade-light); }
+  .msg-paid    { border-color: var(--paid-light); }
+
+  /* CENTERED */
+  .center { display: flex; justify-content: center; }
+
+  /* WHAT / HOW BOX */
+  .wh { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .wh-box { border-radius: 10px; padding: 12px 14px; border: 1px solid; }
+  .wh-free { background: var(--free-bg); border-color: var(--free-border); }
+  .wh-paid { background: var(--upgrade-bg); border-color: var(--upgrade-border); }
+  .whtag { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .wh-free .whtag { color: var(--free-light); } .wh-paid .whtag { color: var(--upgrade-light); }
+  .whi { font-size: 11px; color: var(--t2); padding: 2px 0; display: flex; gap: 6px; }
+  .whi::before { content: '→'; color: var(--t3); flex-shrink: 0; }
+
+  /* PERSUASIVE SEQUENCE */
+  .seq { display: flex; flex-direction: column; gap: 8px; }
+  .seq-msg { border-radius: 12px; padding: 12px 16px; position: relative; }
+  .seq-msg.bot { background: rgba(13,148,136,0.07); border: 1px solid rgba(13,148,136,0.2); }
+  .seq-num { position: absolute; top: -8px; left: 14px; background: var(--upgrade-light); color: white; font-size: 9px; font-weight: 800; padding: 1px 8px; border-radius: 10px; }
+  .seq-delay { text-align: center; font-size: 10px; color: var(--t3); font-family: var(--mono); padding: 2px 0; }
+  .seq-text { font-size: 12px; color: var(--t1); line-height: 1.6; }
+  .seq-sub { font-size: 10px; color: var(--t3); margin-top: 4px; font-family: var(--mono); }
+
+  /* COST TABLES */
+  .cost-table { width: 100%; border-collapse: collapse; }
+  .cost-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--t3); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .cost-table td { font-size: 12px; color: var(--t2); padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+  .cost-table td strong { color: var(--t1); }
+  .cost-table tr:last-child td { border-bottom: none; }
+  .cost-table tr.total td { border-top: 1px solid var(--border); font-weight: 700; color: var(--t1); }
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+  .pill-green  { background: var(--free-bg);    color: var(--free-light);    border: 1px solid var(--free-border); }
+  .pill-blue   { background: var(--paid-bg);    color: var(--paid-light);    border: 1px solid var(--paid-border); }
+  .pill-purple { background: var(--upgrade-bg); color: var(--upgrade-light); border: 1px solid var(--upgrade-border); }
+  .pill-red    { background: var(--block-bg);   color: var(--block-light);   border: 1px solid var(--block-border); }
+  .pill-teal   { background: var(--teal-bg);    color: var(--teal-light);    border: 1px solid var(--teal-border); }
+
+  /* MARGIN BAR */
+  .margin-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; margin-top: 4px; }
+  .margin-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--free-light), var(--teal-light)); }
+
+  /* TIPS */
+  .tip { border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 12px; border: 1px solid; }
+  .tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .tip-body { flex: 1; }
+  .tip-title { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
+  .tip-desc { font-size: 12px; color: var(--t2); line-height: 1.6; }
+  .tip-code { font-family: var(--mono); font-size: 10px; color: var(--teal-light); background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.2); border-radius: 5px; padding: 2px 8px; margin-top: 6px; display: inline-block; }
+  .tip-saving { font-size: 11px; font-weight: 700; margin-top: 6px; }
+  .tip.t1 { background: rgba(13,148,136,0.06); border-color: rgba(13,148,136,0.2); }
+  .tip.t2 { background: rgba(59,130,246,0.06); border-color: rgba(59,130,246,0.2); }
+  .tip.t3 { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.2); }
+  .tip.t4 { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.2); }
+  .tip.t5 { background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.2); }
+  .tip.t6 { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.2); }
+
+  .saving-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; background: rgba(34,197,94,0.15); color: var(--free-light); border: 1px solid rgba(34,197,94,0.3); }
+
+  @media(max-width:640px){ .g2,.g3,.wh{grid-template-columns:1fr;} }
+
+/* ── TIMELINE SIDEBAR ── */
+body{padding-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-right:1px solid rgba(255,255,255,0.08);background:var(--surface,#0f1628);z-index:50;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(13,148,136,0.2);color:#14b8a6;padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.07) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.04);}
+.tl-item.tl-active{background:rgba(13,148,136,.07);}
+.tl-item.tl-active .tl-name{color:#e2e8f0;}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(13,148,136,.25);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(29,78,216,.2);border:2px solid #3b82f6;color:#3b82f6;}
+.tl-dot-yellow{background:rgba(217,119,6,.15);border:2px solid #f59e0b;color:#f59e0b;}
+.tl-dot-green{background:rgba(22,163,74,.15);border:2px solid #22c55e;color:#22c55e;}
+.tl-dot-red{background:rgba(220,38,38,.12);border:2px solid #ef4444;color:#ef4444;}
+.tl-dot-gray{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.2);color:rgba(255,255,255,.4);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.tl-info:hover .tl-name{color:#e2e8f0;}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:#4b5563;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:#94a3b8;}
+.tl-highlight{outline:3px solid rgba(13,148,136,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:inherit;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.15);border-radius:6px;padding:5px 10px;}
+.tlp-branches{margin-bottom:8px;}
+.tlp-branch-title{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.tlp-branch-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(46,51,79,.35);}
+.tlp-branch-row:last-child{border-bottom:none;}
+.tlp-bcond{font-size:10px;font-weight:700;background:rgba(13,148,136,.1);color:#14b8a6;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.tlp-baction{font-size:11px;color:#64748b;line-height:1.4;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:#0d9488;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#0f766e;}
+@media(max-width:900px){
+  body{padding-left:0;}
+  #tl-sidebar{position:relative;top:0;height:auto;width:100%;border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+</style>
+</head>
+<body>
+<aside id="tl-sidebar">
+  <div class="tl-head">Seções <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="9" fill="#0d9488"/><path d="M6 24C8 20,10 17,12 19C14 21,15 14,17 12C19 10,20 16,22 18C24 20,25 16,27 14C29 12,30 17,32 19" stroke="white" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="19" r="1.8" fill="#5eead4"/><circle cx="22" cy="18" r="1.8" fill="#5eead4"/></svg>
+      <div class="logo-text">Gluco <span>AI</span></div>
+    </div>
+    <span class="doc-badge">Arquitetura de Upgrade + Custos</span>
+  </div>
+  <a href="index.html" class="back-btn">← Central</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Documento Técnico · Dev Reference</div>
+  <h1 class="hero-title">Fluxo de Upgrade · Análise de Custos</h1>
+  <p class="hero-sub">Glicemia: sempre livre. Foto de comida: 1/dia grátis. O QUÊ é grátis, O COMO ativa o plano pago com sequência persuasiva automática.</p>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--free-light)"></div>Gratuito</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--warn-light)"></div>Limite se aproximando</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--block-light)"></div>Limite atingido</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--upgrade-light)"></div>Gatilho de upgrade</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--paid-light)"></div>Plano pago</div>
+  <div class="leg"><div class="leg-dot" style="background:#475569"></div>Decisão</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════
+       PARTE 1 — REGRAS DO PLANO FREE
+  ══════════════════════════════ -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Parte 1 — Regras do Plano Gratuito</div><div class="sec-line"></div></div>
+
+  <div class="g2" style="margin-bottom:14px;">
+    <div class="node node-free">
+      <span class="nlabel">Glicemia — Sempre Livre ∞</span>
+      <div class="ntitle">📸 Foto do glicosímetro ou entrada manual</div>
+      <div class="ndesc" style="margin:6px 0 10px;">Sem limite de análises. Sempre responde o QUÊ. Cada resposta termina com sequência persuasiva para o COMO.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="nflag">quota = unlimited</span>
+        <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;background:rgba(34,197,94,0.12);color:var(--free-light)">always_respond = true</span>
+      </div>
+    </div>
+    <div class="node node-warn">
+      <span class="nlabel">Foto de Comida — 1 por dia</span>
+      <div class="ntitle">🥗 Análise de foto do prato</div>
+      <div class="ndesc" style="margin:6px 0 10px;">1 análise/dia no plano free. Ao atingir o limite diário, entrega aviso + CTA para upgrade. Reset às 00:00.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;background:rgba(245,158,11,0.12);color:var(--warn-light)">food_daily_count ≤ 1</span>
+        <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;background:rgba(245,158,11,0.12);color:var(--warn-light)">reset = 00:00 daily</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PARTE 2 — FLUXO GLICEMIA
+  ══════════════════════════════ -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Parte 2 — Fluxo de Glicemia (sempre livre)</div><div class="sec-line"></div></div>
+
+  <div class="center"><div class="node-start">📸 Usuário envia glicemia (foto ou manual)</div></div>
+  <div class="arrow a-default"><div class="aline"></div><div class="atip"></div></div>
+
+  <!-- ANÁLISE -->
+  <div class="node node-free">
+    <span class="nlabel">✅ Análise Sempre Entregue — O QUÊ</span>
+    <div class="ntitle">Resposta imediata: status + contexto clínico</div>
+    <div class="wh" style="margin-top:10px;">
+      <div class="wh-box wh-free">
+        <span class="whtag">✅ Entregue grátis</span>
+        <div class="whi">Valor lido e confirmado</div>
+        <div class="whi">Status: Normal / Elevado / Perigoso / Crítico</div>
+        <div class="whi">Comparação com meta SBD 2023</div>
+        <div class="whi">Orientação: consultar médico se necessário</div>
+        <div class="whi">Histórico: comparação com última medição</div>
+      </div>
+      <div class="wh-box wh-paid">
+        <span class="whtag">🔒 Requer plano pago</span>
+        <div class="whi">Protocolo AQS (o que fazer agora)</div>
+        <div class="whi">Chás, vitaminas, exercícios específicos</div>
+        <div class="whi">Acompanhamento 1h/1h</div>
+        <div class="whi">Ajuste de próxima refeição</div>
+        <div class="whi">Protocolo pré/durante próxima refeição</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow a-default"><div class="aline"></div><div class="atip"></div></div>
+
+  <!-- DECISÃO: qual faixa -->
+  <div class="dw">
+    <div class="diamond">
+      Qual faixa glicêmica?
+      <div class="dsub">classifica_glicemia(valor)</div>
+    </div>
+  </div>
+
+  <div class="g3" style="margin-top:8px;">
+    <div class="bcol">
+      <div class="blabel bl-yes">≤ 140 mg/dL — Normal</div>
+      <div class="node node-free">
+        <span class="nlabel">Zona segura</span>
+        <div class="msg msg-free">"<strong>Ótimo, {nome}!</strong> 127 mg/dL — dentro da meta pós-refeição (≤140).<br><br>🔒 Quer saber como manter isso sempre assim? Tenho um protocolo específico para o seu perfil."</div>
+        <span class="nflag" style="margin-top:8px;">persuasive_level = soft</span>
+      </div>
+    </div>
+    <div class="bcol">
+      <div class="blabel" style="background:var(--warn-bg);color:var(--warn-light);border:1px solid var(--warn-border);">141–299 mg/dL — Elevado</div>
+      <div class="node node-warn">
+        <span class="nlabel">Zona de atenção</span>
+        <div class="msg msg-warn">"<strong>{nome}, sua glicemia está em 230 mg/dL.</strong> Acima da meta — risco de complicações se continuar assim.<br><br>Recomendo que consulte seu médico. <br><br>🔒 Enquanto isso, tenho um protocolo natural para baixar isso agora. Quer ativar?"</div>
+        <span class="nflag" style="background:rgba(245,158,11,0.12);color:var(--warn-light);margin-top:8px;">persuasive_level = medium</span>
+      </div>
+    </div>
+    <div class="bcol">
+      <div class="blabel bl-no">&gt; 300 mg/dL — Perigoso / AQS</div>
+      <div class="node node-block">
+        <span class="nlabel">Zona crítica — AQS obrigatório</span>
+        <div class="msg msg-block">"<strong>⚠️ {nome}, 380 mg/dL é perigoso.</strong> Procure seu médico ou pronto-socorro se tiver sintomas.<br><br>🔒 Ative o Protocolo AQS agora — acompanho você a cada 1h até a glicemia baixar para zona segura."</div>
+        <span class="nflag" style="background:rgba(239,68,68,0.12);color:var(--block-light);margin-top:8px;">persuasive_level = urgent · AQS_3_exception = true</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow a-up" style="margin-top:8px;"><div class="alabel">Todas as faixas disparam sequência persuasiva</div><div class="aline"></div><div class="atip"></div></div>
+
+  <!-- SEQUÊNCIA PERSUASIVA -->
+  <div class="node node-upgrade">
+    <span class="nlabel">Sequência Persuasiva Automática — O COMO</span>
+    <div class="ntitle" style="margin-bottom:12px;">3 mensagens progressivas após a análise (usuário sem plano)</div>
+    <div class="seq">
+      <div class="seq-msg bot">
+        <div class="seq-num">MSG 1 — imediata</div>
+        <div class="seq-text">"<strong>{nome}</strong>, eu sei exatamente o que está causando essa glicemia alta — e tenho o protocolo para reverter isso em horas, não dias."</div>
+        <div class="seq-sub">timing = immediately_after_analysis</div>
+      </div>
+      <div class="seq-delay">⏱ aguarda 60 segundos</div>
+      <div class="seq-msg bot">
+        <div class="seq-num">MSG 2 — 60s depois</div>
+        <div class="seq-text">"São 3 passos simples: um chá específico, um exercício de 8 minutos e um ajuste na sua próxima refeição. <strong>Funciona para o seu perfil</strong> (Tipo {tipo_diabetes}, HbA1c {hba1c})."</div>
+        <div class="seq-sub">timing = +60s · uses profile variables</div>
+      </div>
+      <div class="seq-delay">⏱ aguarda 90 segundos</div>
+      <div class="seq-msg bot">
+        <div class="seq-num">MSG 3 — 90s depois</div>
+        <div class="seq-text">"<strong>Ativar o Plano 1 por R$ 49,90/mês</strong> e eu te acompanho agora mesmo. Ou posso te lembrar amanhã — mas sua glicemia não vai esperar."<br><br>[ ✅ Ativar agora — R$ 49,90 ] [ ⏰ Lembrar amanhã ]</div>
+        <div class="seq-sub">timing = +90s · CTA with urgency · plan = {plan_suggested}</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:10px 12px;background:rgba(0,0,0,0.3);border-radius:8px;font-size:11px;color:var(--t3);">
+      ⚠️ <strong style="color:var(--t2);">Exceção de segurança:</strong> Glicemia &gt;500 mg/dL → MSG 1 é sempre orientação para pronto-socorro, independente do plano. Nunca bloquear emergência.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PARTE 3 — FLUXO FOTO DE COMIDA
+  ══════════════════════════════ -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Parte 3 — Fluxo de Foto de Comida (1/dia grátis)</div><div class="sec-line"></div></div>
+
+  <div class="center"><div class="node-start">🥗 Usuário envia foto do prato</div></div>
+  <div class="arrow a-default"><div class="aline"></div><div class="atip"></div></div>
+
+  <div class="dw">
+    <div class="diamond">
+      food_daily_count &lt; 1 ?
+      <div class="dsub">check_food_quota(user_id, today)</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-top:8px;">
+    <div class="bcol">
+      <div class="arrow a-yes"><div class="alabel">SIM — 1ª foto do dia</div><div class="aline"></div><div class="atip"></div></div>
+      <div class="node node-free">
+        <span class="nlabel">Análise entregue — O QUÊ</span>
+        <div class="ntitle">Identifica alimentos + impacto glicêmico</div>
+        <div class="msg msg-free" style="margin-top:8px;">"Identifiquei: <strong>arroz branco, feijão, frango grelhado, salada.</strong><br>Índice glicêmico médio: <strong>alto</strong> (pelo arroz branco).<br>Estimativa: +60–80 mg/dL em 2h para o seu perfil.<br><br>🔒 Quer saber como montar esse prato de um jeito que reduz esse impacto pela metade?"</div>
+        <span class="nflag" style="margin-top:8px;">food_daily_count += 1 · soft_cta = true</span>
+      </div>
+    </div>
+    <div class="bcol">
+      <div class="arrow a-no"><div class="alabel">NÃO — já usou hoje</div><div class="aline"></div><div class="atip"></div></div>
+      <div class="node node-block">
+        <span class="nlabel">Limite diário atingido</span>
+        <div class="ntitle">Bloqueia análise + CTA upgrade</div>
+        <div class="msg msg-block" style="margin-top:8px;">"<strong>{nome}</strong>, você já analisou 1 prato hoje (seu limite grátis).<br><br>No <strong>Plano 1 por R$ 49,90/mês</strong> você analisa quantas refeições quiser — e ainda recebe o protocolo de como montar cada prato para sua glicemia."</div>
+        <span class="nflag" style="background:rgba(239,68,68,0.12);color:var(--block-light);margin-top:8px;">quota_exhausted · show_upgrade_cta</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PARTE 4 — ROTEAMENTO DE PLANO
+  ══════════════════════════════ -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Parte 4 — Roteamento para o Plano Certo</div><div class="sec-line"></div></div>
+
+  <div class="node node-action" style="margin-bottom:12px;">
+    <div class="ntitle" style="margin-bottom:10px;">Algoritmo de roteamento — <span style="font-family:var(--mono);font-size:11px;color:var(--teal-light)">route_to_plan(user_profile)</span> — calculado no fim do onboarding</div>
+    <table class="cost-table">
+      <thead><tr><th>Condição (onboarding)</th><th>Plano sugerido</th><th>Flag</th></tr></thead>
+      <tbody>
+        <tr><td>Q12B com 1+ complicação (IRC, cardiopatia, retinopatia, etc.)</td><td><span class="pill pill-purple">Plano 3 — R$ 97</span></td><td><span style="font-family:var(--mono);font-size:10px;color:var(--teal-light)">plan_suggested=M3</span></td></tr>
+        <tr><td>HbA1c 7–9% (Q6B) + medicação (Q6) + sintomas (Q12) · sem complicações</td><td><span class="pill pill-blue">Plano 2 — R$ 69,90</span></td><td><span style="font-family:var(--mono);font-size:10px;color:var(--teal-light)">plan_suggested=M2</span></td></tr>
+        <tr><td>HbA1c &lt;7% · sem medicação · glicemia alta sem complicações</td><td><span class="pill pill-teal">Plano 1 — R$ 49,90</span></td><td><span style="font-family:var(--mono);font-size:10px;color:var(--teal-light)">plan_suggested=M1</span></td></tr>
+        <tr><td>Perfil incompleto ou ambíguo</td><td><span class="pill pill-teal">Plano 1 — fallback</span></td><td><span style="font-family:var(--mono);font-size:10px;color:var(--teal-light)">plan_suggested=M1_fb</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════
+       PARTE 5 — ANÁLISE DE CUSTOS
+  ══════════════════════════════ -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Parte 5 — Análise de Custos por Usuário/Mês</div><div class="sec-line"></div></div>
+
+  <div style="background:rgba(13,148,136,0.06);border:1px solid rgba(13,148,136,0.2);border-radius:12px;padding:14px 18px;margin-bottom:16px;font-size:12px;color:var(--t2);line-height:1.6;">
+    <strong style="color:var(--teal-light);">Modelo base:</strong> Claude Haiku 3.5 · $0,80/M input · $4,00/M output · Câmbio: R$ 5,70/USD<br>
+    <strong style="color:var(--teal-light);">Custo unitário:</strong> Foto glicemia ~$0,0024 · Entrada manual ~$0,001 · Foto comida ~$0,0038 · Resposta protocolo ~$0,0038
+  </div>
+
+  <div class="g3" style="margin-bottom:14px;">
+
+    <!-- FREE USER -->
+    <div class="node node-free">
+      <span class="nlabel">Usuário Free — Ativo</span>
+      <div class="ntitle" style="margin-bottom:10px;">Receita: R$ 0</div>
+      <table class="cost-table">
+        <thead><tr><th>Uso estimado</th><th>Custo USD</th></tr></thead>
+        <tbody>
+          <tr><td>Glicemia: 20/mês × $0,002</td><td>$0,040</td></tr>
+          <tr><td>Foto comida: 25/mês × $0,0038</td><td>$0,095</td></tr>
+          <tr><td>Msgs gerais: 15/mês × $0,001</td><td>$0,015</td></tr>
+          <tr class="total"><td>Total USD</td><td><strong>~$0,15</strong></td></tr>
+          <tr class="total"><td>Total BRL</td><td><strong>~R$ 0,86</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="margin-bar" style="margin-top:10px;"><div class="margin-fill" style="width:100%;background:var(--block-light);"></div></div>
+      <div style="font-size:10px;color:var(--block-light);margin-top:4px;">Custo puro — sem receita. É o custo de aquisição.</div>
+    </div>
+
+    <!-- PLANO 1 -->
+    <div class="node node-paid">
+      <span class="nlabel">Plano 1 — R$ 49,90/mês</span>
+      <div class="ntitle" style="margin-bottom:10px;">Receita: R$ 49,90</div>
+      <table class="cost-table">
+        <thead><tr><th>Uso estimado</th><th>Custo USD</th></tr></thead>
+        <tbody>
+          <tr><td>Glicemia: 45/mês × $0,002</td><td>$0,090</td></tr>
+          <tr><td>Foto comida: 60/mês × $0,0038</td><td>$0,228</td></tr>
+          <tr><td>Protocolos AQS: 20/mês × $0,0038</td><td>$0,076</td></tr>
+          <tr><td>Msgs gerais: 30/mês × $0,001</td><td>$0,030</td></tr>
+          <tr class="total"><td>Total USD</td><td><strong>~$0,42</strong></td></tr>
+          <tr class="total"><td>Total BRL</td><td><strong>~R$ 2,40</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="margin-bar" style="margin-top:10px;"><div class="margin-fill" style="width:95%;"></div></div>
+      <div style="font-size:10px;color:var(--free-light);margin-top:4px;font-weight:700;">Margem: ~95% · Lucro: ~R$ 47,50/usuário</div>
+    </div>
+
+    <!-- PLANO 2 -->
+    <div class="node node-paid">
+      <span class="nlabel">Plano 2 — R$ 69,90/mês</span>
+      <div class="ntitle" style="margin-bottom:10px;">Receita: R$ 69,90</div>
+      <table class="cost-table">
+        <thead><tr><th>Uso estimado</th><th>Custo USD</th></tr></thead>
+        <tbody>
+          <tr><td>Glicemia: 60/mês × $0,002</td><td>$0,120</td></tr>
+          <tr><td>Foto comida: 90/mês × $0,0038</td><td>$0,342</td></tr>
+          <tr><td>Ritual diário (templated): 270 × $0,0005</td><td>$0,135</td></tr>
+          <tr><td>Protocolos personalizados: 30 × $0,005</td><td>$0,150</td></tr>
+          <tr class="total"><td>Total USD</td><td><strong>~$0,75</strong></td></tr>
+          <tr class="total"><td>Total BRL</td><td><strong>~R$ 4,27</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="margin-bar" style="margin-top:10px;"><div class="margin-fill" style="width:94%;"></div></div>
+      <div style="font-size:10px;color:var(--free-light);margin-top:4px;font-weight:700;">Margem: ~94% · Lucro: ~R$ 65,63/usuário</div>
+    </div>
+
+  </div>
+
+  <!-- PLANO 3 -->
+  <div class="node node-upgrade" style="margin-bottom:14px;">
+    <span class="nlabel">Plano 3 — R$ 97/mês · Uso mais intenso</span>
+    <div class="g2" style="margin-top:8px;">
+      <table class="cost-table">
+        <thead><tr><th>Uso estimado</th><th>Custo USD</th></tr></thead>
+        <tbody>
+          <tr><td>Glicemia: 90/mês × $0,002</td><td>$0,180</td></tr>
+          <tr><td>Foto comida: 90/mês × $0,0038</td><td>$0,342</td></tr>
+          <tr><td>Ritual + protocolos: 300 × $0,0008</td><td>$0,240</td></tr>
+          <tr><td>Respostas especializadas: 40 × $0,006</td><td>$0,240</td></tr>
+          <tr><td>Alertas emergência: 10 × $0,002</td><td>$0,020</td></tr>
+          <tr class="total"><td>Total USD</td><td><strong>~$1,02</strong></td></tr>
+          <tr class="total"><td>Total BRL</td><td><strong>~R$ 5,81</strong></td></tr>
+        </tbody>
+      </table>
+      <div>
+        <div class="margin-bar" style="margin-top:4px;height:12px;"><div class="margin-fill" style="width:94%;"></div></div>
+        <div style="font-size:11px;color:var(--free-light);margin-top:6px;font-weight:700;">Margem: ~94% · Lucro: ~R$ 91,19/usuário/mês</div>
+        <div style="margin-top:12px;padding:10px 12px;background:rgba(0,0,0,0.3);border-radius:8px;">
+          <div style="font-size:10px;font-weight:700;color:var(--upgrade-light);margin-bottom:6px;letter-spacing:.5px;">SIMULAÇÃO: 1.000 USUÁRIOS PAGOS (mix)</div>
+          <div style="font-size:11px;color:var(--t2);line-height:1.8;">
+            500 × Plano 1 = R$ 24.950 receita / R$ 1.200 custo<br>
+            350 × Plano 2 = R$ 24.465 receita / R$ 1.495 custo<br>
+            150 × Plano 3 = R$ 14.550 receita / R$ 872 custo<br>
+            <strong style="color:var(--t1);">Total: R$ 63.965 receita / R$ 3.567 custo IA = margem ~94%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PARTE 6 — RECOMENDAÇÕES DEV
+  ══════════════════════════════ -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Parte 6 — Recomendações para Reduzir Custos</div><div class="sec-line"></div></div>
+
+  <div class="tip t1">
+    <div class="tip-icon">🧠</div>
+    <div class="tip-body">
+      <div class="tip-title">1. Haiku para tudo — só use Sonnet quando realmente necessário</div>
+      <div class="tip-desc">Claude Haiku 3.5 cobre 95% dos casos do Gluco AI. Sonnet custa 3–4x mais. Use Sonnet apenas para relatórios mensais complexos ou quando o usuário fizer perguntas muito abertas sobre condição médica.</div>
+      <span class="saving-tag">Economia: -70% no custo de tokens</span>
+    </div>
+  </div>
+
+  <div class="tip t2">
+    <div class="tip-icon">💾</div>
+    <div class="tip-body">
+      <div class="tip-title">2. Prompt Caching — cachear o system prompt do usuário</div>
+      <div class="tip-desc">O perfil do usuário (tipo de diabetes, HbA1c, medicação, complicações, histórico) é enviado em todo request. Com prompt caching do Claude, tokens repetidos custam 90% menos. Implementar <code>cache_control: ephemeral</code> no bloco de perfil.</div>
+      <div class="tip-code">cache_control: {{ type: "ephemeral" }} — no system prompt block</div>
+      <span class="saving-tag">Economia: -40% no custo total de tokens</span>
+    </div>
+  </div>
+
+  <div class="tip t3">
+    <div class="tip-icon">👁️</div>
+    <div class="tip-body">
+      <div class="tip-title">3. OCR dedicado para leitura de glicemia (não LLM)</div>
+      <div class="tip-desc">Foto do glicosímetro → use Google Vision OCR ou Tesseract para extrair apenas o número. Custo: ~$0,0001/imagem (25x mais barato que LLM). Só passe ao LLM o número extraído + contexto. O LLM não precisa ver a imagem.</div>
+      <div class="tip-code">glycemia_value = ocr.extract(image) → llm.analyze(value, user_profile)</div>
+      <span class="saving-tag">Economia: -90% no custo das leituras de glicemia</span>
+    </div>
+  </div>
+
+  <div class="tip t4">
+    <div class="tip-icon">📝</div>
+    <div class="tip-body">
+      <div class="tip-title">4. Templates para o ritual diário do Plano 2</div>
+      <div class="tip-desc">As 9 mensagens diárias de ritual (jejum, café, lanche…) do Plano 2 NÃO precisam ser geradas por LLM toda vez. Criar 30 variações por momento do dia + substituição de variáveis ({nome}, {meta_glicemia}, {medicacao}). LLM só quando o usuário responde com uma pergunta nova.</div>
+      <div class="tip-code">ritual_msg = template_engine.render(slot, user_vars) — sem LLM</div>
+      <span class="saving-tag">Economia: -80% no custo do Plano 2</span>
+    </div>
+  </div>
+
+  <div class="tip t5">
+    <div class="tip-icon">🍽️</div>
+    <div class="tip-body">
+      <div class="tip-title">5. Cache de alimentos comuns</div>
+      <div class="tip-desc">70% das fotos de comida no Brasil são arroz, feijão, frango, macarrão, pão. Criar um cache de resposta para os 50 alimentos mais comuns. Se a foto é identificada como um desses, retornar resposta cacheada + personalizar apenas os números de impacto glicêmico pelo perfil.</div>
+      <div class="tip-code">food_cache.get(food_hash) ?? llm.analyze(image)</div>
+      <span class="saving-tag">Economia: -55% no custo de análise de comida</span>
+    </div>
+  </div>
+
+  <div class="tip t6">
+    <div class="tip-icon">📦</div>
+    <div class="tip-body">
+      <div class="tip-title">6. Comprimir histórico antes de enviar ao LLM</div>
+      <div class="tip-desc">Não enviar o histórico completo de mensagens a cada request. Manter apenas os últimos 3 dias em contexto + um resumo comprimido dos últimos 30 dias. Implementar janela deslizante de contexto.</div>
+      <div class="tip-code">context = last_3_days(messages) + summarize(30_days_history)</div>
+      <span class="saving-tag">Economia: -35% nos tokens de contexto</span>
+    </div>
+  </div>
+
+  <!-- VARIÁVEIS DEV -->
+  <div class="sec"><div class="sec-line"></div><div class="sec-tag">Variáveis de Estado Necessárias</div><div class="sec-line"></div></div>
+
+  <div class="node node-action">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--teal-light);letter-spacing:1px;margin-bottom:8px;">CONTROLE DE COTA</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;border-bottom:1px solid var(--border);"><span style="color:var(--t3)">user.</span>food_daily_count <span style="color:var(--t3)">// int · reset 00:00</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;border-bottom:1px solid var(--border);"><span style="color:var(--t3)">user.</span>food_daily_reset_at <span style="color:var(--t3)">// timestamp</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;border-bottom:1px solid var(--border);"><span style="color:var(--t3)">user.</span>glycemia_unlimited <span style="color:var(--t3)">// always true</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;"><span style="color:var(--t3)">user.</span>persuasive_seq_sent_at <span style="color:var(--t3)">// timestamp · cooldown 24h</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--teal-light);letter-spacing:1px;margin-bottom:8px;">PLANO E PERFIL</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;border-bottom:1px solid var(--border);"><span style="color:var(--t3)">user.</span>plan_active <span style="color:var(--t3)">// null | M1 | M2 | M3</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;border-bottom:1px solid var(--border);"><span style="color:var(--t3)">user.</span>plan_suggested <span style="color:var(--t3)">// M1 | M2 | M3</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;border-bottom:1px solid var(--border);"><span style="color:var(--t3)">user.</span>complicacoes_ativas <span style="color:var(--t3)">// bool</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal-light);padding:3px 0;"><span style="color:var(--t3)">user.</span>hba1c <span style="color:var(--t3)">// low|mid|high|unknown</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════
+       ANÁLISE DE CUSTOS — VISION API
+  ══════════════════════════════ -->
+  <div class="sec" style="margin-top:60px;"><div class="sec-line"></div><div class="sec-tag">Análise de Custos — Vision API</div><div class="sec-line"></div></div>
+
+  <!-- INTRO BOX -->
+  <div class="node node-action" style="margin-bottom:16px;border-color:var(--teal-border);background:var(--teal-bg);">
+    <div style="display:flex;align-items:flex-start;gap:14px;">
+      <div style="font-size:28px;flex-shrink:0;">💡</div>
+      <div>
+        <div style="font-size:14px;font-weight:800;color:var(--teal-light);margin-bottom:6px;">Vision API é o menor custo do sistema</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7;">Esta análise cobre o custo real de processar <strong style="color:var(--t1)">1 foto de alimento/dia (30/mês)</strong> e <strong style="color:var(--t1)">fotos de glicemia ilimitadas</strong>. O custo de Vision é insignificante comparado ao WhatsApp API e infraestrutura. O risco real está no WhatsApp — não na IA.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA 1: CUSTO POR FOTO POR MODELO -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">1. Custo por foto — comparativo de modelos</div><div class="sec-line"></div></div>
+
+  <div class="node node-action" style="padding:0;overflow:hidden;">
+    <table class="cost-table">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.03);">
+          <th>Modelo</th>
+          <th>Foto Alimento</th>
+          <th>Foto Glicemia</th>
+          <th>30 alimentos/mês</th>
+          <th>Qualidade</th>
+          <th>Recomendação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GPT-4o mini</strong></td>
+          <td><strong>R$0,0026</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,00046</span></td>
+          <td><strong>R$0,0005</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,000095</span></td>
+          <td><strong style="color:var(--free-light)">R$0,08</strong></td>
+          <td><span class="pill pill-teal">Boa</span></td>
+          <td><span class="pill pill-green">✓ USAR PARA GLICEMIA</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claude Haiku 3.5</strong></td>
+          <td><strong>R$0,0178</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,0031</span></td>
+          <td><strong>R$0,0066</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,0012</span></td>
+          <td><strong style="color:var(--teal-light)">R$0,53</strong></td>
+          <td><span class="pill pill-teal">Muito boa</span></td>
+          <td><span class="pill pill-blue">✓ USAR PARA ALIMENTO</span></td>
+        </tr>
+        <tr>
+          <td><strong>GPT-4o</strong></td>
+          <td><strong>R$0,0437</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,0077</span></td>
+          <td><strong>R$0,0091</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,0016</span></td>
+          <td><strong>R$1,31</strong></td>
+          <td><span class="pill pill-blue">Excelente</span></td>
+          <td><span class="pill pill-purple">Opcional premium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claude Sonnet 4.6</strong></td>
+          <td><strong>R$0,0667</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,0117</span></td>
+          <td><strong>R$0,0248</strong><br><span style="font-family:var(--mono);font-size:9px;color:var(--t3)">$0,0044</span></td>
+          <td><strong>R$2,00</strong></td>
+          <td><span class="pill pill-purple">Premium</span></td>
+          <td><span class="pill pill-red">Evitar para produção</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="font-size:10px;color:var(--t3);margin-top:8px;padding:0 4px;line-height:1.6;">
+    Base: câmbio R$5,70 · Foto alimento = alta resolução ~765 tokens + prompt 300 tokens + output 500 tokens · Foto glicemia = baixa resolução ~235 tokens + prompt 150 tokens + output 100 tokens
+  </div>
+
+  <!-- TABELA 2: CUSTO MENSAL POR USUÁRIO - GLICEMIA ILIMITADA -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">2. Custo mensal de Vision por usuário (30 alimentos + glicemia ilimitada)</div><div class="sec-line"></div></div>
+
+  <div class="g2" style="gap:14px;">
+    <!-- GPT-4o mini -->
+    <div>
+      <div style="font-size:10px;font-weight:700;color:var(--free-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;padding:4px 10px;background:var(--free-bg);border-radius:6px;border:1px solid var(--free-border);display:inline-block;">GPT-4o mini (recomendado)</div>
+      <div class="node node-action" style="padding:0;overflow:hidden;">
+        <table class="cost-table">
+          <thead>
+            <tr style="background:rgba(255,255,255,0.03);">
+              <th>Glicemias/mês</th>
+              <th>Uso real</th>
+              <th>Custo Vision</th>
+              <th>% M1 R$49,90</th>
+              <th>% M2 R$97</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>30</td><td style="color:var(--t3)">1×/dia</td><td><strong style="color:var(--free-light)">R$0,09</strong></td><td>0,2%</td><td>0,1%</td></tr>
+            <tr><td>60</td><td style="color:var(--t3)">2×/dia</td><td><strong style="color:var(--free-light)">R$0,11</strong></td><td>0,2%</td><td>0,1%</td></tr>
+            <tr><td>90</td><td style="color:var(--t3)">3×/dia</td><td><strong style="color:var(--free-light)">R$0,13</strong></td><td>0,3%</td><td>0,1%</td></tr>
+            <tr><td>120</td><td style="color:var(--t3)">4×/dia</td><td><strong style="color:var(--free-light)">R$0,15</strong></td><td>0,3%</td><td>0,2%</td></tr>
+            <tr><td>240</td><td style="color:var(--t3)">8×/dia</td><td><strong style="color:var(--free-light)">R$0,22</strong></td><td>0,4%</td><td>0,2%</td></tr>
+            <tr><td>480</td><td style="color:var(--t3)">16×/dia 🔴</td><td><strong>R$0,32</strong></td><td>0,6%</td><td>0,3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Claude Haiku -->
+    <div>
+      <div style="font-size:10px;font-weight:700;color:var(--teal-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;padding:4px 10px;background:var(--teal-bg);border-radius:6px;border:1px solid var(--teal-border);display:inline-block;">Claude Haiku 3.5 (qualidade superior)</div>
+      <div class="node node-action" style="padding:0;overflow:hidden;">
+        <table class="cost-table">
+          <thead>
+            <tr style="background:rgba(255,255,255,0.03);">
+              <th>Glicemias/mês</th>
+              <th>Uso real</th>
+              <th>Custo Vision</th>
+              <th>% M1 R$49,90</th>
+              <th>% M2 R$97</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>30</td><td style="color:var(--t3)">1×/dia</td><td><strong style="color:var(--teal-light)">R$0,73</strong></td><td>1,5%</td><td>0,8%</td></tr>
+            <tr><td>60</td><td style="color:var(--t3)">2×/dia</td><td><strong style="color:var(--teal-light)">R$0,93</strong></td><td>1,9%</td><td>1,0%</td></tr>
+            <tr><td>90</td><td style="color:var(--t3)">3×/dia</td><td><strong style="color:var(--teal-light)">R$1,12</strong></td><td>2,2%</td><td>1,2%</td></tr>
+            <tr><td>120</td><td style="color:var(--t3)">4×/dia</td><td><strong style="color:var(--teal-light)">R$1,32</strong></td><td>2,6%</td><td>1,4%</td></tr>
+            <tr><td>240</td><td style="color:var(--t3)">8×/dia</td><td><strong>R$2,11</strong></td><td>4,2%</td><td>2,2%</td></tr>
+            <tr><td>480</td><td style="color:var(--t3)">16×/dia 🔴</td><td><strong>R$3,69</strong></td><td>7,4%</td><td>3,8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PONTO DE INVIABILIDADE -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">3. Ponto de inviabilidade — quando Vision se torna problema</div><div class="sec-line"></div></div>
+
+  <div class="node node-action" style="padding:0;overflow:hidden;">
+    <table class="cost-table">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.03);">
+          <th>Modelo</th>
+          <th>Para Vision = 20% do M2 (R$19,40)</th>
+          <th>Fotos glicemia/dia necessárias</th>
+          <th>Viável?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GPT-4o mini</strong></td>
+          <td>~14.000 fotos glicemia/mês</td>
+          <td><strong style="color:var(--block-light)">~467/dia</strong></td>
+          <td><span class="pill pill-green">✓ IMPOSSÍVEL NA PRÁTICA</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claude Haiku</strong></td>
+          <td>~2.700 fotos glicemia/mês</td>
+          <td><strong style="color:var(--block-light)">~90/dia</strong></td>
+          <td><span class="pill pill-green">✓ IMPOSSÍVEL NA PRÁTICA</span></td>
+        </tr>
+        <tr>
+          <td><strong>GPT-4o</strong></td>
+          <td>~1.200 fotos glicemia/mês</td>
+          <td><strong style="color:var(--warn-light)">~40/dia</strong></td>
+          <td><span class="pill pill-teal">Extremamente improvável</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip t4" style="margin-top:12px;">
+    <div class="tip-icon">✅</div>
+    <div class="tip-body">
+      <div class="tip-title">Glicemia ilimitada é TOTALMENTE viável — sem restrição de uso</div>
+      <div class="tip-desc">Mesmo o usuário mais extremo (mede 8×/dia) gera apenas R$0,22/mês em Vision com GPT-4o mini. A funcionalidade "ilimitada" pode ser entregue com total segurança financeira. Não há necessidade de limitar fotos de glicemia em nenhum plano.</div>
+    </div>
+  </div>
+
+  <!-- P&L COMPLETO -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">4. P&L completo por plano — todos os custos operacionais</div><div class="sec-line"></div></div>
+
+  <div class="node node-action" style="padding:0;overflow:hidden;margin-bottom:14px;">
+    <table class="cost-table">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.03);">
+          <th>Componente de Custo</th>
+          <th style="text-align:center;">Free</th>
+          <th style="text-align:center;color:var(--teal-light);">M1 — R$49,90</th>
+          <th style="text-align:center;color:var(--paid-light);">M2 — R$97,00</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Receita</td>
+          <td style="text-align:center;"><strong style="color:var(--t3)">R$0</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--teal-light)">R$49,90</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--paid-light)">R$97,00</strong></td>
+          <td style="font-size:11px;color:var(--t3)">—</td>
+        </tr>
+        <tr>
+          <td>(-) Vision API (GPT-4o mini)</td>
+          <td style="text-align:center;">R$0</td>
+          <td style="text-align:center;">R$0,08</td>
+          <td style="text-align:center;">R$0,15</td>
+          <td style="font-size:11px;color:var(--t3)">30 alimentos + 60 glicemias</td>
+        </tr>
+        <tr>
+          <td>(-) LLM texto (respostas, análise)</td>
+          <td style="text-align:center;">R$1,50</td>
+          <td style="text-align:center;">R$3,00</td>
+          <td style="text-align:center;">R$5,00</td>
+          <td style="font-size:11px;color:var(--t3)">Claude Haiku para conversação</td>
+        </tr>
+        <tr style="background:rgba(220,38,38,0.04);">
+          <td><strong style="color:var(--block-light)">(-) WhatsApp API ⚠️</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--block-light)">R$5,00</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--block-light)">R$8,00</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--block-light)">R$10,00</strong></td>
+          <td style="font-size:11px;color:var(--t3)">BSP cloud (WATI/Twilio). MAIOR CUSTO</td>
+        </tr>
+        <tr>
+          <td>(-) Infraestrutura (server, DB, storage)</td>
+          <td style="text-align:center;">R$1,00</td>
+          <td style="text-align:center;">R$2,00</td>
+          <td style="text-align:center;">R$3,00</td>
+          <td style="font-size:11px;color:var(--t3)">VPS + Supabase + S3</td>
+        </tr>
+        <tr class="total" style="background:rgba(255,255,255,0.03);">
+          <td><strong>Custo total/usuário</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--block-light)">R$7,50</strong></td>
+          <td style="text-align:center;"><strong>R$13,08</strong></td>
+          <td style="text-align:center;"><strong>R$18,15</strong></td>
+          <td>—</td>
+        </tr>
+        <tr class="total" style="background:rgba(34,197,94,0.04);">
+          <td><strong>Margem bruta</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--block-light)">−R$7,50</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--free-light)">+R$36,82</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--free-light)">+R$78,85</strong></td>
+          <td>—</td>
+        </tr>
+        <tr class="total">
+          <td><strong>Margem %</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--block-light)">—</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--free-light)">73,8%</strong></td>
+          <td style="text-align:center;"><strong style="color:var(--free-light)">81,3%</strong></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BARRAS DE MARGEM -->
+  <div class="g2" style="gap:12px;margin-bottom:14px;">
+    <div class="node node-action" style="padding:14px 18px;">
+      <div style="font-size:10px;font-weight:700;color:var(--teal-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">M1 — R$49,90 · Margem 73,8%</div>
+      <div class="margin-bar"><div class="margin-fill" style="width:73.8%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--t3);">
+        <span>Custo: R$13,08</span><span style="color:var(--free-light);font-weight:700;">Lucro: R$36,82/usuário</span>
+      </div>
+    </div>
+    <div class="node node-action" style="padding:14px 18px;">
+      <div style="font-size:10px;font-weight:700;color:var(--paid-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">M2 — R$97,00 · Margem 81,3%</div>
+      <div class="margin-bar"><div class="margin-fill" style="width:81.3%;background:linear-gradient(90deg,var(--paid-light),var(--teal-light))"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--t3);">
+        <span>Custo: R$18,15</span><span style="color:var(--free-light);font-weight:700;">Lucro: R$78,85/usuário</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VARIANTE SELF-HOSTED -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">5. Cenário WhatsApp self-hosted (Evolution API) — impacto na margem</div><div class="sec-line"></div></div>
+
+  <div class="node node-action" style="padding:0;overflow:hidden;margin-bottom:12px;">
+    <table class="cost-table">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.03);">
+          <th>Usuários ativos</th>
+          <th>Custo WhatsApp/usuário</th>
+          <th>Custo total M1</th>
+          <th>Margem M1</th>
+          <th>Custo total M2</th>
+          <th>Margem M2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>50</td><td>R$4,00</td><td>R$12,08</td><td><strong style="color:var(--teal-light)">75,8%</strong></td><td>R$16,15</td><td><strong style="color:var(--teal-light)">83,4%</strong></td></tr>
+        <tr><td><strong>100</strong></td><td>R$2,00</td><td>R$10,08</td><td><strong style="color:var(--free-light)">79,8%</strong></td><td>R$14,15</td><td><strong style="color:var(--free-light)">85,4%</strong></td></tr>
+        <tr><td>300</td><td>R$0,67</td><td>R$8,75</td><td><strong style="color:var(--free-light)">82,5%</strong></td><td>R$12,82</td><td><strong style="color:var(--free-light)">86,8%</strong></td></tr>
+        <tr><td>500+</td><td>R$0,40</td><td>R$8,48</td><td><strong style="color:var(--free-light)">83,0%</strong></td><td>R$12,55</td><td><strong style="color:var(--free-light)">87,1%</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:10px;color:var(--t3);padding:0 4px;line-height:1.6;">
+    Self-hosted: Evolution API em VPS dedicado (~R$200/mês fixo). A partir de 100 usuários, o custo por usuário cai drasticamente. Recomendado migrar para self-hosted quando atingir 100+ usuários ativos.
+  </div>
+
+  <!-- PROJEÇÃO DE RECEITA POR ESCALA -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">6. Projeção de receita por escala (mix de planos)</div><div class="sec-line"></div></div>
+
+  <div class="node node-action" style="padding:0;overflow:hidden;margin-bottom:12px;">
+    <table class="cost-table">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.03);">
+          <th>Usuários totais</th>
+          <th>Free (40%)</th>
+          <th>M1 (40%)</th>
+          <th>M2 (20%)</th>
+          <th>Receita Bruta</th>
+          <th>Custo Total</th>
+          <th>Lucro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>100</strong></td>
+          <td style="color:var(--t3)">40 users</td>
+          <td style="color:var(--teal-light)">40 × R$49,90</td>
+          <td style="color:var(--paid-light)">20 × R$97</td>
+          <td><strong>R$3.936</strong></td>
+          <td style="color:var(--t3)">R$1.590</td>
+          <td><strong style="color:var(--free-light)">R$2.346/mês</strong></td>
+        </tr>
+        <tr>
+          <td><strong>300</strong></td>
+          <td style="color:var(--t3)">120 users</td>
+          <td style="color:var(--teal-light)">120 × R$49,90</td>
+          <td style="color:var(--paid-light)">60 × R$97</td>
+          <td><strong>R$11.808</strong></td>
+          <td style="color:var(--t3)">R$4.770</td>
+          <td><strong style="color:var(--free-light)">R$7.038/mês</strong></td>
+        </tr>
+        <tr>
+          <td><strong>500</strong></td>
+          <td style="color:var(--t3)">200 users</td>
+          <td style="color:var(--teal-light)">200 × R$49,90</td>
+          <td style="color:var(--paid-light)">100 × R$97</td>
+          <td><strong>R$19.680</strong></td>
+          <td style="color:var(--t3)">R$7.950</td>
+          <td><strong style="color:var(--free-light)">R$11.730/mês</strong></td>
+        </tr>
+        <tr>
+          <td><strong>1.000</strong></td>
+          <td style="color:var(--t3)">400 users</td>
+          <td style="color:var(--teal-light)">400 × R$49,90</td>
+          <td style="color:var(--paid-light)">200 × R$97</td>
+          <td><strong>R$39.360</strong></td>
+          <td style="color:var(--t3)">R$15.900</td>
+          <td><strong style="color:var(--free-light)">R$23.460/mês</strong></td>
+        </tr>
+        <tr>
+          <td><strong>5.000</strong></td>
+          <td style="color:var(--t3)">2.000 users</td>
+          <td style="color:var(--teal-light)">2.000 × R$49,90</td>
+          <td style="color:var(--paid-light)">1.000 × R$97</td>
+          <td><strong>R$196.800</strong></td>
+          <td style="color:var(--t3)">R$79.500</td>
+          <td><strong style="color:var(--free-light)">R$117.300/mês</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:10px;color:var(--t3);padding:0 4px;line-height:1.6;">
+    Mix assumido: 40% Free / 40% M1 / 20% M2. Custo considera WhatsApp cloud BSP. Custo de Free inclui R$7,50/usuário (custo mesmo sem pagar). Free users são custo — precisam converter para ser sustentável.
+  </div>
+
+  <!-- ALERTA FREE USERS -->
+  <div class="tip t6" style="margin-top:12px;">
+    <div class="tip-icon">⚠️</div>
+    <div class="tip-body">
+      <div class="tip-title">Free users custam R$7,50/mês sem gerar receita</div>
+      <div class="tip-desc">Cada usuário free gera custo real de WhatsApp + infra + LLM. Com 400 free users a R$7,50 = <strong style="color:var(--block-light)">R$3.000/mês de custo sem retorno</strong>. Necessário: limite de uso agressivo no free (como a quota de 1 foto/dia) e sequência de upgrade automática dentro de 14 dias de ativação.</div>
+    </div>
+  </div>
+
+  <!-- DECISÃO TÉCNICA -->
+  <div class="sec" style="margin-top:32px;"><div class="sec-line"></div><div class="sec-tag">7. Decisão técnica — qual modelo usar onde</div><div class="sec-line"></div></div>
+
+  <div class="g2" style="gap:12px;">
+    <div class="node node-free">
+      <span class="nlabel">Foto de Glicemia → GPT-4o mini</span>
+      <div style="font-size:11px;color:var(--t2);line-height:1.6;margin-top:4px;">Tarefa simples: apenas ler um número no display. GPT-4o mini resolve com 99%+ de acurácia. Custo: <strong style="color:var(--free-light)">R$0,0005/foto</strong>. Não há motivo para usar modelo mais caro aqui.</div>
+      <div class="tip-code" style="margin-top:8px;">model: "gpt-4o-mini" · detail: "low"</div>
+    </div>
+    <div class="node node-paid">
+      <span class="nlabel">Foto de Alimento → Claude Haiku ou GPT-4o mini</span>
+      <div style="font-size:11px;color:var(--t2);line-height:1.6;margin-top:4px;">Tarefa mais complexa: identificar alimentos, estimar porções, calcular índice glicêmico. Claude Haiku entrega melhor resultado. Se orçamento for crítico, GPT-4o mini também funciona bem. Custo Haiku: <strong style="color:var(--paid-light)">R$0,018/foto</strong>.</div>
+      <div class="tip-code" style="margin-top:8px;">model: "claude-haiku-4-5" · detail: "high"</div>
+    </div>
+  </div>
+
+  <!-- BOX DECISÃO FINAL -->
+  <div class="node node-upgrade" style="margin-top:16px;border-width:1.5px;">
+    <div style="font-size:14px;font-weight:900;color:var(--upgrade-light);margin-bottom:12px;letter-spacing:-0.02em;">📊 Resumo para tomada de decisão</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--upgrade-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">O QUE É SEGURO FAZER</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--free-light)">✓</span>Glicemia ilimitada em TODOS os planos (inclusive free)</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--free-light)">✓</span>Foto alimento: 1/dia no free, ilimitado nos pagos</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--free-light)">✓</span>Margem de 73–81% nos planos pagos</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--free-light)">✓</span>Vision nunca ultrapassa 5% da receita no M2</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--block-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">O QUE MONITORAR</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--block-light)">⚠</span>WhatsApp API — maior custo (R$5–10/usuário/mês)</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--block-light)">⚠</span>Free users sem conversão em 14 dias = prejuízo</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--warn-light)">→</span>Migrar para self-hosted ao atingir 100+ usuários</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;gap:8px;"><span style="color:var(--warn-light)">→</span>Monitorar custo real com dashboard de billing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px;text-align:right;font-size:10px;color:var(--t3);">Análise: Mar 2026 · Câmbio R$5,70 · Modelos: GPT-4o mini + Claude Haiku 3.5 · WhatsApp via BSP cloud</div>
+
+</div>
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Ver na página</button>
+    <button class="tlp-btn-edit">✏️ Editar</button>
+  </div>
+</div>
+<script src="timeline.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>

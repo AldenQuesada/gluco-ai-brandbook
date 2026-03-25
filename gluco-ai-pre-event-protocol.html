@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Protocolo Pré-Evento v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#0A0E1A; --abyss:#111526; --surface:#1A1E2E;
+  --elevated:#242840; --stroke:#2E334F; --muted:#4A5070;
+  --t2:#8B93B8; --t1:#E8EEFF; --white:#FFFFFF;
+  --blue:#1B6FFF; --teal:#00D4B4; --green:#00C48C;
+  --yellow:#FFB020; --red:#FF4B4B; --orange:#FF8C00;
+  --wa:#25D366; --wa-dark:#128C7E;
+  --fixed:rgba(255,176,32,0.08); --ok:rgba(0,196,140,0.08); --new:rgba(27,111,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.6;font-size:14px;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.page{max-width:1100px;margin:0 auto;padding:0 24px 80px;}
+
+/* HEADER */
+.doc-header{background:var(--abyss);border-bottom:1px solid var(--stroke);padding:0;position:sticky;top:0;z-index:100;}
+.doc-header-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.doc-logo{font-weight:800;font-size:17px;letter-spacing:-0.04em;display:flex;align-items:center;gap:10px;}
+.doc-logo span{color:var(--blue);}
+.version-badge{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;background:rgba(0,212,180,0.1);border:1px solid rgba(0,212,180,0.3);color:var(--teal);padding:4px 10px;border-radius:6px;}
+.status-badge{font-size:11px;font-weight:700;background:rgba(27,111,255,0.12);border:1px solid rgba(27,111,255,0.3);color:var(--blue);padding:4px 10px;border-radius:6px;}
+
+/* TITLE */
+.doc-title-area{padding:48px 0 24px;}
+.doc-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+.doc-title{font-size:clamp(28px,3.5vw,44px);font-weight:900;letter-spacing:-0.04em;line-height:1.05;margin-bottom:12px;}
+.doc-desc{font-size:15px;color:var(--t2);max-width:640px;line-height:1.7;}
+
+/* TABS */
+.tab-nav{display:flex;gap:0;border:1px solid var(--stroke);border-radius:14px;overflow:hidden;margin-bottom:32px;background:var(--abyss);}
+.tab-btn{flex:1;padding:14px 20px;font-size:13px;font-weight:700;color:var(--t2);background:transparent;border:none;cursor:pointer;transition:all .2s;border-right:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;gap:8px;}
+.tab-btn:last-child{border-right:none;}
+.tab-btn:hover{color:var(--t1);background:var(--surface);}
+.tab-btn.active{color:var(--t1);background:var(--surface);}
+.tab-btn.active.pre{border-bottom:3px solid var(--blue);}
+.tab-btn.active.ev{border-bottom:3px solid var(--green);}
+.tab-btn.active.pos{border-bottom:3px solid var(--red);}
+.tab-icon{font-size:16px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--stroke);margin:32px 0;}
+.sec-title{font-size:clamp(18px,2.5vw,24px);font-weight:900;letter-spacing:-0.03em;margin-bottom:8px;}
+.sec-desc{font-size:13px;color:var(--t2);max-width:620px;margin-bottom:24px;line-height:1.7;}
+
+/* STAGE */
+.stage{background:var(--abyss);border:1px solid var(--stroke);border-radius:20px;margin-bottom:20px;overflow:hidden;}
+.stage-header{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--stroke);}
+.stage-num{width:44px;height:44px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;flex-shrink:0;}
+.stage-num.red{background:var(--red);}
+.stage-num.green{background:var(--green);}
+.stage-num.orange{background:var(--orange);}
+.stage-num.yellow{background:var(--yellow);color:#000;}
+.stage-num.teal{background:var(--teal);color:#000;}
+.stage-name{font-size:16px;font-weight:800;letter-spacing:-0.02em;}
+.stage-desc{font-size:12px;color:var(--t2);margin-top:2px;}
+.stage-obj{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;}
+.obj-tag{font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--stroke);border-radius:6px;padding:3px 10px;color:var(--t2);}
+.obj-tag.red{background:rgba(255,75,75,.1);border-color:rgba(255,75,75,.3);color:var(--red);}
+.obj-tag.green{background:rgba(0,196,140,.1);border-color:rgba(0,196,140,.3);color:var(--green);}
+.obj-tag.blue{background:rgba(27,111,255,.1);border-color:rgba(27,111,255,.3);color:var(--blue);}
+.obj-tag.yellow{background:rgba(255,176,32,.1);border-color:rgba(255,176,32,.3);color:var(--yellow);}
+.obj-tag.teal{background:rgba(0,212,180,.1);border-color:rgba(0,212,180,.3);color:var(--teal);}
+
+/* MSG BLOCK */
+.msg-block{border-radius:14px;margin:0 16px 14px;border:1px solid;}
+.msg-block.ok{background:var(--ok);border-color:rgba(0,196,140,0.2);}
+.msg-block.new{background:var(--new);border-color:rgba(27,111,255,0.2);}
+.msg-block.fixed{background:var(--fixed);border-color:rgba(255,176,32,0.2);}
+.msg-block.danger{background:rgba(255,75,75,0.06);border-color:rgba(255,75,75,0.25);}
+.msg-block.convert{background:rgba(27,111,255,0.12);border-color:rgba(27,111,255,0.4);}
+.msg-block.neutral{background:var(--surface);border-color:var(--stroke);}
+.msg-block-header{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.msg-id{font-size:12px;font-weight:700;color:var(--t1);}
+.msg-type{font-size:10px;font-weight:700;border-radius:4px;padding:2px 8px;}
+.tag-ok{background:rgba(0,196,140,.15);color:var(--green);}
+.tag-new{background:rgba(27,111,255,.15);color:var(--blue);}
+.tag-fixed{background:rgba(255,176,32,.15);color:var(--yellow);}
+.tag-danger{background:rgba(255,75,75,.15);color:var(--red);}
+.tag-convert{background:rgba(27,111,255,.25);color:#93BCFF;}
+.tag-neutral{background:rgba(255,255,255,.08);color:var(--t2);}
+.msg-block-body{padding:14px 16px;}
+
+/* WA */
+.wa-wrap{display:flex;flex-direction:column;gap:10px;}
+.wa-bot,.wa-user{border-radius:16px;padding:12px 16px;max-width:88%;font-size:13.5px;line-height:1.65;white-space:pre-wrap;}
+.wa-bot{background:var(--surface);border:1px solid var(--stroke);border-radius:16px 16px 16px 0;align-self:flex-start;}
+.wa-user{background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);border-radius:16px 16px 0 16px;align-self:flex-end;color:var(--t1);}
+.wa-label{font-size:10px;font-weight:700;color:var(--teal);margin-bottom:4px;letter-spacing:.04em;}
+.wa-label.user{color:var(--wa);}
+.wa-options{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-width:280px;}
+.wa-opt{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.3);border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--wa);}
+
+/* ANNOTATION */
+.annotation{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:10px 14px;margin-top:10px;font-size:12px;line-height:1.6;}
+.annotation.info{background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.2);}
+.annotation.warn{background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.2);}
+.annotation.danger{background:rgba(255,75,75,.08);border:1px solid rgba(255,75,75,.2);}
+.annotation.success{background:rgba(0,196,140,.08);border:1px solid rgba(0,196,140,.2);}
+.ann-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.ann-text{color:var(--t2);}
+.ann-text strong{color:var(--t1);}
+
+/* BRANCH */
+.branch{background:var(--surface);border:1px solid var(--stroke);border-radius:12px;overflow:hidden;margin:14px 0;}
+.branch-row{display:flex;align-items:stretch;border-bottom:1px solid var(--stroke);}
+.branch-row:last-child{border-bottom:none;}
+.branch-cond{padding:10px 14px;font-size:12px;font-weight:700;border-right:1px solid var(--stroke);min-width:160px;display:flex;align-items:center;}
+.branch-cond.sim{color:var(--green);background:rgba(0,196,140,.06);}
+.branch-cond.nao{color:var(--red);background:rgba(255,75,75,.06);}
+.branch-cond.else{color:var(--yellow);background:rgba(255,176,32,.06);}
+.branch-dest{padding:10px 14px;font-size:12px;color:var(--t2);flex:1;display:flex;align-items:center;}
+.branch-dest strong{color:var(--t1);}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;margin:16px 0;}
+.tl-item{display:flex;gap:16px;align-items:flex-start;position:relative;}
+.tl-item::before{content:'';position:absolute;left:19px;top:44px;width:2px;bottom:-12px;background:var(--stroke);}
+.tl-item:last-child::before{display:none;}
+.tl-dot{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
+.tl-dot.blue{background:rgba(27,111,255,.2);border:1px solid rgba(27,111,255,.4);color:var(--blue);}
+.tl-dot.green{background:rgba(0,196,140,.2);border:1px solid rgba(0,196,140,.4);color:var(--green);}
+.tl-dot.yellow{background:rgba(255,176,32,.2);border:1px solid rgba(255,176,32,.4);color:var(--yellow);}
+.tl-dot.red{background:rgba(255,75,75,.2);border:1px solid rgba(255,75,75,.4);color:var(--red);}
+.tl-dot.teal{background:rgba(0,212,180,.2);border:1px solid rgba(0,212,180,.4);color:var(--teal);}
+.tl-body{flex:1;padding-bottom:24px;}
+.tl-label{font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.tl-title{font-size:14px;font-weight:800;color:var(--t1);margin-bottom:6px;}
+.tl-desc{font-size:13px;color:var(--t2);line-height:1.6;}
+
+/* TRIGGER GRID */
+.trigger-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+.trigger-card{background:var(--surface);border:1px solid var(--stroke);border-radius:14px;padding:18px 20px;text-align:center;}
+.trigger-icon{font-size:28px;margin-bottom:10px;}
+.trigger-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:6px;}
+.trigger-desc{font-size:12px;color:var(--t2);line-height:1.5;}
+
+/* FLOW MODES */
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+.mode-card{background:var(--surface);border:1px solid var(--stroke);border-radius:14px;padding:20px;}
+.mode-card.full{border-color:rgba(0,196,140,.4);background:rgba(0,196,140,.04);}
+.mode-card.adapted{border-color:rgba(255,176,32,.4);background:rgba(255,176,32,.04);}
+.mode-card.fast{border-color:rgba(255,75,75,.4);background:rgba(255,75,75,.04);}
+.mode-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.mode-label.green{color:var(--green);}
+.mode-label.yellow{color:var(--yellow);}
+.mode-label.red{color:var(--red);}
+.mode-title{font-size:14px;font-weight:800;color:var(--t1);margin-bottom:6px;}
+.mode-steps{font-size:12px;color:var(--t2);line-height:1.8;}
+
+/* DRINK CARD */
+.drink-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0;}
+.drink-card{background:var(--surface);border:1px solid var(--stroke);border-radius:14px;padding:16px 18px;}
+.drink-icon{font-size:24px;margin-bottom:8px;}
+.drink-name{font-size:13px;font-weight:800;color:var(--t1);margin-bottom:4px;}
+.drink-formula{font-size:12px;color:var(--teal);font-weight:600;margin-bottom:6px;}
+.drink-dose{font-size:11px;color:var(--t2);}
+.drink-effect{font-size:11px;color:var(--green);margin-top:6px;font-weight:600;}
+
+/* RISK BADGE */
+.risk-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
+.risk-badge{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;}
+.risk-badge.low{background:rgba(0,196,140,.15);color:var(--green);border:1px solid rgba(0,196,140,.3);}
+.risk-badge.med{background:rgba(255,176,32,.15);color:var(--yellow);border:1px solid rgba(255,176,32,.3);}
+.risk-badge.high{background:rgba(255,75,75,.15);color:var(--red);border:1px solid rgba(255,75,75,.3);}
+/* ── TIMELINE SIDEBAR ── */
+.tl-layout{margin-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-right:1px solid var(--stroke,#2E334F);background:var(--abyss,#111526);z-index:50;scrollbar-width:thin;scrollbar-color:var(--stroke,#2E334F) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:var(--stroke,#2E334F);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted,#4A5070);border-bottom:1px solid var(--stroke,#2E334F);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(27,111,255,.15);color:var(--blue,#1B6FFF);padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--stroke,#2E334F),var(--stroke,#2E334F) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.03);}
+.tl-item.tl-active{background:rgba(27,111,255,.05);}
+.tl-item.tl-active .tl-name{color:var(--t1,#E8EEFF);}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(27,111,255,.22);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(27,111,255,.18);border:2px solid var(--blue,#1B6FFF);color:var(--blue,#1B6FFF);}
+.tl-dot-yellow{background:rgba(255,176,32,.14);border:2px solid var(--yellow,#FFB020);color:var(--yellow,#FFB020);}
+.tl-dot-green{background:rgba(0,196,140,.12);border:2px solid var(--green,#00C48C);color:var(--green,#00C48C);}
+.tl-dot-red{background:rgba(255,75,75,.12);border:2px solid var(--red,#FF4B4B);color:var(--red,#FF4B4B);}
+.tl-dot-gray{background:rgba(139,147,184,.1);border:2px solid var(--muted,#4A5070);color:var(--muted,#4A5070);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:var(--t2,#8B93B8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:var(--muted,#4A5070);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.tl-info:hover .tl-name{color:var(--t1,#E8EEFF);}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:var(--muted,#4A5070);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:var(--stroke,#2E334F);color:var(--t2,#8B93B8);}
+.tl-highlight{outline:3px solid rgba(27,111,255,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:'Inter',sans-serif;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;font-family:inherit;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.15);border-radius:6px;padding:5px 10px;}
+.tlp-branches{margin-bottom:8px;}
+.tlp-branch-title{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.tlp-branch-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(46,51,79,.35);}
+.tlp-branch-row:last-child{border-bottom:none;}
+.tlp-bcond{font-size:10px;font-weight:700;background:rgba(27,111,255,.1);color:#93c5fd;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.tlp-baction{font-size:11px;color:#64748b;line-height:1.4;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:#1B6FFF;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#1559cc;}
+@media(max-width:900px){
+  .tl-layout{margin-left:0;}
+  #tl-sidebar{position:relative;top:0;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--stroke,#2E334F);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-logo">
+      <img src="gluco-ai-icon.svg" width="28" height="28" alt="GLUCO AI">
+      <span>GLUCO</span> AI
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="index.html" style="font-size:12px;font-weight:700;color:var(--t2);text-decoration:none;padding:5px 12px;border:1px solid var(--stroke);border-radius:8px;background:var(--surface);">← Central</a>
+      <a href="gluco-ai-conversion-flow.html" style="font-size:12px;font-weight:700;color:var(--t2);text-decoration:none;padding:5px 12px;border:1px solid var(--stroke);border-radius:8px;background:var(--surface);">↗ Fluxo de Conversão</a>
+      <span class="version-badge">Pré-Evento v1.0</span>
+      <span class="status-badge">🛡️ Método AQS</span>
+    </div>
+  </div>
+</div>
+
+<div class="tl-layout">
+<aside id="tl-sidebar">
+  <div class="tl-head">Mensagens <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
+<div class="page">
+
+<!-- TÍTULO -->
+<div class="doc-title-area">
+  <div class="doc-eyebrow">Protocolo Pré-Evento — Método AQS</div>
+  <h1 class="doc-title">Controle Antes,<br>Durante e Depois.</h1>
+  <p class="doc-desc">Ciclo completo de proteção glicêmica para eventos sociais. Preparação natural antes de comer, autocontrole durante o evento, e protocolo de resposta caso a glicemia suba após.</p>
+</div>
+
+<!-- TABS -->
+<div class="tab-nav">
+  <button class="tab-btn pre active" onclick="switchTab('pre')">
+    <span class="tab-icon">⚙️</span> Pré-Evento
+  </button>
+  <button class="tab-btn ev" onclick="switchTab('ev')">
+    <span class="tab-icon">🍽️</span> Evento
+  </button>
+  <button class="tab-btn pos" onclick="switchTab('pos')">
+    <span class="tab-icon">⏱️</span> Pós-Evento
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 1 — PRÉ-EVENTO
+══════════════════════════════════════ -->
+<div id="tab-pre" class="tab-content active">
+
+  <div class="sec-title">Pré-Evento — Preparação Completa</div>
+  <div class="sec-desc">Protocolo enviado quando o usuário anuncia que vai a um evento com comida. Baseado no tempo disponível até o evento — 3 modos de execução.</div>
+
+  <!-- Triggers -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num teal">T</div>
+      <div>
+        <div class="stage-name">Triggers de Ativação</div>
+        <div class="stage-desc">Como o protocolo é iniciado — por intenção do usuário ou sugestão proativa da IA.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag teal">Automático</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="trigger-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="trigger-card">
+          <div class="trigger-icon">💬</div>
+          <div class="trigger-title">Trigger por Texto</div>
+          <div class="trigger-desc">Usuário escreve: "vou a uma festa", "jantar hoje", "vou sair para comer", "confraternização hoje".<br><br>IA classifica: <code style="color:var(--teal);font-size:11px;">intent = social_event_food</code></div>
+        </div>
+        <div class="trigger-card">
+          <div class="trigger-icon">🤖</div>
+          <div class="trigger-title">Sugestão Proativa da IA</div>
+          <div class="trigger-desc">IA detecta: glicemia elevada recente, fim de semana ou horário noturno.<br><br>Envia: <em>"(Nome), hoje vai sair para algum evento com comida? Posso te preparar."</em></div>
+        </div>
+      </div>
+
+      <!-- M1 -->
+      <div class="msg-block new" style="margin-top:8px;">
+        <div class="msg-block-header">
+          <span class="msg-id">M1 · Abertura do fluxo</span>
+          <span class="msg-type tag-new">⚙️ Início</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Perfeito, {nome}! 💙
+
+Vou te ajudar a preparar sua glicemia antes do evento.
+
+⏰ *Em quanto tempo começa?*</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Tenho mais de 1 hora</div>
+              <div class="wa-opt">⏱️ Entre 30 e 60 minutos</div>
+              <div class="wa-opt">🚀 Menos de 30 minutos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- M2 -->
+      <div class="msg-block neutral">
+        <div class="msg-block-header">
+          <span class="msg-id">M2 · Checagem de equipamento + tipo de evento</span>
+          <span class="msg-type tag-neutral">📋 Validação</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Antes de começarmos, me confirme:
+
+1️⃣ Você tem glicosímetro funcionando?
+2️⃣ Consegue medir agora?
+3️⃣ Quer que eu te acompanhe passo a passo?
+
+E me diz: *que tipo de evento é esse?*</div>
+            <div class="wa-options">
+              <div class="wa-opt">🎂 Festa/Aniversário (doces, salgados)</div>
+              <div class="wa-opt">🍖 Churrasco</div>
+              <div class="wa-opt">🍽️ Jantar/Restaurante</div>
+              <div class="wa-opt">🥂 Confraternização</div>
+            </div>
+          </div>
+          <div class="annotation info" style="margin-top:10px;">
+            <span class="ann-icon">🎯</span>
+            <div class="ann-text"><strong>Por que perguntar o tipo:</strong> Festa tem doces + refrigerantes como risco principal. Churrasco tem risco em pão de alho e sobremesas. Jantar em restaurante tem risco em massas e álcool. A IA calibra as orientações do M7 e M12 para os riscos específicos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modos de Fluxo -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">⏱</div>
+      <div>
+        <div class="stage-name">3 Modos de Execução — Baseados no Tempo Disponível</div>
+        <div class="stage-desc">O protocolo se adapta ao tempo que o usuário tem antes do evento.</div>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <div class="mode-grid">
+        <div class="mode-card full">
+          <div class="mode-label green">≥ 60 min</div>
+          <div class="mode-title">FULL FLOW</div>
+          <div class="mode-steps">
+            T-60 · Glicemia 1<br>
+            T-50 · Chá funcional<br>
+            T-45 · Vinagre de maçã<br>
+            T-30 · Vitamina de pepino<br>
+            T-20 · Educação + tipo de evento<br>
+            T-10 · Glicemia 2 (se >180)<br>
+            T-0 · Resumo final
+          </div>
+        </div>
+        <div class="mode-card adapted">
+          <div class="mode-label yellow">30–59 min</div>
+          <div class="mode-title">ADAPTED FLOW</div>
+          <div class="mode-steps">
+            Imediato · Glicemia 1<br>
+            +5min · Chá (versão rápida)<br>
+            +10min · Vinagre de maçã<br>
+            +15min · Vitamina de pepino<br>
+            +25min · Orientação + resumo<br>
+            +30min · Glicemia 2 (se >180)
+          </div>
+        </div>
+        <div class="mode-card fast">
+          <div class="mode-label red">{"<"} 30 min</div>
+          <div class="mode-title">FAST FLOW</div>
+          <div class="mode-steps">
+            Imediato · Glicemia (se possível)<br>
+            Imediato · Vinagre de maçã<br>
+            +5min · Vitamina de pepino<br>
+            +10min · Orientação alimentar<br>
+            +15min · Resumo rápido
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL FLOW TIMELINE -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num green">FULL</div>
+      <div>
+        <div class="stage-name">Full Flow — Sequência Completa (≥ 60 min)</div>
+        <div class="stage-desc">Protocolo completo com todas as etapas. Cobertura máxima de redução de risco glicêmico.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag green">≥ 60 min</span></div>
+    </div>
+    <div style="padding:20px 24px;">
+      <div class="timeline">
+
+        <!-- T-60 -->
+        <div class="tl-item">
+          <div class="tl-dot blue">T-60</div>
+          <div class="tl-body">
+            <div class="tl-label">Primeira medição</div>
+            <div class="tl-title">Glicemia basal — diagnóstico de partida</div>
+            <div class="msg-block new" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M3 · Primeira glicemia</span>
+                <span class="msg-type tag-new">🩺 T-60</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Primeiro passo, {nome}.
+
+Faça agora a medição da sua glicemia e me envie o valor — ou a foto do glicosímetro. 📷</div>
+                </div>
+                <div class="branch" style="margin-top:12px;">
+                  <div class="branch-row">
+                    <div class="branch-cond sim">≤ 180 mg/dL</div>
+                    <div class="branch-dest">→ <strong>M4A:</strong> "Valor registrado ✅ Vamos seguir com sua preparação para manter estável…"</div>
+                  </div>
+                  <div class="branch-row">
+                    <div class="branch-cond nao">&gt; 180 mg/dL</div>
+                    <div class="branch-dest">→ <strong>M4B:</strong> "Valor registrado ⚠️ Glicemia acima de 180 — vamos trabalhar para reduzir o risco durante o evento…" + ativa segunda medição em T-10</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T-50 -->
+        <div class="tl-item">
+          <div class="tl-dot teal">T-50</div>
+          <div class="tl-body">
+            <div class="tl-label">Chá funcional</div>
+            <div class="tl-title">Canela · Alecrim · Insulina Vegetal · Gengibre · Limão</div>
+            <div class="drink-grid" style="grid-template-columns:1fr;">
+              <div class="drink-card">
+                <div class="drink-icon">🍵</div>
+                <div class="drink-name">Chá Funcional Anti-Pico</div>
+                <div class="drink-formula">Canela + Alecrim + Insulina Vegetal + Gengibre + Limão</div>
+                <div class="drink-dose">250 a 300 ml · Beber quente ou morno</div>
+                <div class="drink-effect">↓ Absorção de carboidratos · ↑ Sensibilidade à insulina · Ação anti-inflamatória</div>
+              </div>
+            </div>
+            <div class="msg-block fixed" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M5 · Chá funcional</span>
+                <span class="msg-type tag-fixed">🍵 T-50</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, prepare agora e beba *1 xícara de chá*:
+
+🌿 Canela + Alecrim + Insulina Vegetal + Gengibre + Limão
+
+Quantidade: *250 a 300 ml*
+
+Quando terminar, me responda: *"chá ok"* ✅</div>
+                </div>
+                <div class="annotation info" style="margin-top:10px;">
+                  <span class="ann-icon">⏰</span>
+                  <div class="ann-text">Se não responder em 5 min: enviar lembrete automático. "Enviado em T-50 para que o efeito esteja ativo quando o vinagre de maçã for tomado em T-45."</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T-45 -->
+        <div class="tl-item">
+          <div class="tl-dot green">T-45</div>
+          <div class="tl-body">
+            <div class="tl-label">Vinagre de Maçã · Nova adição</div>
+            <div class="tl-title">Intervenção de maior evidência científica</div>
+            <div class="drink-grid" style="grid-template-columns:1fr;">
+              <div class="drink-card" style="border-color:rgba(0,196,140,.4);">
+                <div class="drink-icon">🍶</div>
+                <div class="drink-name">Shot AQS Anti-Pico</div>
+                <div class="drink-formula">Vinagre de Maçã + Suco de 1 Limão + 10 gotas de Própolis</div>
+                <div class="drink-dose">Misturar em 200 ml de água · Beber de uma vez</div>
+                <div class="drink-effect">↓ Pico glicêmico em até 34% · 3 mecanismos de ação simultâneos</div>
+              </div>
+            </div>
+            <div class="msg-block ok" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M5B · Vinagre de maçã</span>
+                <span class="msg-type tag-ok">🍶 T-45</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Agora, {nome}:
+
+🍶 *1 colher de sopa de vinagre de maçã* em *200 ml de água*.
+
+Misture bem e beba de uma vez.
+
+Quando terminar: *"vinagre ok"* ✅</div>
+                </div>
+                <div class="annotation success">
+                  <span class="ann-icon">🔬</span>
+                  <div class="ann-text"><strong>Base científica sólida:</strong> O vinagre de maçã inibe a enzima alfa-glicosidase — o mesmo mecanismo do medicamento Acarbose. Estudos mostram redução de 20–34% no pico pós-prandial. É a intervenção natural de maior impacto do protocolo.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T-30 -->
+        <div class="tl-item">
+          <div class="tl-dot teal">T-30</div>
+          <div class="tl-body">
+            <div class="tl-label">Vitamina funcional</div>
+            <div class="tl-title">Vitamina de Pepino — barreira de absorção</div>
+            <div class="drink-grid" style="grid-template-columns:1fr;">
+              <div class="drink-card">
+                <div class="drink-icon">🥒</div>
+                <div class="drink-name">Vitamina de Pepino</div>
+                <div class="drink-formula">Pepino + Limão + Gengibre + Água</div>
+                <div class="drink-dose">250 a 300 ml</div>
+                <div class="drink-effect">↓ IG da refeição · Fibra solúvel · Hidratação + saciedade pré-evento</div>
+              </div>
+            </div>
+            <div class="msg-block fixed" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M6 · Vitamina de pepino</span>
+                <span class="msg-type tag-fixed">🥒 T-30</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, agora prepare e tome uma *Vitamina de Pepino* 🥒
+
+Quantidade: *250 a 300 ml*
+
+Quando terminar: *"vitamina ok"* ✅</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T-20 -->
+        <div class="tl-item">
+          <div class="tl-dot yellow">T-20</div>
+          <div class="tl-body">
+            <div class="tl-label">Educação comportamental</div>
+            <div class="tl-title">Orientações calibradas para o tipo de evento</div>
+            <div class="msg-block fixed" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M7 · Educação comportamental</span>
+                <span class="msg-type tag-fixed">🧠 T-20</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, lembrete importante antes de sair 💙
+
+🥗 *No buffet: vegetais e proteína primeiro, carboidratos por último.*
+🍽️ Coma devagar e mastigue bem.
+🧠 Observe se sua fome é física ou emocional.
+🍞 Modere os carboidratos — especialmente {risco_evento}.
+
+Você está bem preparado(a). Qualquer coisa é só me chamar! 💙</div>
+                </div>
+                <div class="annotation info">
+                  <span class="ann-icon">🎯</span>
+                  <div class="ann-text"><strong>{risco_evento}</strong> é preenchido com base no tipo de evento: festa → "doces e refrigerantes" | churrasco → "pão de alho e sobremesas" | restaurante → "massas, pães e bebidas alcoólicas".</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T-10 -->
+        <div class="tl-item">
+          <div class="tl-dot red">T-10</div>
+          <div class="tl-body">
+            <div class="tl-label">Segunda medição (condicional)</div>
+            <div class="tl-title">Somente se glicemia inicial estava &gt; 180 mg/dL</div>
+            <div class="msg-block danger" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M8 · Segunda glicemia</span>
+                <span class="msg-type tag-danger">🩺 T-10</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, como sua glicemia antes estava acima de 180 mg/dL, faça agora uma *nova medição* por favor. 📷</div>
+                </div>
+                <div class="branch" style="margin-top:10px;">
+                  <div class="branch-row">
+                    <div class="branch-cond sim">≤ 180 mg/dL</div>
+                    <div class="branch-dest">→ "Melhorou! ✅ Protocolo funcionou — siga para o evento com tranquilidade."</div>
+                  </div>
+                  <div class="branch-row">
+                    <div class="branch-cond nao">&gt; 180 mg/dL</div>
+                    <div class="branch-dest">→ <strong>M9:</strong> Orientação para levar vitamina (500ml) + evitar carboidratos + checagem de sintomas (M10)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- M9 -->
+            <div class="msg-block danger" style="margin:10px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M9 · Persistência — ainda &gt; 180</span>
+                <span class="msg-type tag-danger">⚠️ Elevada</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, sua glicemia ainda está acima de 180 mg/dL.
+
+Sugestões para hoje:
+
+🥒 Leve uma garrafa de Vitamina de Pepino (500 ml) e tome pequenos goles a cada 3–5 minutos no evento.
+🍰🍕🍞 Evite doces, massas, pão, pizza ou arroz.
+
+Qualquer coisa me chame. Estou por aqui 💙</div>
+                </div>
+              </div>
+            </div>
+            <!-- M10 Sintomas -->
+            <div class="msg-block danger" style="margin:10px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M10 · Verificação de sintomas (se &gt; 180)</span>
+                <span class="msg-type tag-danger">🚨 Sintomas</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, você está sentindo algum destes sintomas?
+
+• Muita sede
+• Visão turva
+• Dor de cabeça
+• Urinar muitas vezes
+• Cansaço intenso
+• Tontura</div>
+                  <div class="wa-options">
+                    <div class="wa-opt">⚠️ Sim, estou sentindo</div>
+                    <div class="wa-opt">✅ Não, estou bem</div>
+                  </div>
+                </div>
+                <div class="branch" style="margin-top:10px;">
+                  <div class="branch-row">
+                    <div class="branch-cond nao">&gt;180 + sintomas</div>
+                    <div class="branch-dest">→ <strong>M11:</strong> Orientar busca médica urgente + oferecer protocolo pós-prandial como contingência</div>
+                  </div>
+                  <div class="branch-row">
+                    <div class="branch-cond sim">&gt;180 sem sintomas</div>
+                    <div class="branch-dest">→ M9 (levar vitamina) + continuar monitoramento pós-evento</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T-0 -->
+        <div class="tl-item">
+          <div class="tl-dot blue">T-0</div>
+          <div class="tl-body">
+            <div class="tl-label">Resumo final antes de sair</div>
+            <div class="tl-title">Checklist de preparação + protocolo de álcool</div>
+            <div class="msg-block convert" style="margin:8px 0 0;">
+              <div class="msg-block-header">
+                <span class="msg-id">M12 · Resumo final + protocolo álcool</span>
+                <span class="msg-type tag-convert">🏁 T-0</span>
+              </div>
+              <div class="msg-block-body">
+                <div class="wa-wrap">
+                  <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>Resumo rápido antes do evento 💙
+
+✔ Glicemia verificada
+✔ Chá tomado
+✔ Vinagre de maçã tomado
+✔ Vitamina de pepino tomada
+
+Durante o evento:
+🥗 Vegetais e proteína primeiro, carboidratos por último
+🍽️ Coma devagar · Mastigue bem
+🧠 Observe sua fome antes de repetir
+⚠️ Modere os carboidratos
+
+🍺 *Se for beber álcool:*
+Prefira vinho seco ou destilado puro.
+Evite drinks com suco, refrigerante ou xarope.
+Me avise se beber — ajustarei o monitoramento pós-evento.
+
+{nome}, vai com tranquilidade! Qualquer coisa é só me chamar. 💙</div>
+                </div>
+                <div class="annotation warn">
+                  <span class="ann-icon">🍺</span>
+                  <div class="ann-text"><strong>Protocolo de álcool é crítico:</strong> Álcool mascara sintomas de hipoglicemia, eleva a glicemia inicialmente (açúcar da bebida) e pode causar hipoglicemia rebote horas depois. Sem essa orientação, o protocolo tem um buraco sério de segurança.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+    </div>
+  </div>
+
+  <!-- Fome física vs emocional -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">🧠</div>
+      <div>
+        <div class="stage-name">Educação — Fome Física vs Fome Emocional</div>
+        <div class="stage-desc">Enviado contextualmente quando o usuário pergunta sobre compulsão ou durante eventos de alto risco (festas).</div>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block new">
+        <div class="msg-block-header">
+          <span class="msg-id">M-EDU · Fome física vs emocional</span>
+          <span class="msg-type tag-new">🧠 Educação</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, antes de pegar o prato, pergunte a si mesmo:
+
+_Eu realmente estou com fome?_
+_Preciso comer isso agora?_
+_Esse alimento vai me nutrir ou é só vontade?_
+
+━━━━━━━━━━━━━━
+🟢 *Fome física:* aparece gradualmente · estômago dá sinais · qualquer comida satisfaz · não gera culpa depois.
+
+🔴 *Fome emocional:* aparece de repente · desejo por algo específico · urgência para comer · pode gerar culpa depois.
+
+💙 Reconhecer a diferença é um superpoder para o controle glicêmico.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-pre -->
+
+<!-- ══════════════════════════════════════
+     TAB 2 — EVENTO
+══════════════════════════════════════ -->
+<div id="tab-ev" class="tab-content">
+
+  <div class="sec-title">Durante o Evento</div>
+  <div class="sec-desc">Orientações ativas enquanto o usuário está no evento. Foco em ordem da refeição, autocontrole e resposta a situações de risco.</div>
+
+  <!-- Ordem da refeição -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num green">EV-1</div>
+      <div>
+        <div class="stage-name">Ordem do Prato — A Sequência que Muda Tudo</div>
+        <div class="stage-desc">A ordem em que os alimentos são consumidos afeta diretamente o pico glicêmico — independente do que se come.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag green">Alto Impacto</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block ok">
+        <div class="msg-block-header">
+          <span class="msg-id">EV-MSG-01 · Ordem da refeição no evento</span>
+          <span class="msg-type tag-ok">🥗 Ordem</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🥗 *{nome}, na hora de montar o prato:*
+
+1️⃣ *Primeiro:* saladas, vegetais, legumes
+2️⃣ *Depois:* proteínas (frango, carne, peixe, ovos)
+3️⃣ *Por último:* arroz, macarrão, pão, carboidratos
+
+_Essa ordem reduz em até 40% a velocidade de absorção dos carboidratos._
+
+━━━━━━━━━━━━━━
+⏱️ *Ritmo:*
+• Mastigue bem cada garfada
+• Faça uma pausa no meio do prato
+• Pare quando sentir 70–80% de saciedade
+
+A saciedade real chega com ~20 min de atraso. Quem come rápido, come a mais.</div>
+          </div>
+          <div class="annotation success">
+            <span class="ann-icon">🥗</span>
+            <div class="ann-text"><strong>Fibras primeiro:</strong> A fibra dos vegetais forma uma barreira física no intestino delgado, reduzindo a velocidade de absorção da glicose dos carboidratos consumidos depois. Proteína e gordura também retardam o esvaziamento gástrico.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Protocolo Álcool detalhado -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num yellow">EV-2</div>
+      <div>
+        <div class="stage-name">Protocolo de Álcool — Risco Oculto em Eventos</div>
+        <div class="stage-desc">Álcool e glicemia têm interação complexa e bidirecional. Este é o risco mais subestimado em eventos sociais.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag yellow">Risco Oculto</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block fixed">
+        <div class="msg-block-header">
+          <span class="msg-id">EV-MSG-02 · Protocolo de álcool</span>
+          <span class="msg-type tag-fixed">🍺 Álcool</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🍺 *{nome}, sobre o álcool hoje:*
+
+━━━━━━━━━━━━━━
+✅ *Opções mais seguras:*
+• Vinho seco (tinto ou branco)
+• Destilado puro (vodka, whisky — sem mistura)
+• Cerveja long neck (moderado)
+
+━━━━━━━━━━━━━━
+❌ *Evite:*
+• Drinks com suco, refrigerante ou xarope
+• Caipirinha com açúcar
+• Bebidas doces ou fermentadas com açúcar
+
+━━━━━━━━━━━━━━
+⚠️ *Por que o álcool é arriscado:*
+• Pode elevar a glicemia inicialmente (açúcares da bebida)
+• Pode causar *queda brusca de glicemia horas depois* (hipoglicemia rebote)
+• Mascara os sintomas de hipoglicemia — você pode confundir com sono ou tontura
+
+Me avise se for beber. Vou ajustar o monitoramento pós-evento. 💙</div>
+          </div>
+          <div class="annotation warn">
+            <span class="ann-icon">⚠️</span>
+            <div class="ann-text"><strong>Hipoglicemia rebote:</strong> O fígado prioriza metabolizar o álcool e deixa de produzir glicose (gliconeogênese). Isso pode causar hipoglicemia grave 4–6h após a ingestão, especialmente durante o sono. Se o usuário bebeu, o follow-up pós-evento deve incluir check de glicemia antes de dormir.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Branch álcool -->
+      <div class="branch">
+        <div class="branch-row">
+          <div class="branch-cond sim">Bebeu · avisou</div>
+          <div class="branch-dest">→ Ajustar follow-up pós-evento para incluir check extra antes de dormir · alerta de hipoglicemia noturna</div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-cond else">Bebeu · não avisou</div>
+          <div class="branch-dest">→ Follow-up pós-evento padrão + perguntar se consumiu álcool</div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-cond nao">Não bebeu</div>
+          <div class="branch-dest">→ Follow-up padrão · sem ajuste necessário</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Companheiro durante o evento -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num blue">EV-3</div>
+      <div>
+        <div class="stage-name">Modo Companheiro — Suporte Ativo Durante o Evento</div>
+        <div class="stage-desc">Usuário pode acionar o GLUCO AI a qualquer momento durante o evento para análise de prato ou dúvidas.</div>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block new">
+        <div class="msg-block-header">
+          <span class="msg-id">EV-MSG-03 · Análise de prato no evento</span>
+          <span class="msg-type tag-new">📷 Ao Vivo</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-user"><div class="wa-label user">Você</div>[📷 foto do prato no evento]</div>
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>📸 Analisando seu prato, {nome}…
+
+🚨 *Atenção:* vejo bastante carboidrato nesse prato.
+
+✅ *O que fazer agora:*
+• Coma a salada primeiro
+• Deixe o arroz/macarrão para o final
+• Se já começou pelos carboidratos — mastigue muito devagar
+
+Quer que eu te mande uma nova análise em 2 horas para ver como seu corpo reagiu? 📊</div>
+          </div>
+          <div class="annotation info">
+            <span class="ann-icon">📸</span>
+            <div class="ann-text"><strong>Funcionalidade de alto valor:</strong> Análise de prato ao vivo no evento cria um vínculo de dependência positiva — o usuário sente que tem um especialista no bolso. Disponível apenas no plano pago — forte argumento de retenção.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Autoavaliação fome -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num">🧠</div>
+      <div>
+        <div class="stage-name">Autoavaliação — Antes de Repetir o Prato</div>
+        <div class="stage-desc">Mensagem de controle enviada contextualmente quando o usuário pede orientação ou em check-in automático.</div>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block neutral">
+        <div class="msg-block-header">
+          <span class="msg-id">EV-MSG-04 · Antes de repetir</span>
+          <span class="msg-type tag-neutral">🧠 Autocontrole</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>{nome}, antes de repetir o prato:
+
+🤔 *Eu realmente ainda estou com fome?*
+🤔 *Ou é só porque a comida está boa?*
+🤔 *Estou em 70% ou 100% de saciedade?*
+
+Se a resposta for "só porque está bom" — dê mais 5 minutos antes de decidir. O sinal de saciedade real ainda está chegando. 💙</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-ev -->
+
+<!-- ══════════════════════════════════════
+     TAB 3 — PÓS-EVENTO
+══════════════════════════════════════ -->
+<div id="tab-pos" class="tab-content">
+
+  <div class="sec-title">Pós-Evento — Monitoramento e Resposta</div>
+  <div class="sec-desc">Follow-up automático após o evento. Se a glicemia subiu, os 3 protocolos AQS naturais entram em ação imediatamente.</div>
+
+  <!-- Follow-up automático -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num blue">PÓS-1</div>
+      <div>
+        <div class="stage-name">Follow-up Automático — Fim do Evento</div>
+        <div class="stage-desc">Disparado automaticamente com base no horário do evento informado + estimativa de duração (2–3h).</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag blue">Automático</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block new">
+        <div class="msg-block-header">
+          <span class="msg-id">PÓS-MSG-01 · Check pós-evento</span>
+          <span class="msg-type tag-new">⏱️ Auto</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>⏱️ {nome}, o evento deve estar terminando!
+
+Como você foi? 💙
+
+Me envie sua glicemia agora — foto ou valor — para eu ver como seu corpo reagiu.</div>
+            <div class="wa-options">
+              <div class="wa-opt">📷 Enviando foto do glicosímetro</div>
+              <div class="wa-opt">🩺 Vou digitar o valor</div>
+              <div class="wa-opt">✅ Ainda no evento</div>
+            </div>
+          </div>
+          <div class="annotation info">
+            <span class="ann-icon">🔗</span>
+            <div class="ann-text"><strong>Fechamento do ciclo AQS:</strong> Esse follow-up conecta a preparação pré-evento com o resultado real. A glicemia pós-evento é o dado mais valioso — ela confirma se o protocolo funcionou e alimenta o histórico de risco metabólico do usuário.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Se bebeu álcool: check adicional antes de dormir -->
+      <div class="msg-block fixed" style="margin-top:12px;">
+        <div class="msg-block-header">
+          <span class="msg-id">PÓS-MSG-01B · Check antes de dormir (se bebeu álcool)</span>
+          <span class="msg-type tag-fixed">🍺 Pós-Álcool</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🍺 {nome}, como você bebeu hoje, faça uma medição *antes de dormir.*
+
+O álcool pode causar queda de glicemia durante o sono — é importante checar agora.
+
+📊 Me manda o valor por favor.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultado normal -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num green">PÓS-2</div>
+      <div>
+        <div class="stage-name">Glicemia Normal — Reforço Positivo</div>
+        <div class="stage-desc">≤ 140 mg/dL após o evento. Momento de celebrar e reforçar o comportamento correto.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag green">✅ Normal</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block ok">
+        <div class="msg-block-header">
+          <span class="msg-id">PÓS-MSG-02 · Resultado normal</span>
+          <span class="msg-type tag-ok">✅ Ótimo</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-user"><div class="wa-label user">Você</div>132</div>
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>✅ *{nome}, glicemia excelente!* 132 mg/dL após o evento.
+
+O protocolo funcionou. 🎉
+
+Você preparou sua glicemia, fez as escolhas certas no evento e seu corpo respondeu. Isso é controle real.
+
+Registrei aqui. Continue assim — vejo você na próxima refeição! 💙</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Protocolo AQS 180-299 -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num yellow">PÓS-3</div>
+      <div>
+        <div class="stage-name">Protocolo AQS Moderado — 180 a 299 mg/dL</div>
+        <div class="stage-desc">Glicemia elevada mas controlável com protocolo natural. Check em 1 hora.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag yellow">🟡 Moderado</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block fixed">
+        <div class="msg-block-header">
+          <span class="msg-id">PÓS-AQS-03A · Protocolo moderado 180–299</span>
+          <span class="msg-type tag-fixed">🟡 Moderado</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-user"><div class="wa-label user">Você</div>230</div>
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🟡 *{nome}, {valor} mg/dL — nível moderadamente elevado.*
+
+Esperado após o evento — vamos agir agora com o *Protocolo AQS Moderado:*
+
+━━━━━━━━━━━━━━
+🌿 *PROTOCOLO NATURAL — NÍVEL MODERADO*
+
+✅ *[Protocolo natural 1]* — age nos próximos {tempo}
+✅ *[Protocolo natural 2]* — reduz absorção residual
+✅ *[Protocolo natural 3]* — ativa sensibilidade natural
+
+━━━━━━━━━━━━━━
+🎯 *Meta:* voltar abaixo de 140 mg/dL
+
+⏰ Me envie novamente em *1 hora* para checar a evolução.</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Iniciando o protocolo agora</div>
+              <div class="wa-opt">❓ Por que está elevada?</div>
+            </div>
+          </div>
+          <div class="annotation warn">
+            <span class="ann-icon">🟡</span>
+            <div class="ann-text"><strong>180–299 mg/dL:</strong> Faixa de ação moderada. Protocolos naturais são eficazes nessa janela. Meta clara (abaixo de 140) + prazo definido (1h) cria engajamento e expectativa de resultado.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Protocolo AQS 300-500 -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num red">PÓS-4</div>
+      <div>
+        <div class="stage-name">Protocolo AQS Alto — 300 a 500 mg/dL</div>
+        <div class="stage-desc">Urgência real. Protocolo mais intenso com monitoramento a cada 45 minutos e alerta de sintomas.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag red">🔴 Alto</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block danger">
+        <div class="msg-block-header">
+          <span class="msg-id">PÓS-AQS-03B · Protocolo alto 300–500</span>
+          <span class="msg-type tag-danger">🔴 Alto</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-user"><div class="wa-label user">Você</div>380</div>
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🔴 *{nome}, {valor} mg/dL — nível elevado. Preciso da sua atenção agora.*
+
+Nessa faixa, o risco de complicações metabólicas aumenta com o tempo. Ativando o *Protocolo AQS Alto:*
+
+━━━━━━━━━━━━━━
+🚨 *PROTOCOLO NATURAL — NÍVEL ALTO*
+
+⚡ *[Protocolo de ação imediata 1]* — faça agora
+⚡ *[Protocolo de ação imediata 2]* — nos próximos 15 min
+⚡ *[Protocolo de ação imediata 3]* — mantém por 2h
+⚡ *[Protocolo de ação imediata 4]* — reforço adicional
+
+━━━━━━━━━━━━━━
+🩺 *Importante:* Se sentir tontura, visão turva ou náusea — procure atendimento médico imediatamente.
+
+⏰ Me envie novamente em *45 minutos.*</div>
+            <div class="wa-options">
+              <div class="wa-opt">✅ Iniciando agora</div>
+              <div class="wa-opt">🚨 Estou com sintomas</div>
+            </div>
+          </div>
+          <div class="annotation danger">
+            <span class="ann-icon">🔴</span>
+            <div class="ann-text"><strong>300–500 mg/dL:</strong> Urgência real. Check mais frequente (45min). A menção de sintomas graves + orientação médica é essencial — protege juridicamente e reforça credibilidade do produto.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Protocolo AQS >500 -->
+  <div class="stage">
+    <div class="stage-header">
+      <div class="stage-num red">PÓS-5</div>
+      <div>
+        <div class="stage-name">Protocolo AQS Crítico — Acima de 500 mg/dL</div>
+        <div class="stage-desc">Emergência médica. Pronto-socorro PRIMEIRO. Protocolo natural apenas como suporte enquanto aguarda atendimento.</div>
+      </div>
+      <div class="stage-obj"><span class="obj-tag red">🚨 Crítico</span></div>
+    </div>
+    <div style="padding:16px;">
+      <div class="msg-block danger" style="border-color:rgba(255,75,75,0.6);">
+        <div class="msg-block-header">
+          <span class="msg-id">PÓS-AQS-03C · Protocolo crítico &gt;500</span>
+          <span class="msg-type tag-danger">🚨 Crítico</span>
+        </div>
+        <div class="msg-block-body">
+          <div class="wa-wrap">
+            <div class="wa-user"><div class="wa-label user">Você</div>520</div>
+            <div class="wa-bot"><div class="wa-label">✦ GLUCO AI</div>🚨 *{nome}, {valor} mg/dL — NÍVEL CRÍTICO.*
+
+*Você precisa buscar atendimento médico agora.*
+
+━━━━━━━━━━━━━━
+🏥 *AÇÃO IMEDIATA:*
+👉 Ligue para o SAMU (192) ou vá ao pronto-socorro mais próximo.
+👉 Informe a leitura: {valor} mg/dL.
+
+━━━━━━━━━━━━━━
+🌿 *ENQUANTO AGUARDA — Protocolo AQS Intensivo:*
+⚡ *[Protocolo de estabilização 1]* — faça agora
+⚡ *[Protocolo de estabilização 2]* — a cada 30 min
+⚡ *Não coma nada* até avaliação médica
+
+━━━━━━━━━━━━━━
+💙 *Estou com você.* Me avise quando chegar ao atendimento.
+
+_Este protocolo é de suporte — o médico precisa avaliar você agora._</div>
+            <div class="wa-options">
+              <div class="wa-opt">🏥 Estou indo ao pronto-socorro</div>
+              <div class="wa-opt">✅ Iniciando estabilização</div>
+            </div>
+          </div>
+          <div class="annotation danger">
+            <span class="ann-icon">🚨</span>
+            <div class="ann-text"><strong>Pronto-socorro PRIMEIRO, sempre.</strong> O GLUCO AI nunca substitui emergência médica. O protocolo natural é suporte enquanto aguarda atendimento. Postura protege juridicamente e é a correta do ponto de vista clínico.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela resumo dos 3 protocolos -->
+      <div class="branch" style="margin-top:16px;">
+        <div class="branch-row">
+          <div class="branch-cond sim" style="min-width:180px;">✅ ≤ 140 mg/dL</div>
+          <div class="branch-dest">→ Reforço positivo · Registro de evolução · Ciclo concluído com sucesso</div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-cond else" style="min-width:180px;">🟡 141–180 mg/dL</div>
+          <div class="branch-dest">→ Moderado aceitável · Orientações para próxima refeição · Monitoramento passivo</div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-cond else" style="min-width:180px;">🟡 181–299 mg/dL</div>
+          <div class="branch-dest">→ <strong>PÓS-AQS-03A</strong> Protocolo Moderado · Check em 1h · Meta &lt;140 mg/dL</div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-cond nao" style="min-width:180px;">🔴 300–500 mg/dL</div>
+          <div class="branch-dest">→ <strong>PÓS-AQS-03B</strong> Protocolo Alto · Check 45min · Alerta de sintomas</div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-cond nao" style="min-width:180px;">🚨 &gt; 500 mg/dL</div>
+          <div class="branch-dest">→ <strong>PÓS-AQS-03C</strong> Emergência · SAMU 192 · Protocolo intensivo de suporte</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="annotation warn" style="margin-top:20px;">
+    <span class="ann-icon">⚕️</span>
+    <div class="ann-text"><strong>Disclaimer automático (enviado em toda ativação do protocolo AQS):</strong> "{nome}, este sistema fornece orientação educacional e não substitui avaliação médica. Em caso de sintomas importantes, procure assistência médica o mais rápido possível."</div>
+  </div>
+
+</div><!-- /tab-pos -->
+
+<!-- RODAPÉ -->
+<div class="divider"></div>
+<div style="text-align:center;color:var(--muted);font-size:12px;padding-bottom:20px;">
+  GLUCO AI · Protocolo Pré-Evento v1.0 · Método AQS · Março 2026 · Documento Interno
+</div>
+
+</div><!-- /.page -->
+</div><!-- /.tl-layout -->
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector('.tab-btn.' + tab).classList.add('active');
+}
+</script>
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Ver na página</button>
+    <button class="tlp-btn-edit">✏️ Editar</button>
+  </div>
+</div>
+<script src="timeline.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>
