@@ -24,6 +24,8 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-h
 .logo-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
 .logo span{color:var(--blue);}
 .header-badge{font-size:11px;font-weight:700;background:rgba(0,212,180,.1);border:1px solid rgba(0,212,180,.3);color:var(--teal);padding:4px 12px;border-radius:6px;}
+.btn-admin-open{font-size:11px;font-weight:700;background:rgba(27,111,255,.15);border:1px solid rgba(27,111,255,.4);color:#93c5fd;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit;transition:background .2s;}
+.btn-admin-open:hover{background:rgba(27,111,255,.28);}
 
 /* HERO */
 .hero{max-width:1080px;margin:0 auto;padding:72px 28px 56px;}
@@ -83,6 +85,8 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-h
 .quick-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-right:4px;white-space:nowrap;}
 .quick-link{font-size:12px;font-weight:600;color:var(--t2);text-decoration:none;padding:6px 12px;border-radius:8px;border:1px solid var(--stroke);background:var(--abyss);transition:all .15s;white-space:nowrap;}
 .quick-link:hover{color:var(--blue);border-color:rgba(27,111,255,.4);}
+.quick-link.admin{background:rgba(27,111,255,.12);border-color:rgba(27,111,255,.4);color:#93c5fd;font-weight:800;cursor:pointer;font-family:inherit;}
+.quick-link.admin:hover{background:rgba(27,111,255,.22);}
 
 /* FOOTER */
 .footer{border-top:1px solid var(--stroke);padding:32px 28px;max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
@@ -90,14 +94,174 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-h
 .footer-logo span{color:var(--blue);}
 .footer-meta{font-size:12px;color:var(--muted);}
 
+/* ── TIMELINE SIDEBAR ── */
+body{padding-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:64px;height:calc(100vh - 64px);overflow-y:auto;border-right:1px solid var(--stroke);background:var(--abyss);z-index:50;scrollbar-width:thin;scrollbar-color:var(--stroke) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:var(--stroke);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(27,111,255,.15);color:var(--blue);padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--stroke),var(--stroke) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.03);}
+.tl-item.tl-active{background:rgba(27,111,255,.05);}
+.tl-item.tl-active .tl-name{color:var(--t1);}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(27,111,255,.22);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(27,111,255,.18);border:2px solid var(--blue);color:var(--blue);}
+.tl-dot-yellow{background:rgba(255,176,32,.14);border:2px solid var(--yellow);color:var(--yellow);}
+.tl-dot-green{background:rgba(0,196,140,.12);border:2px solid var(--green);color:var(--green);}
+.tl-dot-red{background:rgba(255,75,75,.12);border:2px solid var(--red);color:var(--red);}
+.tl-dot-gray{background:rgba(139,147,184,.1);border:2px solid var(--muted);color:var(--muted);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.tl-info:hover .tl-name{color:var(--t1);}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:var(--stroke);color:var(--t2);}
+.tl-highlight{outline:3px solid rgba(27,111,255,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:'Inter',sans-serif;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.15);border-radius:6px;padding:5px 10px;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:var(--blue);border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#1559cc;}
+@media(max-width:900px){
+  body{padding-left:0;}
+  #tl-sidebar{position:relative;top:0;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--stroke);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   .featured-grid{grid-template-columns:1fr;}
   .docs-grid{grid-template-columns:1fr;}
 }
+
+/* ═══════════════════════════════════════════════
+   ADMIN PANEL OVERLAY
+═══════════════════════════════════════════════ */
+#adm-overlay{
+  display:none;
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9000;
+  background:#080d1a;
+  overflow-y:auto;
+  font-family:'Inter',sans-serif;
+  padding-bottom:60px;
+}
+#adm-overlay.open{display:block;}
+
+#adm-header{
+  background:#0f1628;border-bottom:1px solid #1e2a45;
+  padding:0 32px;display:flex;align-items:center;
+  justify-content:space-between;height:60px;
+  position:sticky;top:0;z-index:10;
+}
+#adm-logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:-0.04em;color:#e2e8f0;}
+#adm-logo span{color:#1B6FFF;}
+#adm-hbadge{font-size:11px;font-weight:700;background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.3);color:#93c5fd;padding:4px 12px;border-radius:6px;}
+#adm-back{font-size:12px;color:#94a3b8;background:none;border:1px solid #2a3a5c;border-radius:8px;padding:7px 14px;cursor:pointer;font-family:inherit;transition:all .2s;}
+#adm-back:hover{color:#1B6FFF;border-color:rgba(27,111,255,.4);}
+
+#adm-hero{max-width:1040px;margin:0 auto;padding:40px 32px 24px;}
+#adm-hero h1{font-size:26px;font-weight:900;letter-spacing:-0.04em;margin-bottom:6px;color:#e2e8f0;}
+#adm-hero h1 span{color:#1B6FFF;}
+#adm-hero p{font-size:14px;color:#94a3b8;line-height:1.7;}
+
+.adm-wrap{max-width:1040px;margin:0 auto;padding:0 32px;}
+
+.adm-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+.adm-scard{background:#0f1628;border:1px solid #1e2a45;border-radius:14px;padding:16px 18px;}
+.adm-scard-value{font-size:26px;font-weight:900;letter-spacing:-0.04em;margin-bottom:2px;}
+.adm-scard-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.1em;}
+.adm-scard.blue .adm-scard-value{color:#1B6FFF;}
+.adm-scard.green .adm-scard-value{color:#22c55e;}
+.adm-scard.yellow .adm-scard-value{color:#f59e0b;}
+.adm-scard.red .adm-scard-value{color:#ef4444;}
+
+.adm-sec-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#64748b;margin-bottom:12px;padding-top:24px;}
+
+.adm-global{background:#0f1628;border:1px solid #1e2a45;border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.adm-global-left{font-size:14px;color:#94a3b8;}
+.adm-global-left strong{color:#e2e8f0;}
+.adm-global-btns{display:flex;gap:10px;}
+.adm-btn-export{background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.3);color:#93c5fd;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.adm-btn-export:hover{background:rgba(27,111,255,.18);}
+.adm-btn-reset-all{background:rgba(220,38,38,.08);border:1px solid rgba(239,68,68,.25);color:#ef4444;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.adm-btn-reset-all:hover{background:rgba(220,38,38,.15);}
+
+.adm-pages{display:flex;flex-direction:column;gap:10px;}
+.adm-page-card{background:#0f1628;border:1px solid #1e2a45;border-radius:16px;overflow:hidden;transition:border-color .2s;}
+.adm-page-card:hover{border-color:#2a3a5c;}
+.adm-page-card.has-edits{border-color:rgba(245,158,11,.35);}
+.adm-page-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;}
+.adm-page-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.adm-page-info{flex:1;}
+.adm-page-name{font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:2px;}
+.adm-page-desc{font-size:12px;color:#64748b;}
+.adm-page-meta{display:flex;align-items:center;gap:8px;}
+.adm-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;}
+.adm-badge-orig{background:rgba(100,116,139,.08);color:#64748b;border:1px solid rgba(100,116,139,.2);}
+.adm-badge-edited{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.25);}
+.adm-badge-count{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);font-weight:800;}
+.adm-page-actions{display:flex;gap:8px;}
+.adm-btn-edit{background:#1B6FFF;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;}
+.adm-btn-edit:hover{background:#1559cc;}
+.adm-btn-reset{background:rgba(220,38,38,.08);border:1px solid rgba(239,68,68,.25);color:#ef4444;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.adm-btn-reset:hover{background:rgba(220,38,38,.15);}
+.adm-btn-view{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;}
+.adm-btn-view:hover{color:#e2e8f0;border-color:#1B6FFF;}
+
+.adm-page-edits{display:none;border-top:1px solid #1e2a45;padding:16px 20px;background:rgba(0,0,0,.2);}
+.adm-page-card.expanded .adm-page-edits{display:block;}
+.adm-edit-item{background:#141c30;border:1px solid #1e2a45;border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.adm-edit-item:last-child{margin-bottom:0;}
+.adm-edit-idx{font-size:10px;font-weight:700;color:#64748b;font-family:monospace;margin-bottom:4px;}
+.adm-edit-preview{font-size:12px;color:#94a3b8;line-height:1.5;white-space:pre-wrap;max-height:80px;overflow:hidden;}
+.adm-edit-actions{display:flex;justify-content:flex-end;margin-top:8px;}
+.adm-btn-reset-one{background:none;border:none;color:#64748b;font-size:11px;cursor:pointer;padding:0;font-family:inherit;}
+.adm-btn-reset-one:hover{color:#ef4444;}
+.adm-empty{text-align:center;padding:40px;color:#64748b;font-size:13px;}
+.adm-empty-icon{font-size:40px;margin-bottom:12px;}
+
+#adm-toast{position:fixed;top:20px;right:20px;z-index:10000;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;opacity:0;transform:translateY(-8px);transition:all .25s;pointer-events:none;}
+#adm-toast.show{opacity:1;transform:translateY(0);}
+#adm-toast.success{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.3);}
+#adm-toast.warning{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.3);}
+#adm-toast.info{background:#141c30;color:#94a3b8;border:1px solid #1e2a45;}
+
+@media(max-width:768px){
+  .adm-summary{grid-template-columns:1fr 1fr;}
+  .adm-global{flex-direction:column;gap:12px;}
+  .adm-page-head{flex-wrap:wrap;}
+  .adm-page-actions{width:100%;}
+}
 </style>
 </head>
 <body>
+
+<aside id="tl-sidebar">
+  <div class="tl-head">Documentos <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
 
 <header class="header">
   <div class="header-inner">
@@ -107,7 +271,7 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-h
     </a>
     <div style="display:flex;align-items:center;gap:10px;">
       <span class="header-badge">Central de Documentos</span>
-      <a href="admin.html" style="font-size:11px;font-weight:700;background:rgba(27,111,255,.15);border:1px solid rgba(27,111,255,.4);color:#93c5fd;padding:4px 12px;border-radius:6px;text-decoration:none;">⚙️ Editor</a>
+      <a href="#" onclick="admOpen();return false;" style="font-size:11px;font-weight:700;background:rgba(27,111,255,.15);border:1px solid rgba(27,111,255,.4);color:#93c5fd;padding:4px 12px;border-radius:6px;text-decoration:none;cursor:pointer;">⚙️ Editor</a>
     </div>
   </div>
 </header>
@@ -309,7 +473,7 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-h
     <a class="quick-link" href="gluco-ai-pre-event-protocol.html#pre">AQS · Pré-Evento</a>
     <a class="quick-link" href="gluco-ai-pre-event-protocol.html#ev">AQS · Durante</a>
     <a class="quick-link" href="gluco-ai-pre-event-protocol.html#pos">AQS · Pós-Evento</a>
-    <a class="quick-link" href="admin.html" style="background:rgba(27,111,255,.12);border-color:rgba(27,111,255,.4);color:#93c5fd;font-weight:800;">⚙️ Editor de Mensagens</a>
+    <button class="quick-link admin" onclick="admOpen()">⚙️ Editor de Mensagens</button>
   </div>
 
 </div>
@@ -318,6 +482,532 @@ body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-h
   <div class="footer-logo">GLUCO <span>AI</span></div>
   <div class="footer-meta">Central de Documentos · Março 2026 · Documento Interno Confidencial</div>
 </div>
+
+<!-- ═══════════════════════════════════════════════
+     ADMIN PANEL OVERLAY (integrado, sem admin.html)
+═══════════════════════════════════════════════ -->
+<div id="adm-overlay">
+
+  <header id="adm-header">
+    <div id="adm-logo">
+      <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="8" fill="#0d9488"/><path d="M6 24C8 20,10 17,12 19C14 21,15 14,17 12C19 10,20 16,22 18C24 20,25 16,27 14" stroke="white" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="12" cy="19" r="1.8" fill="#5eead4"/><circle cx="22" cy="18" r="1.8" fill="#5eead4"/></svg>
+      GLUCO <span>AI</span>
+    </div>
+    <span id="adm-hbadge">Admin · Editor de Mensagens</span>
+    <button id="adm-back" onclick="admClose()">← Voltar à Central</button>
+  </header>
+
+  <div id="adm-hero">
+    <h1>Editor de <span>Mensagens</span></h1>
+    <p>Gerencie todas as edições de mensagens WhatsApp em todos os documentos. Clique em "Editar" para abrir a página com o editor ativo, ou visualize as edições salvas diretamente aqui.</p>
+  </div>
+
+  <div class="adm-wrap">
+
+    <div class="adm-summary">
+      <div class="adm-scard blue"><div class="adm-scard-value" id="adm-stat-pages">—</div><div class="adm-scard-label">Páginas</div></div>
+      <div class="adm-scard green"><div class="adm-scard-value" id="adm-stat-edited">—</div><div class="adm-scard-label">Com edições</div></div>
+      <div class="adm-scard yellow"><div class="adm-scard-value" id="adm-stat-total">—</div><div class="adm-scard-label">Mensagens editadas</div></div>
+      <div class="adm-scard red"><div class="adm-scard-value" id="adm-stat-orig">—</div><div class="adm-scard-label">Sem alterações</div></div>
+    </div>
+
+    <div class="adm-global">
+      <div class="adm-global-left">Gerencie todas as edições em um só lugar. <strong>As alterações ficam salvas no navegador</strong> (localStorage).</div>
+      <div class="adm-global-btns">
+        <button class="adm-btn-export" id="adm-btn-export">↓ Exportar JSON</button>
+        <button class="adm-btn-reset-all" id="adm-btn-reset-all">↺ Resetar tudo</button>
+      </div>
+    </div>
+
+    <div class="adm-sec-label">Documentos</div>
+    <div class="adm-pages" id="adm-pages"></div>
+
+  </div>
+</div>
+
+<div id="adm-toast"></div>
+
+<script>
+// ─── Admin Panel ───────────────────────────────────────────────────────
+var ADM_PAGES = [
+  { key:'/aios-core/docs/gluco-ai-onboarding-flow.html',   file:'gluco-ai-onboarding-flow.html',   name:'Fluxo de Onboarding',            desc:'E1–E6 · Abertura, LGPD, Coleta de dados, Ativação',           icon:'💬', color:'rgba(27,111,255,.12)' },
+  { key:'/aios-core/docs/gluco-ai-saas-funnel.html',       file:'gluco-ai-saas-funnel.html',       name:'Funil SaaS — 3 Métodos',         desc:'Do plano gratuito até conversão · Gatilhos contextuais',       icon:'🎯', color:'rgba(20,184,166,.12)' },
+  { key:'/aios-core/docs/gluco-ai-upgrade-flow.html',      file:'gluco-ai-upgrade-flow.html',      name:'Fluxo de Upgrade + Custos',      desc:'Arquitetura O QUÊ grátis / O COMO pago · Análise Vision API', icon:'⚙️', color:'rgba(139,92,246,.12)' },
+  { key:'/aios-core/docs/gluco-ai-pre-event-protocol.html',file:'gluco-ai-pre-event-protocol.html',name:'Protocolo AQS — Pré/Durante/Pós',desc:'3 fases do protocolo em eventos sociais',                      icon:'🛡️', color:'rgba(27,111,255,.12)' },
+  { key:'/aios-core/docs/gluco-ai-conversion-flow.html',   file:'gluco-ai-conversion-flow.html',   name:'Fluxo de Conversão',             desc:'Scripts de pitch · Objeções · Fórmula Hormozi',               icon:'💳', color:'rgba(34,197,94,.12)'  },
+  { key:'/aios-core/docs/gluco-ai-playbook.html',          file:'gluco-ai-playbook.html',          name:'Playbook Operacional',           desc:'Referência completa · Score de risco · Protocolo AQS',        icon:'📋', color:'rgba(245,158,11,.12)' },
+  { key:'/aios-core/docs/gluco-ai-sales.html',             file:'gluco-ai-sales.html',             name:'Página de Vendas',               desc:'Landing page B2C · Preços · FAQ',                             icon:'🚀', color:'rgba(20,184,166,.12)' },
+  { key:'/aios-core/docs/gluco-ai-brandbook.html',         file:'gluco-ai-brandbook.html',         name:'Brandbook',                      desc:'Cores · Tipografia · Tom de voz · Diretrizes da marca',        icon:'🎨', color:'rgba(139,92,246,.12)' },
+];
+
+function admLoadEdits(page) {
+  var variants = [
+    'glucoai_edits::' + page.key,
+    'glucoai_edits::/' + page.file,
+    'glucoai_edits::' + page.file,
+  ];
+  for (var i = 0; i < variants.length; i++) {
+    var raw = localStorage.getItem(variants[i]);
+    if (raw) try { return { key: variants[i], data: JSON.parse(raw) }; } catch(e){}
+  }
+  return { key: variants[0], data: {} };
+}
+
+function admEsc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function admToast(msg, type) {
+  var t = document.getElementById('adm-toast');
+  t.textContent = msg;
+  t.className = (type || 'info') + ' show';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.className = ''; }, 3000);
+}
+
+function admRender() {
+  var grid = document.getElementById('adm-pages');
+  grid.innerHTML = '';
+  var totalEdited = 0, totalMsgs = 0, pagesWithEdits = 0;
+
+  ADM_PAGES.forEach(function(page) {
+    var edits = admLoadEdits(page);
+    var count = Object.keys(edits.data).length;
+    if (count > 0) { pagesWithEdits++; totalMsgs += count; }
+
+    var card = document.createElement('div');
+    card.className = 'adm-page-card' + (count > 0 ? ' has-edits' : '');
+
+    var detailHtml = count ? Object.keys(edits.data).map(function(k) {
+      var text = edits.data[k];
+      var preview = String(text).replace(/\n/g,' ').slice(0,120) + (text.length > 120 ? '…' : '');
+      return '<div class="adm-edit-item">' +
+        '<div class="adm-edit-idx">Mensagem #' + (parseInt(k,10)+1) + '</div>' +
+        '<div class="adm-edit-preview">' + admEsc(preview) + '</div>' +
+        '<div class="adm-edit-actions"><button class="adm-btn-reset-one" data-pk="' + admEsc(edits.key) + '" data-mk="' + admEsc(k) + '">↺ Resetar esta</button></div>' +
+        '</div>';
+    }).join('') : '<div class="adm-empty"><div class="adm-empty-icon">✨</div>Nenhuma edição salva nesta página</div>';
+
+    card.innerHTML =
+      '<div class="adm-page-head">' +
+        '<div class="adm-page-icon" style="background:' + page.color + '">' + page.icon + '</div>' +
+        '<div class="adm-page-info">' +
+          '<div class="adm-page-name">' + admEsc(page.name) + '</div>' +
+          '<div class="adm-page-desc">' + admEsc(page.desc) + '</div>' +
+        '</div>' +
+        '<div class="adm-page-meta">' +
+          (count > 0
+            ? '<span class="adm-badge adm-badge-edited">Editado</span><span class="adm-badge adm-badge-count">' + count + ' msg</span>'
+            : '<span class="adm-badge adm-badge-orig">Original</span>') +
+        '</div>' +
+        '<div class="adm-page-actions">' +
+          '<a class="adm-btn-view" href="' + admEsc(page.file) + '" target="_blank">↗ Ver</a>' +
+          (count > 0 ? '<button class="adm-btn-reset" data-pk="' + admEsc(edits.key) + '" data-pn="' + admEsc(page.name) + '">↺ Reset</button>' : '') +
+          '<a class="adm-btn-edit" href="' + admEsc(page.file) + '#edit" target="_blank">✏️ Editar</a>' +
+        '</div>' +
+      '</div>' +
+      '<div class="adm-page-edits">' + detailHtml + '</div>';
+
+    // Toggle expand
+    card.querySelector('.adm-page-head').addEventListener('click', function(e) {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+      card.classList.toggle('expanded');
+    });
+
+    // Reset page
+    var rb = card.querySelector('.adm-btn-reset');
+    if (rb) {
+      rb.onclick = function(e) {
+        e.stopPropagation();
+        var k = rb.dataset.pk, n = rb.dataset.pn;
+        if (confirm('Resetar todas as edições de "' + n + '"?')) {
+          localStorage.removeItem(k);
+          admToast('Edições de "' + n + '" removidas.', 'success');
+          admRender();
+        }
+      };
+    }
+
+    // Reset individual
+    card.querySelectorAll('.adm-btn-reset-one').forEach(function(btn) {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        try {
+          var d = JSON.parse(localStorage.getItem(btn.dataset.pk) || '{}');
+          delete d[btn.dataset.mk];
+          if (Object.keys(d).length) localStorage.setItem(btn.dataset.pk, JSON.stringify(d));
+          else localStorage.removeItem(btn.dataset.pk);
+          admToast('Mensagem resetada.', 'success');
+          admRender();
+        } catch(err){}
+      };
+    });
+
+    grid.appendChild(card);
+  });
+
+  document.getElementById('adm-stat-pages').textContent  = ADM_PAGES.length;
+  document.getElementById('adm-stat-edited').textContent  = pagesWithEdits;
+  document.getElementById('adm-stat-total').textContent   = totalMsgs;
+  document.getElementById('adm-stat-orig').textContent    = ADM_PAGES.length - pagesWithEdits;
+}
+
+// Global reset
+document.getElementById('adm-btn-reset-all').onclick = function() {
+  var hasAny = ADM_PAGES.some(function(p) { return Object.keys(admLoadEdits(p).data).length > 0; });
+  if (!hasAny) { admToast('Nenhuma edição salva para resetar.', 'warning'); return; }
+  if (!confirm('Resetar TODAS as edições em TODOS os documentos? Esta ação é irreversível.')) return;
+  ADM_PAGES.forEach(function(p) { localStorage.removeItem(admLoadEdits(p).key); });
+  admToast('Todas as edições foram removidas.', 'success');
+  admRender();
+};
+
+// Export JSON
+document.getElementById('adm-btn-export').onclick = function() {
+  var out = {};
+  ADM_PAGES.forEach(function(p) {
+    var e = admLoadEdits(p);
+    if (Object.keys(e.data).length) out[p.file] = e.data;
+  });
+  if (!Object.keys(out).length) { admToast('Nenhuma edição para exportar.', 'warning'); return; }
+  var blob = new Blob([JSON.stringify(out, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'glucoai-messages-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  admToast('JSON exportado!', 'success');
+};
+
+// Open / Close
+function admOpen() {
+  admRender();
+  document.getElementById('adm-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function admClose() {
+  document.getElementById('adm-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Fechar com ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('adm-overlay').classList.contains('open')) admClose();
+});
+</script>
+
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Abrir documento</button>
+    <button class="tlp-btn-edit" style="display:none"></button>
+  </div>
+</div>
+<script>
+/**
+ * GLUCO AI — Universal Timeline Sidebar
+ * Auto-detects sections by priority: .msg-block > .stage > section.section[id] > .section[id] > .sec
+ */
+(function() {
+  var itemsEl = document.getElementById('tl-items');
+  var countEl = document.getElementById('tl-count');
+  var sidebar  = document.getElementById('tl-sidebar');
+  var popover  = document.getElementById('tl-popover');
+  if (!itemsEl || !popover) return;
+
+  /* ── helpers ── */
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── block detection ── */
+  var blocks = null, cfg = null;
+
+  var CONFIGS = [
+    {
+      sel: '.msg-block',
+      title: function(el) { var e=el.querySelector('.msg-id'); return e?e.textContent.trim():''; },
+      color: function(el) {
+        return el.classList.contains('new')    ? 'blue'   :
+               el.classList.contains('fixed')  ? 'yellow' :
+               el.classList.contains('ok')     ? 'green'  :
+               el.classList.contains('danger') ? 'red'    :
+               el.classList.contains('convert')? 'blue'   : 'gray';
+      },
+      peek: 'wa'
+    },
+    {
+      sel: '.stage',
+      title: function(el) {
+        var e = el.querySelector('.stage-name, .stage-label');
+        return e ? e.textContent.trim() : '';
+      },
+      color: function(el) {
+        var n = el.querySelector('.stage-num');
+        if (!n) return 'blue';
+        return n.classList.contains('red')    ? 'red'    :
+               n.classList.contains('green')  ? 'green'  :
+               n.classList.contains('yellow') ? 'yellow' :
+               n.classList.contains('orange') ? 'yellow' :
+               n.classList.contains('teal')   ? 'green'  : 'blue';
+      },
+      peek: 'text'
+    },
+    {
+      sel: 'section.section[id]',
+      title: function(el) { var e=el.querySelector('.section-title, h2, h3'); return e?e.textContent.trim():''; },
+      color: function() { return 'blue'; },
+      peek: 'text'
+    },
+    {
+      sel: '.section[id]',
+      title: function(el) { var e=el.querySelector('.sec-title, h2, h3'); return e?e.textContent.trim():''; },
+      color: function() { return 'blue'; },
+      peek: 'text'
+    }
+  ];
+
+  for (var ci=0; ci<CONFIGS.length; ci++) {
+    var found = document.querySelectorAll(CONFIGS[ci].sel);
+    if (found && found.length > 0) { blocks = Array.from(found); cfg = CONFIGS[ci]; break; }
+  }
+
+  /* .sec fallback (upgrade-flow) */
+  if (!blocks) {
+    var allSecs = document.querySelectorAll('.sec');
+    var filtered = Array.from(allSecs).filter(function(el){ return !!el.querySelector('.sec-tag'); });
+    if (filtered.length) {
+      blocks = filtered;
+      cfg = {
+        title: function(el){ var e=el.querySelector('.sec-tag'); return e?e.textContent.trim():''; },
+        color: function(){ return 'blue'; },
+        peek: 'text'
+      };
+    }
+  }
+
+  /* .doc-card fallback (index.html hub) */
+  if (!blocks) {
+    var cards = document.querySelectorAll('.doc-card[href]');
+    if (cards && cards.length) {
+      blocks = Array.from(cards);
+      cfg = {
+        title: function(el){
+          var h = el.querySelector('.card-title');
+          var tag = el.querySelector('.card-tag');
+          var tname = h ? h.textContent.trim() : '';
+          var ttag  = tag ? tag.textContent.trim() : '';
+          return ttag ? ttag + ' · ' + tname : tname;
+        },
+        color: function(el){
+          return el.classList.contains('green')  ? 'green'  :
+                 el.classList.contains('yellow') ? 'yellow' :
+                 el.classList.contains('teal')   ? 'green'  :
+                 el.classList.contains('purple') ? 'blue'   : 'blue';
+        },
+        peek: 'card'
+      };
+    }
+  }
+
+  if (!blocks || !blocks.length) return;
+  if (countEl) countEl.textContent = blocks.length;
+
+  /* ── build items ── */
+  var tlItems = [];
+  var obsMap  = {};
+
+  blocks.forEach(function(block, i) {
+    if (!block.id) block.id = 'tl-blk-' + i;
+    obsMap[block.id] = i;
+
+    var fullTitle = cfg.title(block) || ('Item ' + (i+1));
+    var color     = cfg.color(block);
+
+    var parts    = fullTitle.split('·');
+    var rawBadge = parts[0].trim();
+    var name     = parts.slice(1).join('·').trim() || rawBadge;
+    var badge    = String(i+1);
+
+    var item = document.createElement('div');
+    item.className = 'tl-item';
+    item.dataset.idx = i;
+    item.innerHTML =
+      '<div class="tl-dot tl-dot-'+color+'">'+badge+'</div>'+
+      '<div class="tl-info">'+
+        '<div class="tl-name">'+esc(name)+'</div>'+
+        '<div class="tl-id">'+esc(rawBadge)+'</div>'+
+      '</div>'+
+      '<button class="tl-peek-btn" title="Ver conteúdo">👁</button>';
+
+    item.querySelector('.tl-dot').addEventListener('click', function(){
+      if (block.href) { window.location.href = block.href; } else { tlScrollTo(block); }
+    });
+    item.querySelector('.tl-info').addEventListener('click', function(){
+      if (block.href) { window.location.href = block.href; } else { tlScrollTo(block); }
+    });
+    item.querySelector('.tl-peek-btn').addEventListener('click', function(e){
+      e.stopPropagation();
+      openPeek(block, item, fullTitle, cfg.peek);
+    });
+
+    itemsEl.appendChild(item);
+    tlItems.push(item);
+  });
+
+  /* ── intersection observer ── */
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var idx = obsMap[e.target.id];
+        if (idx == null || !tlItems[idx]) return;
+        tlItems[idx].classList.toggle('tl-active', e.isIntersecting);
+        if (e.isIntersecting && sidebar && window.innerWidth > 900) {
+          sidebar.scrollTo({ top: tlItems[idx].offsetTop - sidebar.clientHeight/2, behavior:'smooth' });
+        }
+      });
+    }, { rootMargin:'-8% 0px -60% 0px' });
+    blocks.forEach(function(b){ io.observe(b); });
+  }
+
+  /* ── scroll to block ── */
+  function tlScrollTo(block) {
+    var top = block.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: top, behavior:'smooth' });
+    block.classList.add('tl-highlight');
+    setTimeout(function(){ block.classList.remove('tl-highlight'); }, 1800);
+  }
+
+  /* ── popover ── */
+  var curBlock = null;
+
+  function openPeek(block, item, title, type) {
+    curBlock = block;
+    var parts   = title.split('·');
+    var idText  = parts[0].trim();
+    var descTxt = parts.slice(1).join('·').trim();
+
+    popover.querySelector('.tlp-title').textContent = idText;
+    var descEl = popover.querySelector('.tlp-desc');
+    descEl.textContent = descTxt;
+    descEl.style.display = descTxt ? '' : 'none';
+
+    var html = '';
+
+    if (type === 'card') {
+      /* doc-card preview: description + chips */
+      var desc2 = block.querySelector('.card-desc');
+      var chips = block.querySelectorAll('.chip');
+      var txt2 = desc2 ? desc2.textContent.trim() : block.querySelector('p') ? block.querySelector('p').textContent.trim() : '';
+      html = '<div class="tlp-msg-text">'+esc(txt2)+'</div>';
+      if (chips.length) {
+        html += '<div class="tlp-opts">';
+        chips.forEach(function(c){ html += '<div class="tlp-opt">'+esc(c.textContent.trim())+'</div>'; });
+        html += '</div>';
+      }
+    } else if (type === 'wa') {
+      /* WhatsApp messages */
+      Array.from(block.querySelectorAll('.wa-text, .wa-bot, .wa-user')).forEach(function(el){
+        var t = el.textContent.trim();
+        if (t) html += '<div class="tlp-msg-text">'+esc(t)+'</div>';
+      });
+      if (!html) html = '<div class="tlp-msg-text" style="color:#4A5070">— Sem texto —</div>';
+
+      var waOpts = block.querySelectorAll('.wa-opt');
+      if (waOpts.length) {
+        html += '<div class="tlp-opts">';
+        waOpts.forEach(function(o){ html += '<div class="tlp-opt">'+esc(o.textContent.trim())+'</div>'; });
+        html += '</div>';
+      }
+
+      var branchRows = block.querySelectorAll('.branch-row');
+      if (branchRows.length) {
+        html += '<div class="tlp-branches"><div class="tlp-branch-title">Ramificações</div>';
+        branchRows.forEach(function(row){
+          var cond   = row.querySelector('.branch-cond');
+          var action = row.querySelector('.branch-action, .branch-dest');
+          html += '<div class="tlp-branch-row">'+
+            '<span class="tlp-bcond">'+esc(cond?cond.textContent.trim():'?')+'</span>'+
+            '<span class="tlp-baction">'+esc(action?action.textContent.trim():'')+'</span>'+
+            '</div>';
+        });
+        html += '</div>';
+      }
+    } else {
+      /* Generic text summary */
+      var h   = block.querySelector('h2, h3, .section-title, .sec-title, .stage-name, .stage-label, .sec-tag');
+      var desc = block.querySelector('p, .section-desc, .sec-desc, .stage-desc');
+      var txt = '';
+      if (h)    txt += h.textContent.trim() + '\n\n';
+      if (desc) txt += desc.textContent.trim();
+      if (!txt) {
+        txt = block.textContent.trim().replace(/\s+/g,' ').substring(0, 280);
+        if (txt.length === 280) txt += '…';
+      }
+      html = '<div class="tlp-msg-text">'+esc(txt)+'</div>';
+    }
+
+    popover.querySelector('.tlp-body').innerHTML = html;
+
+    /* position popover — set inline position BEFORE adding 'open' class */
+    var rect   = item.getBoundingClientRect();
+    var sbRect = sidebar.getBoundingClientRect();
+    if (window.innerWidth > 900) {
+      var top = Math.max(64, Math.min(rect.top, window.innerHeight - 480));
+      popover.style.top    = top + 'px';
+      popover.style.left   = (sbRect.right + 10) + 'px';
+      popover.style.right  = 'auto';
+      popover.style.bottom = 'auto';
+      popover.style.width  = '340px';
+    } else {
+      popover.style.top    = 'auto';
+      popover.style.left   = '10px';
+      popover.style.right  = '10px';
+      popover.style.bottom = '12px';
+      popover.style.width  = 'auto';
+    }
+
+    popover.classList.add('open');
+  }
+
+  function closePeek() {
+    popover.classList.remove('open');
+    popover.removeAttribute('style');
+    curBlock = null;
+  }
+
+  popover.querySelector('.tlp-close').addEventListener('click', closePeek);
+  popover.querySelector('.tlp-btn-scroll').addEventListener('click', function(){
+    if (!curBlock) return;
+    var b = curBlock; closePeek();
+    if (b.href) { window.location.href = b.href; } else { tlScrollTo(b); }
+  });
+  popover.querySelector('.tlp-btn-edit').addEventListener('click', function(){
+    if (!curBlock) return;
+    var block = curBlock;
+    closePeek(); tlScrollTo(block);
+    setTimeout(function(){
+      var trigger = document.getElementById('gai-trigger');
+      if (trigger && trigger.style.display !== 'none') {
+        trigger.click();
+        setTimeout(function(){ var el=block.querySelector('.gai-editable'); if(el) el.click(); }, 450);
+      } else {
+        var el = block.querySelector('.gai-editable');
+        if (el) el.click();
+      }
+    }, 700);
+  });
+
+  document.addEventListener('click', function(e){
+    if (!popover.classList.contains('open')) return;
+    if (!popover.contains(e.target) && !e.target.classList.contains('tl-peek-btn')) closePeek();
+  });
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closePeek(); });
+})();
+</script>
 
 </body>
 </html>

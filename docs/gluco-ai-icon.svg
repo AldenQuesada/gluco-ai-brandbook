@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="GLUCO AI">
+  <defs>
+    <linearGradient id="iconGrad" x1="0" y1="0" x2="80" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D4B4"/>
+      <stop offset="100%" stop-color="#1B6FFF"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Glucose curve (matches brandbook cover 80×80 icon exactly) -->
+  <path
+    d="M8 44 C14 44 18 32 26 32 C34 32 38 52 46 52 C54 52 58 36 66 36 C70 36 72 40 74 40"
+    stroke="url(#iconGrad)"
+    stroke-width="3"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- Current reading indicator at anchor (66, 36) -->
+  <circle cx="66" cy="36" r="7" fill="#1B6FFF" opacity="0.2" filter="url(#glow)"/>
+  <circle cx="66" cy="36" r="3" fill="#1B6FFF"/>
+</svg>
