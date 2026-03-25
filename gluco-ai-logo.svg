@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 52" width="210" height="52" role="img" aria-label="GLUCO AI — Metabolic Intelligence">
+  <defs>
+    <!-- Glucose curve gradient: teal → blue (matches brandbook) -->
+    <linearGradient id="curveGrad" x1="4" y1="0" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D4B4"/>
+      <stop offset="100%" stop-color="#1B6FFF"/>
+    </linearGradient>
+
+    <!-- Glow filter for dot -->
+    <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!--
+    Icon: "Pure Signal" glucose curve
+    Scaled from the 32×32 brandbook path (Concept A — Recommended)
+    Original: M2 18 C5 18 7 12 11 12 C15 12 17 22 21 22 C25 22 27 14 30 14
+    Scale ×1.571, centered vertically in 52px, x-range 4→48
+  -->
+  <path
+    d="M4 27.6 C8.7 27.6 11.9 17.4 18.1 17.4 C24.4 17.4 27.6 33.6 33.9 33.6 C40.1 33.6 43.3 20.9 48 20.9"
+    stroke="url(#curveGrad)"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- Current reading dot at curve endpoint -->
+  <circle cx="48" cy="20.9" r="6" fill="#1B6FFF" opacity="0.2" filter="url(#dotGlow)"/>
+  <circle cx="48" cy="20.9" r="2.8" fill="#1B6FFF"/>
+
+  <!-- Wordmark: GLUCO in white, AI in brand blue -->
+  <text
+    x="64"
+    y="36"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="800"
+    font-size="28"
+    letter-spacing="-1.1"
+  >
+    <tspan fill="#FFFFFF">GLUCO</tspan><tspan fill="#1B6FFF"> AI</tspan>
+  </text>
+</svg>
