@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Admin · Editor de Mensagens</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080d1a; --surface:#0f1628; --card:#141c30; --border:#1e2a45;
+  --border-hi:#2a3a5c; --blue:#1B6FFF; --teal:#14b8a6; --green:#22c55e;
+  --yellow:#f59e0b; --red:#ef4444; --purple:#8b5cf6;
+  --t1:#e2e8f0; --t2:#94a3b8; --t3:#64748b; --mono:'JetBrains Mono','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;padding-bottom:60px;}
+
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:10;}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:-0.04em;text-decoration:none;color:var(--t1);}
+.logo span{color:var(--blue);}
+.header-badge{font-size:11px;font-weight:700;background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.3);color:#93c5fd;padding:4px 12px;border-radius:6px;}
+.back-link{font-size:12px;color:var(--t2);text-decoration:none;padding:7px 14px;border:1px solid var(--border-hi);border-radius:8px;transition:all .2s;}
+.back-link:hover{color:var(--blue);border-color:rgba(27,111,255,.4);}
+
+.hero{max-width:1040px;margin:0 auto;padding:40px 32px 24px;}
+.hero-title{font-size:26px;font-weight:900;letter-spacing:-0.04em;margin-bottom:6px;}
+.hero-title span{color:var(--blue);}
+.hero-sub{font-size:14px;color:var(--t2);line-height:1.7;}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 32px;}
+
+/* SUMMARY CARDS */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;}
+.scard-value{font-size:26px;font-weight:900;letter-spacing:-0.04em;margin-bottom:2px;}
+.scard-label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;}
+.scard.blue .scard-value{color:var(--blue);}
+.scard.green .scard-value{color:var(--green);}
+.scard.yellow .scard-value{color:var(--yellow);}
+.scard.red .scard-value{color:var(--red);}
+
+/* SECTION */
+.section-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:12px;padding-top:24px;}
+
+/* PAGE CARDS */
+.pages-grid{display:flex;flex-direction:column;gap:10px;}
+.page-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .2s;}
+.page-card:hover{border-color:var(--border-hi);}
+.page-card.has-edits{border-color:rgba(245,158,11,.35);}
+.page-header{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;}
+.page-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.page-info{flex:1;}
+.page-name{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px;}
+.page-desc{font-size:12px;color:var(--t3);}
+.page-meta{display:flex;align-items:center;gap:8px;}
+.page-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;}
+.badge-orig{background:rgba(100,116,139,.08);color:var(--t3);border:1px solid rgba(100,116,139,.2);}
+.badge-edited{background:rgba(245,158,11,.1);color:var(--yellow);border:1px solid rgba(245,158,11,.25);}
+.badge-count{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3);font-weight:800;}
+.page-actions{display:flex;gap:8px;}
+.btn-edit{background:var(--blue);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;font-family:inherit;}
+.btn-edit:hover{background:#1559cc;}
+.btn-reset{background:rgba(220,38,38,.08);border:1px solid rgba(239,68,68,.25);color:var(--red);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-reset:hover{background:rgba(220,38,38,.15);}
+.btn-view{background:rgba(255,255,255,.05);border:1px solid var(--border-hi);color:var(--t2);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit;transition:all .2s;}
+.btn-view:hover{color:var(--t1);border-color:var(--blue);}
+
+/* EDITS DETAIL */
+.page-edits{display:none;border-top:1px solid var(--border);padding:16px 20px;background:rgba(0,0,0,.2);}
+.page-card.expanded .page-edits{display:block;}
+.edit-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.edit-item:last-child{margin-bottom:0;}
+.edit-idx{font-size:10px;font-weight:700;color:var(--t3);font-family:var(--mono);margin-bottom:4px;}
+.edit-preview{font-size:12px;color:var(--t2);line-height:1.5;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;}
+.edit-item-actions{display:flex;justify-content:flex-end;margin-top:8px;}
+.btn-reset-one{background:none;border:none;color:var(--t3);font-size:11px;cursor:pointer;padding:0;font-family:inherit;}
+.btn-reset-one:hover{color:var(--red);}
+
+/* GLOBAL ACTIONS */
+.global-actions{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.global-left{font-size:14px;color:var(--t2);}
+.global-left strong{color:var(--t1);}
+.global-btns{display:flex;gap:10px;}
+.btn-global-reset{background:rgba(220,38,38,.08);border:1px solid rgba(239,68,68,.25);color:var(--red);padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-global-reset:hover{background:rgba(220,38,38,.15);}
+.btn-global-export{background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.3);color:#93c5fd;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-global-export:hover{background:rgba(27,111,255,.18);}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px;color:var(--t3);font-size:13px;}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+
+/* TOAST */
+.toast{position:fixed;top:20px;right:20px;z-index:9999;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;transform:translateY(-8px);transition:all .25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.success{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.toast.warning{background:rgba(245,158,11,.1);color:var(--yellow);border:1px solid rgba(245,158,11,.3);}
+.toast.info{background:var(--card);color:var(--t2);border:1px solid var(--border);}
+
+@media(max-width:768px){.summary{grid-template-columns:1fr 1fr;}.global-actions{flex-direction:column;gap:12px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="index.html">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="8" fill="#0d9488"/><path d="M6 24C8 20,10 17,12 19C14 21,15 14,17 12C19 10,20 16,22 18C24 20,25 16,27 14" stroke="white" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="12" cy="19" r="1.8" fill="#5eead4"/><circle cx="22" cy="18" r="1.8" fill="#5eead4"/></svg>
+    GLUCO <span>AI</span>
+  </a>
+  <span class="header-badge">Admin · Editor de Mensagens</span>
+  <a href="index.html" class="back-link">← Central</a>
+</header>
+
+<div class="hero">
+  <h1 class="hero-title">Editor de <span>Mensagens</span></h1>
+  <p class="hero-sub">Gerencie todas as edições de mensagens WhatsApp em todos os documentos. Clique em "Editar" para abrir a página com o editor ativo, ou visualize as edições salvas diretamente aqui.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- SUMMARY -->
+  <div class="summary" id="summary">
+    <div class="scard blue"><div class="scard-value" id="stat-pages">—</div><div class="scard-label">Páginas</div></div>
+    <div class="scard green"><div class="scard-value" id="stat-edited">—</div><div class="scard-label">Com edições</div></div>
+    <div class="scard yellow"><div class="scard-value" id="stat-total">—</div><div class="scard-label">Mensagens editadas</div></div>
+    <div class="scard red"><div class="scard-value" id="stat-orig">—</div><div class="scard-label">Sem alterações</div></div>
+  </div>
+
+  <!-- GLOBAL ACTIONS -->
+  <div class="global-actions">
+    <div class="global-left">Gerencie todas as edições em um só lugar. <strong>As alterações ficam salvas no navegador</strong> (localStorage).</div>
+    <div class="global-btns">
+      <button class="btn-global-export" id="btn-export">↓ Exportar JSON</button>
+      <button class="btn-global-reset" id="btn-global-reset">↺ Resetar tudo</button>
+    </div>
+  </div>
+
+  <div class="section-label">Documentos</div>
+
+  <!-- PAGES LIST -->
+  <div class="pages-grid" id="pages-grid"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── Page registry ───
+var PAGES = [
+  {
+    key: '/aios-core/docs/gluco-ai-onboarding-flow.html',
+    file: 'gluco-ai-onboarding-flow.html',
+    name: 'Fluxo de Onboarding',
+    desc: 'E1–E6 · Abertura, LGPD, Coleta de dados, Ativação',
+    icon: '💬',
+    color: 'rgba(27,111,255,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-saas-funnel.html',
+    file: 'gluco-ai-saas-funnel.html',
+    name: 'Funil SaaS — 3 Métodos',
+    desc: 'Do plano gratuito até conversão · Gatilhos contextuais',
+    icon: '🎯',
+    color: 'rgba(20,184,166,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-upgrade-flow.html',
+    file: 'gluco-ai-upgrade-flow.html',
+    name: 'Fluxo de Upgrade + Custos',
+    desc: 'Arquitetura O QUÊ grátis / O COMO pago · Análise Vision API',
+    icon: '⚙️',
+    color: 'rgba(139,92,246,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-pre-event-protocol.html',
+    file: 'gluco-ai-pre-event-protocol.html',
+    name: 'Protocolo AQS — Pré/Durante/Pós',
+    desc: '3 fases do protocolo em eventos sociais',
+    icon: '🛡️',
+    color: 'rgba(27,111,255,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-conversion-flow.html',
+    file: 'gluco-ai-conversion-flow.html',
+    name: 'Fluxo de Conversão',
+    desc: 'Scripts de pitch · Objeções · Fórmula Hormozi',
+    icon: '💳',
+    color: 'rgba(34,197,94,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-playbook.html',
+    file: 'gluco-ai-playbook.html',
+    name: 'Playbook Operacional',
+    desc: 'Referência completa · Score de risco · Protocolo AQS',
+    icon: '📋',
+    color: 'rgba(245,158,11,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-sales.html',
+    file: 'gluco-ai-sales.html',
+    name: 'Página de Vendas',
+    desc: 'Landing page B2C · Preços · FAQ',
+    icon: '🚀',
+    color: 'rgba(20,184,166,.12)',
+  },
+  {
+    key: '/aios-core/docs/gluco-ai-brandbook.html',
+    file: 'gluco-ai-brandbook.html',
+    name: 'Brandbook',
+    desc: 'Cores · Tipografia · Tom de voz · Diretrizes da marca',
+    icon: '🎨',
+    color: 'rgba(139,92,246,.12)',
+  },
+];
+
+// Normalize key: try both with and without /aios-core prefix
+function loadEdits(page) {
+  var variants = [
+    'glucoai_edits::' + page.key,
+    'glucoai_edits::/' + page.file,
+    'glucoai_edits::' + page.file,
+  ];
+  for (var i = 0; i < variants.length; i++) {
+    var raw = localStorage.getItem(variants[i]);
+    if (raw) try { return { key: variants[i], data: JSON.parse(raw) }; } catch(e){}
+  }
+  return { key: variants[0], data: {} };
+}
+
+function countEdits(data) { return Object.keys(data).length; }
+
+// ─── Render ───
+function render() {
+  var grid = document.getElementById('pages-grid');
+  grid.innerHTML = '';
+
+  var totalEdited = 0, totalMsgs = 0, pagesWithEdits = 0;
+
+  PAGES.forEach(function(page, pi) {
+    var edits = loadEdits(page);
+    var count = countEdits(edits.data);
+    if (count > 0) { pagesWithEdits++; totalMsgs += count; }
+
+    var card = document.createElement('div');
+    card.className = 'page-card' + (count > 0 ? ' has-edits' : '');
+    card.dataset.pi = pi;
+
+    var editKeys = Object.keys(edits.data);
+    var detailHtml = editKeys.length ? editKeys.map(function(k) {
+      var text = edits.data[k];
+      var preview = String(text).replace(/\n/g, ' ').slice(0, 120) + (text.length > 120 ? '…' : '');
+      return '<div class="edit-item">' +
+        '<div class="edit-idx">Mensagem #' + (parseInt(k, 10) + 1) + '</div>' +
+        '<div class="edit-preview">' + escHtml(preview) + '</div>' +
+        '<div class="edit-item-actions"><button class="btn-reset-one" data-page-key="' + edits.key + '" data-msg-key="' + k + '">↺ Resetar esta</button></div>' +
+        '</div>';
+    }).join('') : '<div class="empty"><div class="empty-icon">✨</div>Nenhuma edição salva nesta página</div>';
+
+    card.innerHTML =
+      '<div class="page-header">' +
+      '  <div class="page-icon" style="background:' + page.color + '">' + page.icon + '</div>' +
+      '  <div class="page-info">' +
+      '    <div class="page-name">' + page.name + '</div>' +
+      '    <div class="page-desc">' + page.desc + '</div>' +
+      '  </div>' +
+      '  <div class="page-meta">' +
+      (count > 0
+        ? '<span class="page-badge badge-edited">Editado</span><span class="page-badge badge-count">' + count + ' msg</span>'
+        : '<span class="page-badge badge-orig">Original</span>') +
+      '  </div>' +
+      '  <div class="page-actions">' +
+      '    <a class="btn-view" href="' + page.file + '" target="_blank">↗ Ver</a>' +
+      (count > 0 ? '    <button class="btn-reset" data-page-key="' + edits.key + '">↺ Reset</button>' : '') +
+      '    <a class="btn-edit" href="' + page.file + '#edit" target="_blank">✏️ Editar</a>' +
+      '  </div>' +
+      '</div>' +
+      '<div class="page-edits">' + detailHtml + '</div>';
+
+    // Toggle expand
+    card.querySelector('.page-header').addEventListener('click', function(e) {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+      card.classList.toggle('expanded');
+    });
+
+    // Reset page
+    var resetBtn = card.querySelector('.btn-reset');
+    if (resetBtn) {
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        var k = resetBtn.dataset.pageKey;
+        if (confirm('Resetar todas as edições de "' + page.name + '"?')) {
+          localStorage.removeItem(k);
+          showToast('Edições de "' + page.name + '" removidas.', 'success');
+          render();
+        }
+      };
+    }
+
+    // Reset individual message
+    card.querySelectorAll('.btn-reset-one').forEach(function(btn) {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        var pageKey = btn.dataset.pageKey;
+        var msgKey = btn.dataset.msgKey;
+        try {
+          var d = JSON.parse(localStorage.getItem(pageKey) || '{}');
+          delete d[msgKey];
+          if (Object.keys(d).length) localStorage.setItem(pageKey, JSON.stringify(d));
+          else localStorage.removeItem(pageKey);
+          showToast('Mensagem resetada.', 'success');
+          render();
+        } catch(err){}
+      };
+    });
+
+    grid.appendChild(card);
+  });
+
+  // Update stats
+  document.getElementById('stat-pages').textContent = PAGES.length;
+  document.getElementById('stat-edited').textContent = pagesWithEdits;
+  document.getElementById('stat-total').textContent = totalMsgs;
+  document.getElementById('stat-orig').textContent = PAGES.length - pagesWithEdits;
+}
+
+// ─── Global actions ───
+document.getElementById('btn-global-reset').onclick = function() {
+  var hasAny = PAGES.some(function(p) { return countEdits(loadEdits(p).data) > 0; });
+  if (!hasAny) { showToast('Nenhuma edição salva para resetar.', 'warning'); return; }
+  if (!confirm('Resetar TODAS as edições em TODOS os documentos? Esta ação é irreversível.')) return;
+  PAGES.forEach(function(p) { localStorage.removeItem(loadEdits(p).key); });
+  showToast('Todas as edições foram removidas.', 'success');
+  render();
+};
+
+document.getElementById('btn-export').onclick = function() {
+  var out = {};
+  PAGES.forEach(function(p) {
+    var edits = loadEdits(p);
+    if (countEdits(edits.data) > 0) out[p.file] = edits.data;
+  });
+  if (!Object.keys(out).length) { showToast('Nenhuma edição para exportar.', 'warning'); return; }
+  var blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'glucoai-messages-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  showToast('JSON exportado!', 'success');
+};
+
+// ─── Auto-open edit mode when arriving from "#edit" ───
+// (handled by editor.js on each page)
+
+// ─── Helpers ───
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || 'info') + ' show';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.className = 'toast ' + (type || 'info'); }, 3000);
+}
+
+// ─── Init ───
+render();
+</script>
+</body>
+</html>
