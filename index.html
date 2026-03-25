@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLUCO AI — Central de Documentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#0A0E1A; --abyss:#111526; --surface:#1A1E2E;
+  --elevated:#242840; --stroke:#2E334F; --muted:#4A5070;
+  --t2:#8B93B8; --t1:#E8EEFF;
+  --blue:#1B6FFF; --teal:#00D4B4; --green:#00C48C;
+  --yellow:#FFB020; --red:#FF4B4B; --purple:#9B6DFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* HEADER */
+.header{background:var(--abyss);border-bottom:1px solid var(--stroke);position:sticky;top:0;z-index:100;}
+.header-inner{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;letter-spacing:-0.04em;text-decoration:none;color:var(--t1);}
+.logo-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+.logo span{color:var(--blue);}
+.header-badge{font-size:11px;font-weight:700;background:rgba(0,212,180,.1);border:1px solid rgba(0,212,180,.3);color:var(--teal);padding:4px 12px;border-radius:6px;}
+.btn-admin-open{font-size:11px;font-weight:700;background:rgba(27,111,255,.15);border:1px solid rgba(27,111,255,.4);color:#93c5fd;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit;transition:background .2s;}
+.btn-admin-open:hover{background:rgba(27,111,255,.28);}
+
+/* HERO */
+.hero{max-width:1080px;margin:0 auto;padding:72px 28px 56px;}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;}
+.hero-title{font-size:clamp(36px,5vw,58px);font-weight:900;letter-spacing:-0.05em;line-height:1.0;margin-bottom:18px;}
+.hero-title span{color:var(--blue);}
+.hero-sub{font-size:16px;color:var(--t2);max-width:520px;line-height:1.7;margin-bottom:40px;}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.stat{border-left:2px solid var(--stroke);padding-left:16px;}
+.stat-value{font-size:22px;font-weight:900;letter-spacing:-0.04em;color:var(--t1);}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* MAIN */
+.main{max-width:1080px;margin:0 auto;padding:0 28px 80px;}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-top:48px;}
+
+/* CARDS */
+.featured-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;}
+.docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+.doc-card{background:var(--abyss);border:1px solid var(--stroke);border-radius:20px;padding:28px;text-decoration:none;color:var(--t1);display:flex;flex-direction:column;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.doc-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 12px 40px rgba(27,111,255,.15);}
+.doc-card.accent{border-color:rgba(27,111,255,.4);background:linear-gradient(135deg,rgba(27,111,255,.08),var(--abyss));}
+.doc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;opacity:0;transition:opacity .2s;}
+.doc-card:hover::before{opacity:1;}
+.doc-card.blue::before{background:var(--blue);}
+.doc-card.green::before{background:var(--green);}
+.doc-card.yellow::before{background:var(--yellow);}
+.doc-card.purple::before{background:var(--purple);}
+.doc-card.teal::before{background:var(--teal);}
+.card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;}
+.card-icon.blue{background:rgba(27,111,255,.15);}
+.card-icon.green{background:rgba(0,196,140,.15);}
+.card-icon.yellow{background:rgba(255,176,32,.15);}
+.card-icon.purple{background:rgba(155,109,255,.15);}
+.card-icon.teal{background:rgba(0,212,180,.15);}
+.card-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.card-tag.blue{color:var(--blue);}
+.card-tag.green{color:var(--green);}
+.card-tag.yellow{color:var(--yellow);}
+.card-tag.purple{color:var(--purple);}
+.card-tag.teal{color:var(--teal);}
+.card-title{font-size:20px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px;line-height:1.2;}
+.card-desc{font-size:13px;color:var(--t2);line-height:1.6;flex:1;margin-bottom:20px;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.card-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{font-size:10px;font-weight:600;background:var(--surface);border:1px solid var(--stroke);border-radius:5px;padding:3px 8px;color:var(--t2);}
+.card-arrow{font-size:18px;color:var(--muted);transition:color .2s,transform .2s;}
+.doc-card:hover .card-arrow{color:var(--blue);transform:translateX(4px);}
+.new-badge{position:absolute;top:20px;right:20px;font-size:10px;font-weight:800;background:rgba(27,111,255,.2);border:1px solid rgba(27,111,255,.4);color:var(--blue);padding:3px 10px;border-radius:99px;letter-spacing:.06em;}
+.status{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;border-radius:99px;padding:3px 10px;position:absolute;bottom:20px;right:20px;}
+.status::before{content:'';width:5px;height:5px;border-radius:50%;}
+.status.review{background:rgba(255,176,32,.1);color:var(--yellow);}
+.status.review::before{background:var(--yellow);}
+
+/* QUICK LINKS */
+.quick-links{background:var(--surface);border:1px solid var(--stroke);border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:40px;}
+.quick-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-right:4px;white-space:nowrap;}
+.quick-link{font-size:12px;font-weight:600;color:var(--t2);text-decoration:none;padding:6px 12px;border-radius:8px;border:1px solid var(--stroke);background:var(--abyss);transition:all .15s;white-space:nowrap;}
+.quick-link:hover{color:var(--blue);border-color:rgba(27,111,255,.4);}
+.quick-link.admin{background:rgba(27,111,255,.12);border-color:rgba(27,111,255,.4);color:#93c5fd;font-weight:800;cursor:pointer;font-family:inherit;}
+.quick-link.admin:hover{background:rgba(27,111,255,.22);}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--stroke);padding:32px 28px;max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-weight:800;font-size:15px;letter-spacing:-0.03em;}
+.footer-logo span{color:var(--blue);}
+.footer-meta{font-size:12px;color:var(--muted);}
+
+/* ── TIMELINE SIDEBAR ── */
+body{padding-left:230px;}
+#tl-sidebar{width:230px;position:fixed;left:0;top:64px;height:calc(100vh - 64px);overflow-y:auto;border-right:1px solid var(--stroke);background:var(--abyss);z-index:50;scrollbar-width:thin;scrollbar-color:var(--stroke) transparent;}
+#tl-sidebar::-webkit-scrollbar{width:4px;}
+#tl-sidebar::-webkit-scrollbar-thumb{background:var(--stroke);border-radius:2px;}
+.tl-head{padding:14px 14px 10px;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;}
+#tl-count{font-size:10px;font-weight:800;background:rgba(27,111,255,.15);color:var(--blue);padding:1px 8px;border-radius:99px;}
+.tl-items{padding:6px 0 32px;position:relative;}
+.tl-items::before{content:'';position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--stroke),var(--stroke) 92%,transparent);pointer-events:none;}
+.tl-item{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;cursor:pointer;position:relative;transition:background .15s;}
+.tl-item:hover{background:rgba(255,255,255,.03);}
+.tl-item.tl-active{background:rgba(27,111,255,.05);}
+.tl-item.tl-active .tl-name{color:var(--t1);}
+.tl-item.tl-active .tl-dot{box-shadow:0 0 0 3px rgba(27,111,255,.22);}
+.tl-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1;cursor:pointer;transition:transform .15s,box-shadow .2s;}
+.tl-dot:hover{transform:scale(1.08);}
+.tl-dot-blue{background:rgba(27,111,255,.18);border:2px solid var(--blue);color:var(--blue);}
+.tl-dot-yellow{background:rgba(255,176,32,.14);border:2px solid var(--yellow);color:var(--yellow);}
+.tl-dot-green{background:rgba(0,196,140,.12);border:2px solid var(--green);color:var(--green);}
+.tl-dot-red{background:rgba(255,75,75,.12);border:2px solid var(--red);color:var(--red);}
+.tl-dot-gray{background:rgba(139,147,184,.1);border:2px solid var(--muted);color:var(--muted);}
+.tl-info{flex:1;min-width:0;overflow:hidden;cursor:pointer;}
+.tl-name{font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;transition:color .15s;}
+.tl-id{font-size:9px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.tl-info:hover .tl-name{color:var(--t1);}
+.tl-peek-btn{width:22px;height:22px;flex-shrink:0;background:none;border:1px solid transparent;border-radius:5px;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;line-height:1;}
+.tl-peek-btn:hover{background:rgba(255,255,255,.07);border-color:var(--stroke);color:var(--t2);}
+.tl-highlight{outline:3px solid rgba(27,111,255,.7)!important;outline-offset:4px;}
+#tl-popover{position:fixed;z-index:8500;background:#0f1628;border:1px solid #2a3a5c;border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.65);display:none;font-family:'Inter',sans-serif;max-height:70vh;overflow-y:auto;}
+#tl-popover.open{display:block;}
+.tlp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #1e2a45;position:sticky;top:0;background:#0f1628;z-index:2;}
+.tlp-title{font-size:12px;font-weight:800;color:#e2e8f0;line-height:1.3;}
+.tlp-desc{font-size:10px;color:#64748b;margin-top:2px;}
+.tlp-close{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;}
+.tlp-close:hover{color:#e2e8f0;}
+.tlp-body{padding:12px 16px;}
+.tlp-msg-text{font-size:12px;color:#94a3b8;line-height:1.6;white-space:pre-wrap;background:#141c30;border:1px solid #1e2a45;border-radius:8px;padding:10px 12px;margin-bottom:8px;max-height:160px;overflow-y:auto;}
+.tlp-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.tlp-opt{font-size:11px;color:#94a3b8;background:rgba(27,111,255,.08);border:1px solid rgba(27,111,255,.15);border-radius:6px;padding:5px 10px;}
+.tlp-foot{padding:10px 16px;border-top:1px solid #1e2a45;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#0f1628;}
+.tlp-btn-scroll{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-scroll:hover{background:rgba(255,255,255,.1);}
+.tlp-btn-edit{background:var(--blue);border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.tlp-btn-edit:hover{background:#1559cc;}
+@media(max-width:900px){
+  body{padding-left:0;}
+  #tl-sidebar{position:relative;top:0;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--stroke);}
+  .tl-items{display:flex;overflow-x:auto;padding:8px 8px 12px;gap:4px;}
+  .tl-items::before{display:none;}
+  .tl-item{flex-direction:column;gap:3px;padding:6px 4px;min-width:64px;max-width:64px;align-items:center;}
+  .tl-info{text-align:center;}
+  .tl-name{font-size:9px;white-space:normal;line-height:1.2;text-align:center;}
+  .tl-id{display:none;}
+  .tl-peek-btn{display:none;}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .featured-grid{grid-template-columns:1fr;}
+  .docs-grid{grid-template-columns:1fr;}
+}
+
+/* ═══════════════════════════════════════════════
+   ADMIN PANEL OVERLAY
+═══════════════════════════════════════════════ */
+#adm-overlay{
+  display:none;
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9000;
+  background:#080d1a;
+  overflow-y:auto;
+  font-family:'Inter',sans-serif;
+  padding-bottom:60px;
+}
+#adm-overlay.open{display:block;}
+
+#adm-header{
+  background:#0f1628;border-bottom:1px solid #1e2a45;
+  padding:0 32px;display:flex;align-items:center;
+  justify-content:space-between;height:60px;
+  position:sticky;top:0;z-index:10;
+}
+#adm-logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:-0.04em;color:#e2e8f0;}
+#adm-logo span{color:#1B6FFF;}
+#adm-hbadge{font-size:11px;font-weight:700;background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.3);color:#93c5fd;padding:4px 12px;border-radius:6px;}
+#adm-back{font-size:12px;color:#94a3b8;background:none;border:1px solid #2a3a5c;border-radius:8px;padding:7px 14px;cursor:pointer;font-family:inherit;transition:all .2s;}
+#adm-back:hover{color:#1B6FFF;border-color:rgba(27,111,255,.4);}
+
+#adm-hero{max-width:1040px;margin:0 auto;padding:40px 32px 24px;}
+#adm-hero h1{font-size:26px;font-weight:900;letter-spacing:-0.04em;margin-bottom:6px;color:#e2e8f0;}
+#adm-hero h1 span{color:#1B6FFF;}
+#adm-hero p{font-size:14px;color:#94a3b8;line-height:1.7;}
+
+.adm-wrap{max-width:1040px;margin:0 auto;padding:0 32px;}
+
+.adm-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+.adm-scard{background:#0f1628;border:1px solid #1e2a45;border-radius:14px;padding:16px 18px;}
+.adm-scard-value{font-size:26px;font-weight:900;letter-spacing:-0.04em;margin-bottom:2px;}
+.adm-scard-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.1em;}
+.adm-scard.blue .adm-scard-value{color:#1B6FFF;}
+.adm-scard.green .adm-scard-value{color:#22c55e;}
+.adm-scard.yellow .adm-scard-value{color:#f59e0b;}
+.adm-scard.red .adm-scard-value{color:#ef4444;}
+
+.adm-sec-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#64748b;margin-bottom:12px;padding-top:24px;}
+
+.adm-global{background:#0f1628;border:1px solid #1e2a45;border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.adm-global-left{font-size:14px;color:#94a3b8;}
+.adm-global-left strong{color:#e2e8f0;}
+.adm-global-btns{display:flex;gap:10px;}
+.adm-btn-export{background:rgba(27,111,255,.1);border:1px solid rgba(27,111,255,.3);color:#93c5fd;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.adm-btn-export:hover{background:rgba(27,111,255,.18);}
+.adm-btn-reset-all{background:rgba(220,38,38,.08);border:1px solid rgba(239,68,68,.25);color:#ef4444;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.adm-btn-reset-all:hover{background:rgba(220,38,38,.15);}
+
+.adm-pages{display:flex;flex-direction:column;gap:10px;}
+.adm-page-card{background:#0f1628;border:1px solid #1e2a45;border-radius:16px;overflow:hidden;transition:border-color .2s;}
+.adm-page-card:hover{border-color:#2a3a5c;}
+.adm-page-card.has-edits{border-color:rgba(245,158,11,.35);}
+.adm-page-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;}
+.adm-page-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.adm-page-info{flex:1;}
+.adm-page-name{font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:2px;}
+.adm-page-desc{font-size:12px;color:#64748b;}
+.adm-page-meta{display:flex;align-items:center;gap:8px;}
+.adm-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;}
+.adm-badge-orig{background:rgba(100,116,139,.08);color:#64748b;border:1px solid rgba(100,116,139,.2);}
+.adm-badge-edited{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.25);}
+.adm-badge-count{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);font-weight:800;}
+.adm-page-actions{display:flex;gap:8px;}
+.adm-btn-edit{background:#1B6FFF;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;}
+.adm-btn-edit:hover{background:#1559cc;}
+.adm-btn-reset{background:rgba(220,38,38,.08);border:1px solid rgba(239,68,68,.25);color:#ef4444;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.adm-btn-reset:hover{background:rgba(220,38,38,.15);}
+.adm-btn-view{background:rgba(255,255,255,.05);border:1px solid #2a3a5c;color:#94a3b8;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;}
+.adm-btn-view:hover{color:#e2e8f0;border-color:#1B6FFF;}
+
+.adm-page-edits{display:none;border-top:1px solid #1e2a45;padding:16px 20px;background:rgba(0,0,0,.2);}
+.adm-page-card.expanded .adm-page-edits{display:block;}
+.adm-edit-item{background:#141c30;border:1px solid #1e2a45;border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.adm-edit-item:last-child{margin-bottom:0;}
+.adm-edit-idx{font-size:10px;font-weight:700;color:#64748b;font-family:monospace;margin-bottom:4px;}
+.adm-edit-preview{font-size:12px;color:#94a3b8;line-height:1.5;white-space:pre-wrap;max-height:80px;overflow:hidden;}
+.adm-edit-actions{display:flex;justify-content:flex-end;margin-top:8px;}
+.adm-btn-reset-one{background:none;border:none;color:#64748b;font-size:11px;cursor:pointer;padding:0;font-family:inherit;}
+.adm-btn-reset-one:hover{color:#ef4444;}
+.adm-empty{text-align:center;padding:40px;color:#64748b;font-size:13px;}
+.adm-empty-icon{font-size:40px;margin-bottom:12px;}
+
+#adm-toast{position:fixed;top:20px;right:20px;z-index:10000;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;opacity:0;transform:translateY(-8px);transition:all .25s;pointer-events:none;}
+#adm-toast.show{opacity:1;transform:translateY(0);}
+#adm-toast.success{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.3);}
+#adm-toast.warning{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.3);}
+#adm-toast.info{background:#141c30;color:#94a3b8;border:1px solid #1e2a45;}
+
+@media(max-width:768px){
+  .adm-summary{grid-template-columns:1fr 1fr;}
+  .adm-global{flex-direction:column;gap:12px;}
+  .adm-page-head{flex-wrap:wrap;}
+  .adm-page-actions{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<aside id="tl-sidebar">
+  <div class="tl-head">Documentos <span id="tl-count"></span></div>
+  <div class="tl-items" id="tl-items"></div>
+</aside>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="index.html">
+      <div class="logo-icon"><img src="gluco-ai-icon.svg" width="36" height="36" alt="GLUCO AI"></div>
+      <div>GLUCO <span>AI</span></div>
+    </a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="header-badge">Central de Documentos</span>
+      <a href="#" onclick="admOpen();return false;" style="font-size:11px;font-weight:700;background:rgba(27,111,255,.15);border:1px solid rgba(27,111,255,.4);color:#93c5fd;padding:4px 12px;border-radius:6px;text-decoration:none;cursor:pointer;">⚙️ Editor</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Documentação Interna · Confidencial</div>
+  <h1 class="hero-title">Central de<br><span>Documentos</span></h1>
+  <p class="hero-sub">Todos os fluxos, playbooks e estratégias do GLUCO AI em um só lugar. Clique em qualquer documento para abrir.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-value">9</div><div class="stat-label">Documentos</div></div>
+    <div class="stat"><div class="stat-value">100%</div><div class="stat-label">WhatsApp B2C</div></div>
+    <div class="stat"><div class="stat-value">SBD 2023</div><div class="stat-label">Diretrizes</div></div>
+    <div class="stat"><div class="stat-value">LGPD Art.11</div><div class="stat-label">Compliance</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Jornada do Usuário — Fluxo Principal</div>
+
+  <div class="featured-grid">
+    <a class="doc-card accent blue" href="gluco-ai-onboarding-flow.html">
+      <div class="card-icon blue">💬</div>
+      <div class="card-tag blue">Passo 1 · Onboarding</div>
+      <h2 class="card-title">Fluxo de Onboarding</h2>
+      <p class="card-desc">O fluxo completo de entrada do usuário via WhatsApp. Todas as mensagens, ramificações, variáveis e lógica LGPD. Do primeiro "Olá" até a ativação do sistema — com mockup visual de cada mensagem.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">E1–E6</span>
+          <span class="chip">LGPD</span>
+          <span class="chip">MSG-NOME</span>
+          <span class="chip">AQS</span>
+          <span class="chip">Hormozi</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <span class="status review">Em Revisão</span>
+    </a>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <a class="doc-card" style="border-color:rgba(0,212,180,.35);background:linear-gradient(135deg,rgba(0,212,180,.07),var(--abyss));" href="gluco-ai-saas-funnel.html">
+        <div class="new-badge">NOVO</div>
+        <div class="card-icon teal">🎯</div>
+        <div class="card-tag teal">Passo 2 · Pós-Onboarding</div>
+        <h2 class="card-title">Funil SaaS — 3 Métodos</h2>
+        <p class="card-desc">Do plano gratuito até a conversão nos planos pagos. Entrega de valor antes da oferta, gatilhos contextuais e planos cumulativos.</p>
+        <div class="card-meta">
+          <div class="card-chips">
+            <span class="chip">Plano Free</span>
+            <span class="chip">3 Métodos</span>
+            <span class="chip">R$49,90–R$97</span>
+          </div>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+      <a class="doc-card" style="border-color:rgba(124,58,237,.35);background:linear-gradient(135deg,rgba(124,58,237,.07),var(--abyss));" href="gluco-ai-upgrade-flow.html">
+        <div class="new-badge">NOVO</div>
+        <div class="card-icon purple">⚙️</div>
+        <div class="card-tag purple">Dev · Arquitetura</div>
+        <h2 class="card-title" style="font-size:16px;">Fluxo de Upgrade</h2>
+        <p class="card-desc" style="font-size:12px;">Arquitetura "O QUÊ grátis, O COMO pago". 5 análises/mês, roteamento de plano e regras de negócio.</p>
+        <div class="card-meta">
+          <div class="card-chips">
+            <span class="chip">5 análises</span>
+            <span class="chip">Dev ref</span>
+          </div>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section-label" style="padding-top:32px;">Protocolo AQS — Ciclo Completo</div>
+
+  <div class="docs-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:32px;">
+    <a class="doc-card blue" href="gluco-ai-pre-event-protocol.html#pre">
+      <div class="new-badge">NOVO</div>
+      <div class="card-icon blue">⚙️</div>
+      <div class="card-tag blue">AQS · Fase 1</div>
+      <h2 class="card-title">Pré-Evento</h2>
+      <p class="card-desc">Protocolo completo de preparação antes de eventos sociais. Chá funcional, shot AQS, vitamina de pepino e 3 modos de execução por tempo disponível.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">Full / Adapted / Fast</span>
+          <span class="chip">Natural</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card green" href="gluco-ai-pre-event-protocol.html#ev">
+      <div class="card-icon green">🍽️</div>
+      <div class="card-tag green">AQS · Fase 2</div>
+      <h2 class="card-title">Durante o Evento</h2>
+      <p class="card-desc">Ordem da refeição, controle de absorção, protocolo de álcool e análise de prato ao vivo. Autocontrole comportamental em tempo real.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">Ordem do Prato</span>
+          <span class="chip">Álcool</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card" style="border-color:rgba(255,75,75,.3);background:rgba(255,75,75,.03);" href="gluco-ai-pre-event-protocol.html#pos">
+      <div class="card-icon" style="background:rgba(255,75,75,.15);">⏱️</div>
+      <div class="card-tag" style="color:var(--red);">AQS · Fase 3</div>
+      <h2 class="card-title">Pós-Evento</h2>
+      <p class="card-desc">Follow-up automático pós-evento com 3 protocolos naturais por nível: 180–299, 300–500 e acima de 500 mg/dL. Resposta imediata à elevação.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">3 Protocolos</span>
+          <span class="chip">Natural</span>
+          <span class="chip">AQS</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-label" style="padding-top:0;">Outros Documentos</div>
+
+  <div class="docs-grid">
+    <a class="doc-card green" href="gluco-ai-conversion-flow.html">
+      <div class="card-icon green">💳</div>
+      <div class="card-tag green">Scripts de Conversão</div>
+      <h2 class="card-title">Fluxo de Conversão</h2>
+      <p class="card-desc">Mensagens e scripts de pitch para ativação de planos pagos. Tratamento de objeções e fórmula Hormozi aplicada ao contexto de glicemia alta.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">AQS</span>
+          <span class="chip">Objeções</span>
+          <span class="chip">Hormozi</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card yellow" href="gluco-ai-playbook.html">
+      <div class="new-badge">NOVO</div>
+      <div class="card-icon yellow">📋</div>
+      <div class="card-tag yellow">Referência Operacional</div>
+      <h2 class="card-title">Playbook Operacional</h2>
+      <p class="card-desc">Guia completo com todas as mensagens, variáveis, score de risco, protocolo AQS e metas SBD 2023. Versão para impressão e PDF.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">8 Seções</span>
+          <span class="chip">Score</span>
+          <span class="chip">PDF</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card purple" href="gluco-ai-brandbook.html">
+      <div class="card-icon purple">🎨</div>
+      <div class="card-tag purple">Identidade Visual</div>
+      <h2 class="card-title">Brandbook</h2>
+      <p class="card-desc">Paleta de cores, tipografia, logotipo, tom de voz e diretrizes de uso da marca GLUCO AI.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">Cores</span>
+          <span class="chip">Tipografia</span>
+          <span class="chip">Tom de Voz</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card teal" href="gluco-ai-sales.html">
+      <div class="card-icon teal">🚀</div>
+      <div class="card-tag teal">Landing Page</div>
+      <h2 class="card-title">Página de Vendas</h2>
+      <p class="card-desc">Landing page de conversão B2C com hero, problema, solução, preços e FAQ para captação de novos usuários.</p>
+      <div class="card-meta">
+        <div class="card-chips">
+          <span class="chip">B2C</span>
+          <span class="chip">Preços</span>
+          <span class="chip">FAQ</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="quick-links">
+    <span class="quick-label">Acesso Rápido</span>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E1 — Abertura</a>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E2 — LGPD</a>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E4 — Coleta de Dados</a>
+    <a class="quick-link" href="gluco-ai-onboarding-flow.html">E6 — Entrega de Valor</a>
+    <a class="quick-link" href="gluco-ai-saas-funnel.html">Funil — Plano Free</a>
+    <a class="quick-link" href="gluco-ai-saas-funnel.html">Funil — 3 Métodos</a>
+    <a class="quick-link" href="gluco-ai-upgrade-flow.html">Arquitetura de Upgrade</a>
+    <a class="quick-link" href="gluco-ai-playbook.html#score">Score de Risco</a>
+    <a class="quick-link" href="gluco-ai-playbook.html#aqs">Protocolo AQS</a>
+    <a class="quick-link" href="gluco-ai-playbook.html#metas">Metas SBD 2023</a>
+    <a class="quick-link" href="gluco-ai-conversion-flow.html">Pitch Conversão</a>
+    <a class="quick-link" href="gluco-ai-pre-event-protocol.html#pre">AQS · Pré-Evento</a>
+    <a class="quick-link" href="gluco-ai-pre-event-protocol.html#ev">AQS · Durante</a>
+    <a class="quick-link" href="gluco-ai-pre-event-protocol.html#pos">AQS · Pós-Evento</a>
+    <button class="quick-link admin" onclick="admOpen()">⚙️ Editor de Mensagens</button>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">GLUCO <span>AI</span></div>
+  <div class="footer-meta">Central de Documentos · Março 2026 · Documento Interno Confidencial</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ADMIN PANEL OVERLAY (integrado, sem admin.html)
+═══════════════════════════════════════════════ -->
+<div id="adm-overlay">
+
+  <header id="adm-header">
+    <div id="adm-logo">
+      <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="8" fill="#0d9488"/><path d="M6 24C8 20,10 17,12 19C14 21,15 14,17 12C19 10,20 16,22 18C24 20,25 16,27 14" stroke="white" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="12" cy="19" r="1.8" fill="#5eead4"/><circle cx="22" cy="18" r="1.8" fill="#5eead4"/></svg>
+      GLUCO <span>AI</span>
+    </div>
+    <span id="adm-hbadge">Admin · Editor de Mensagens</span>
+    <button id="adm-back" onclick="admClose()">← Voltar à Central</button>
+  </header>
+
+  <div id="adm-hero">
+    <h1>Editor de <span>Mensagens</span></h1>
+    <p>Gerencie todas as edições de mensagens WhatsApp em todos os documentos. Clique em "Editar" para abrir a página com o editor ativo, ou visualize as edições salvas diretamente aqui.</p>
+  </div>
+
+  <div class="adm-wrap">
+
+    <div class="adm-summary">
+      <div class="adm-scard blue"><div class="adm-scard-value" id="adm-stat-pages">—</div><div class="adm-scard-label">Páginas</div></div>
+      <div class="adm-scard green"><div class="adm-scard-value" id="adm-stat-edited">—</div><div class="adm-scard-label">Com edições</div></div>
+      <div class="adm-scard yellow"><div class="adm-scard-value" id="adm-stat-total">—</div><div class="adm-scard-label">Mensagens editadas</div></div>
+      <div class="adm-scard red"><div class="adm-scard-value" id="adm-stat-orig">—</div><div class="adm-scard-label">Sem alterações</div></div>
+    </div>
+
+    <div class="adm-global">
+      <div class="adm-global-left">Gerencie todas as edições em um só lugar. <strong>As alterações ficam salvas no navegador</strong> (localStorage).</div>
+      <div class="adm-global-btns">
+        <button class="adm-btn-export" id="adm-btn-export">↓ Exportar JSON</button>
+        <button class="adm-btn-reset-all" id="adm-btn-reset-all">↺ Resetar tudo</button>
+      </div>
+    </div>
+
+    <div class="adm-sec-label">Documentos</div>
+    <div class="adm-pages" id="adm-pages"></div>
+
+  </div>
+</div>
+
+<div id="adm-toast"></div>
+
+<script>
+// ─── Admin Panel ───────────────────────────────────────────────────────
+var ADM_PAGES = [
+  { key:'/aios-core/docs/gluco-ai-onboarding-flow.html',   file:'gluco-ai-onboarding-flow.html',   name:'Fluxo de Onboarding',            desc:'E1–E6 · Abertura, LGPD, Coleta de dados, Ativação',           icon:'💬', color:'rgba(27,111,255,.12)' },
+  { key:'/aios-core/docs/gluco-ai-saas-funnel.html',       file:'gluco-ai-saas-funnel.html',       name:'Funil SaaS — 3 Métodos',         desc:'Do plano gratuito até conversão · Gatilhos contextuais',       icon:'🎯', color:'rgba(20,184,166,.12)' },
+  { key:'/aios-core/docs/gluco-ai-upgrade-flow.html',      file:'gluco-ai-upgrade-flow.html',      name:'Fluxo de Upgrade + Custos',      desc:'Arquitetura O QUÊ grátis / O COMO pago · Análise Vision API', icon:'⚙️', color:'rgba(139,92,246,.12)' },
+  { key:'/aios-core/docs/gluco-ai-pre-event-protocol.html',file:'gluco-ai-pre-event-protocol.html',name:'Protocolo AQS — Pré/Durante/Pós',desc:'3 fases do protocolo em eventos sociais',                      icon:'🛡️', color:'rgba(27,111,255,.12)' },
+  { key:'/aios-core/docs/gluco-ai-conversion-flow.html',   file:'gluco-ai-conversion-flow.html',   name:'Fluxo de Conversão',             desc:'Scripts de pitch · Objeções · Fórmula Hormozi',               icon:'💳', color:'rgba(34,197,94,.12)'  },
+  { key:'/aios-core/docs/gluco-ai-playbook.html',          file:'gluco-ai-playbook.html',          name:'Playbook Operacional',           desc:'Referência completa · Score de risco · Protocolo AQS',        icon:'📋', color:'rgba(245,158,11,.12)' },
+  { key:'/aios-core/docs/gluco-ai-sales.html',             file:'gluco-ai-sales.html',             name:'Página de Vendas',               desc:'Landing page B2C · Preços · FAQ',                             icon:'🚀', color:'rgba(20,184,166,.12)' },
+  { key:'/aios-core/docs/gluco-ai-brandbook.html',         file:'gluco-ai-brandbook.html',         name:'Brandbook',                      desc:'Cores · Tipografia · Tom de voz · Diretrizes da marca',        icon:'🎨', color:'rgba(139,92,246,.12)' },
+];
+
+function admLoadEdits(page) {
+  var variants = [
+    'glucoai_edits::' + page.key,
+    'glucoai_edits::/' + page.file,
+    'glucoai_edits::' + page.file,
+  ];
+  for (var i = 0; i < variants.length; i++) {
+    var raw = localStorage.getItem(variants[i]);
+    if (raw) try { return { key: variants[i], data: JSON.parse(raw) }; } catch(e){}
+  }
+  return { key: variants[0], data: {} };
+}
+
+function admEsc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function admToast(msg, type) {
+  var t = document.getElementById('adm-toast');
+  t.textContent = msg;
+  t.className = (type || 'info') + ' show';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.className = ''; }, 3000);
+}
+
+function admRender() {
+  var grid = document.getElementById('adm-pages');
+  grid.innerHTML = '';
+  var totalEdited = 0, totalMsgs = 0, pagesWithEdits = 0;
+
+  ADM_PAGES.forEach(function(page) {
+    var edits = admLoadEdits(page);
+    var count = Object.keys(edits.data).length;
+    if (count > 0) { pagesWithEdits++; totalMsgs += count; }
+
+    var card = document.createElement('div');
+    card.className = 'adm-page-card' + (count > 0 ? ' has-edits' : '');
+
+    var detailHtml = count ? Object.keys(edits.data).map(function(k) {
+      var text = edits.data[k];
+      var preview = String(text).replace(/\n/g,' ').slice(0,120) + (text.length > 120 ? '…' : '');
+      return '<div class="adm-edit-item">' +
+        '<div class="adm-edit-idx">Mensagem #' + (parseInt(k,10)+1) + '</div>' +
+        '<div class="adm-edit-preview">' + admEsc(preview) + '</div>' +
+        '<div class="adm-edit-actions"><button class="adm-btn-reset-one" data-pk="' + admEsc(edits.key) + '" data-mk="' + admEsc(k) + '">↺ Resetar esta</button></div>' +
+        '</div>';
+    }).join('') : '<div class="adm-empty"><div class="adm-empty-icon">✨</div>Nenhuma edição salva nesta página</div>';
+
+    card.innerHTML =
+      '<div class="adm-page-head">' +
+        '<div class="adm-page-icon" style="background:' + page.color + '">' + page.icon + '</div>' +
+        '<div class="adm-page-info">' +
+          '<div class="adm-page-name">' + admEsc(page.name) + '</div>' +
+          '<div class="adm-page-desc">' + admEsc(page.desc) + '</div>' +
+        '</div>' +
+        '<div class="adm-page-meta">' +
+          (count > 0
+            ? '<span class="adm-badge adm-badge-edited">Editado</span><span class="adm-badge adm-badge-count">' + count + ' msg</span>'
+            : '<span class="adm-badge adm-badge-orig">Original</span>') +
+        '</div>' +
+        '<div class="adm-page-actions">' +
+          '<a class="adm-btn-view" href="' + admEsc(page.file) + '" target="_blank">↗ Ver</a>' +
+          (count > 0 ? '<button class="adm-btn-reset" data-pk="' + admEsc(edits.key) + '" data-pn="' + admEsc(page.name) + '">↺ Reset</button>' : '') +
+          '<a class="adm-btn-edit" href="' + admEsc(page.file) + '#edit" target="_blank">✏️ Editar</a>' +
+        '</div>' +
+      '</div>' +
+      '<div class="adm-page-edits">' + detailHtml + '</div>';
+
+    // Toggle expand
+    card.querySelector('.adm-page-head').addEventListener('click', function(e) {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+      card.classList.toggle('expanded');
+    });
+
+    // Reset page
+    var rb = card.querySelector('.adm-btn-reset');
+    if (rb) {
+      rb.onclick = function(e) {
+        e.stopPropagation();
+        var k = rb.dataset.pk, n = rb.dataset.pn;
+        if (confirm('Resetar todas as edições de "' + n + '"?')) {
+          localStorage.removeItem(k);
+          admToast('Edições de "' + n + '" removidas.', 'success');
+          admRender();
+        }
+      };
+    }
+
+    // Reset individual
+    card.querySelectorAll('.adm-btn-reset-one').forEach(function(btn) {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        try {
+          var d = JSON.parse(localStorage.getItem(btn.dataset.pk) || '{}');
+          delete d[btn.dataset.mk];
+          if (Object.keys(d).length) localStorage.setItem(btn.dataset.pk, JSON.stringify(d));
+          else localStorage.removeItem(btn.dataset.pk);
+          admToast('Mensagem resetada.', 'success');
+          admRender();
+        } catch(err){}
+      };
+    });
+
+    grid.appendChild(card);
+  });
+
+  document.getElementById('adm-stat-pages').textContent  = ADM_PAGES.length;
+  document.getElementById('adm-stat-edited').textContent  = pagesWithEdits;
+  document.getElementById('adm-stat-total').textContent   = totalMsgs;
+  document.getElementById('adm-stat-orig').textContent    = ADM_PAGES.length - pagesWithEdits;
+}
+
+// Global reset
+document.getElementById('adm-btn-reset-all').onclick = function() {
+  var hasAny = ADM_PAGES.some(function(p) { return Object.keys(admLoadEdits(p).data).length > 0; });
+  if (!hasAny) { admToast('Nenhuma edição salva para resetar.', 'warning'); return; }
+  if (!confirm('Resetar TODAS as edições em TODOS os documentos? Esta ação é irreversível.')) return;
+  ADM_PAGES.forEach(function(p) { localStorage.removeItem(admLoadEdits(p).key); });
+  admToast('Todas as edições foram removidas.', 'success');
+  admRender();
+};
+
+// Export JSON
+document.getElementById('adm-btn-export').onclick = function() {
+  var out = {};
+  ADM_PAGES.forEach(function(p) {
+    var e = admLoadEdits(p);
+    if (Object.keys(e.data).length) out[p.file] = e.data;
+  });
+  if (!Object.keys(out).length) { admToast('Nenhuma edição para exportar.', 'warning'); return; }
+  var blob = new Blob([JSON.stringify(out, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'glucoai-messages-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  admToast('JSON exportado!', 'success');
+};
+
+// Open / Close
+function admOpen() {
+  admRender();
+  document.getElementById('adm-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function admClose() {
+  document.getElementById('adm-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Fechar com ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('adm-overlay').classList.contains('open')) admClose();
+});
+</script>
+
+<div id="tl-popover">
+  <div class="tlp-head">
+    <div><div class="tlp-title"></div><div class="tlp-desc"></div></div>
+    <button class="tlp-close">×</button>
+  </div>
+  <div class="tlp-body"></div>
+  <div class="tlp-foot">
+    <button class="tlp-btn-scroll">↗ Abrir documento</button>
+    <button class="tlp-btn-edit" style="display:none"></button>
+  </div>
+</div>
+<script src="timeline.js"></script>
+
+</body>
+</html>
